@@ -1,4 +1,5 @@
 import 'package:aria_client/views/art/list_view.dart';
+import 'package:aria_client/views/test/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,9 +18,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(primarySwatch: Colors.blue),
       home: ArtListView(),
       initialRoute: '/',
-        getPages: [
-        GetPage(name: "/", page: () => ArtListView()),
-        ],
+      getPages: [
+        GetPage(name: "/", page: () => TestPage()),
+      ],
     );
   }
 }
