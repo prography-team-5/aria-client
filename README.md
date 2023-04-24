@@ -36,7 +36,7 @@
 ├── main
 │   └── home_page.dart # 홈페이지
 ├── my
-│   ├── edit_profile.dart # (작가/유저) 마이페이지 - 프로필 수정
+│   ├── edit_profile_page.dart # (작가/유저) 마이페이지 - 프로필 수정
 │   └── my_page.dart # (작가/유저) 마이페이지
 └── search
     └── search_page.dart # 검색/검색결과 페이지
