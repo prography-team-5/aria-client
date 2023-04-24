@@ -1,16 +1,43 @@
-# aria_client
+# Aria - 작가들의 미니 홈피
 
-A new Flutter project.
+## 프로젝트 구조
 
-## Getting Started
+```bash
+├── constants # 텍스트 스타일, 색상 등 스타일 관련 상수
+├── helper # 백엔드 통신을 위한 모듈
+├── models # 모델
+├── services # 데이터 처리 서비스
+├── viewmodels # 페이지 내 데이터 제공, 변경을 위한 viewmodel
+└── views # 페이지 UI
+    ├── art # 작품 관련 페이지
+    ├── artist # 작가 관련 페이지
+    ├── auth # 인증 관련 페이지
+    ├── error # 에러 처리 페이지
+    ├── main # 홈페이지
+    ├── my # 마이페이지 및 수정 페이지
+    └── search # 검색 페이지
+```
 
-This project is a starting point for a Flutter application.
+## 프로젝트 구조 상세 - views
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+├── art
+│   ├── detail_page.dart # 작품 상세페이지
+│   └── list_view.dart # (임시)
+├── artist
+│   ├── add_art_page.dart # 작가 마이페이지 - 작품 추가
+│   └── artist_home_page.dart # 작가 홈페이지(미니홈피)
+├── auth
+│   ├── signin_page.dart # 로그인 페이지
+│   ├── signup_page.dart # 회원가입 페이지
+│   └── splash_page.dart # 스플래시 페이지
+├── error
+│   └── error_page.dart # 에러처리 페이지
+├── main
+│   └── home_page.dart # 홈페이지
+├── my
+│   ├── edit_profile.dart # (작가/유저) 마이페이지 - 프로필 수정
+│   └── my_page.dart # (작가/유저) 마이페이지
+└── search
+    └── search_page.dart # 검색/검색결과 페이지
+```
