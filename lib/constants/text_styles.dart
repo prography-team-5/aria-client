@@ -6,19 +6,19 @@ class TextStyles {
   // static final Heading1 = TextStyle(
   //     fontFamily: 'PretendardBold', fontSize: 24.sp, height: 1.3, letterSpacing: -0.25);
   static final Heading1 = TextStyle(
-      fontFamily: 'PretendardBold', fontSize: 24, height: 1.3, letterSpacing: -0.25);
+      fontSize: 24, fontWeight: FontWeight.w800, height: 1.3, letterSpacing: -0.25);
   static const Heading2 = TextStyle(
-      fontFamily: 'PretendardBold', fontSize: 20, height: 1.5, letterSpacing: -0.25);
+      fontSize: 20, fontWeight: FontWeight.w800, height: 1.5, letterSpacing: -0.25);
   static const Heading3 = TextStyle(
-      fontFamily: 'PretendardBold', fontSize: 16, height: 1.5, letterSpacing: -0.25);
+      fontSize: 16, fontWeight: FontWeight.w800, height: 1.5, letterSpacing: -0.25);
   static const Heading4 = TextStyle(
-      fontFamily: 'PretendardBold', fontSize: 14, height: 1.6, letterSpacing: -0.25);
+      fontSize: 14, fontWeight: FontWeight.w800, height: 1.6, letterSpacing: -0.25);
   static const Heading5 = TextStyle(
-      fontFamily: 'PretendardBold', fontSize: 13, height: 1.7, letterSpacing: -0.25);
+      fontSize: 13, fontWeight: FontWeight.w800, height: 1.7, letterSpacing: -0.25);
   static const Heading6 = TextStyle(
-      fontFamily: 'PretendardBold', fontSize: 10, height: 1.6, letterSpacing: -0.25);
+      fontSize: 10, fontWeight: FontWeight.w800,height: 1.6, letterSpacing: -0.25);
   static const Body1 = TextStyle(
-      fontSize: 16, height: 1.5, letterSpacing: -0.25);
+      fontSize: 16, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: -0.25);
   static const Body2 = TextStyle(
       fontSize: 16, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: -0.25);
   static const Caption = TextStyle(
