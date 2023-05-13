@@ -1,6 +1,7 @@
 import 'package:aria_client/bindings/initial_bindings.dart';
 import 'package:aria_client/views/test/test_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 import 'views/art/detail_page.dart';
@@ -15,6 +16,10 @@ import 'views/my/my_page.dart';
 import 'views/search/search_page.dart';
 
 void main() {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
+    statusBarIconBrightness: Brightness.light,
+    statusBarColor: Colors.transparent,
+  ));
   runApp(const MyApp());
 }
 
