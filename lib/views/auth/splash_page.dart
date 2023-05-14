@@ -22,7 +22,7 @@ class SplashPage extends StatelessWidget {
           children: [
             SizedBox(height: MediaQuery.of(context).size.height * 0.3),
             SvgPicture.asset(
-              'assets/logo_white.svg',
+              'assets/images/logo_white.svg',
               width: 97,
               height: 69,
             ),
