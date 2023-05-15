@@ -26,7 +26,7 @@ class SigninPage extends StatelessWidget {
               '지금 아리아에서 만나보세요',
               style: TextStyles.Heading1,
             ),
-            SizedBox(height: 236),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -50,28 +50,32 @@ class SigninPage extends StatelessWidget {
               ],
             ),
             SizedBox(height: 24),
-            OutlinedButton(
-              onPressed: () {},
-              // child: Text(
-              //   '둘러보기',
-              //   style: TextStyle(color: Colors.black),
-              // ),
-              child: FittedBox(
-                fit: BoxFit.fitHeight,
-                child: Text(
-                  '둘러보기',
-                  style: TextStyle(color: Colors.black),
+            SizedBox(
+              width: 225,
+              height: 54,
+              child: OutlinedButton(
+                onPressed: () {},
+                // child: Text(
+                //   '둘러보기',
+                //   style: TextStyle(color: Colors.black),
+                // ),
+                child: FittedBox(
+                  fit: BoxFit.fitHeight,
+                  child: Text(
+                    '둘러보기',
+                    style: TextStyle(color: Colors.black),
+                  ),
+                ),
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(width: 1, color: ColorMap.gray_200),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(100),
+                  ),
+                  textStyle: TextStyles.Heading4,
                 ),
               ),
-              style: OutlinedButton.styleFrom(
-                fixedSize: Size(225, 54), // TODO : 높이 54는 Hug 방식으로 변경해야 함
-                side: BorderSide(width: 1, color: ColorMap.gray_200),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(100),
-                ),
-                textStyle: TextStyles.Heading4,
-              ),
-            )
+            ),
+            SizedBox(height: 62,)
           ],
         ),
       ),
