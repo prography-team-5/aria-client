@@ -16,16 +16,7 @@ class GrayTextStyles {
 class SignUpController extends GetxController {
   final nicknameController = TextEditingController();
 
-  // RxBool isEntered = false.obs;
   Rx<Color> backgroundColor = ColorMap.gray_200.obs;
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   nicknameController.addListener(() {
-  //     isEntered.value = nicknameController.text.isNotEmpty;
-  //   });
-  // }
 
   @override
   void onClose() {
@@ -43,6 +34,8 @@ class SignUpController extends GetxController {
 }
 
 class SignupPage extends StatelessWidget {
+  const SignupPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     final signUpController = Get.put(SignUpController());
@@ -107,7 +100,7 @@ class SignupPage extends StatelessWidget {
               height: 64,
               child: Obx(
                 () => TextButton(
-                  onPressed: () {},
+                  onPressed: () {}, // TODO: 회원가입 제출 이후 동작
                   child: Text(
                     '회원가입',
                     style: TextStyle(
@@ -118,9 +111,6 @@ class SignupPage extends StatelessWidget {
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    // backgroundColor: signUpController.isEntered.value
-                    //     ? ColorMap.mainColor
-                    //     : ColorMap.gray_200,
                     backgroundColor: signUpController.backgroundColor.value,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
