@@ -1,18 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:aria_client/helpers/env.dart';
 import 'package:http/http.dart' as http;
 
-enum Environ { DEV, PROD }
-
 class NetworkAdapter {
-  String baseURL = "";
-  Environ env = Environ.DEV;
-
-  NetworkAdapter() {
-    env == Environ.DEV
-        ? baseURL = "https://yts.mx/api/v2/list_movies.json"
-        : baseURL = "https://yts.mx/api/v2/list_movies.json";
-  }
+  Env env = Env();
+  String baseURL = Env.apiUrl;
 
   Future<dynamic> get(
       {required String path,
