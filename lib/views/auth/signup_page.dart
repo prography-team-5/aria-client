@@ -13,9 +13,39 @@ class GrayTextStyles {
       letterSpacing: -0.25);
 }
 
+class SignUpController extends GetxController {
+  final nicknameController = TextEditingController();
+
+  // RxBool isEntered = false.obs;
+  Rx<Color> backgroundColor = ColorMap.gray_200.obs;
+
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   nicknameController.addListener(() {
+  //     isEntered.value = nicknameController.text.isNotEmpty;
+  //   });
+  // }
+
+  @override
+  void onClose() {
+    nicknameController.dispose();
+    super.onClose();
+  }
+
+  void changeColor() {
+    nicknameController.addListener(() {
+      backgroundColor.value = nicknameController.text.isNotEmpty
+          ? ColorMap.mainColor
+          : ColorMap.gray_200;
+    });
+  }
+}
+
 class SignupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final signUpController = Get.put(SignUpController());
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(56),
@@ -56,6 +86,8 @@ class SignupPage extends StatelessWidget {
               height: 8,
             ),
             TextField(
+              controller: signUpController.nicknameController,
+              onChanged: (text) { signUpController.changeColor(); },
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -73,22 +105,26 @@ class SignupPage extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               height: 64,
-              child: TextButton(
-                onPressed: () {},
-                child: Text(
-                  '회원가입',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    height: 1.375,
+              child: Obx(
+                () => TextButton(
+                  onPressed: () {},
+                  child: Text(
+                    '회원가입',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      height: 1.375,
+                    ),
                   ),
-                ),
-                style: TextButton.styleFrom(
-                  // TODO : controller 추가, 비활성 버튼 색 변경
-                  backgroundColor: ColorMap.mainColor,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(100),
+                  style: TextButton.styleFrom(
+                    // backgroundColor: signUpController.isEntered.value
+                    //     ? ColorMap.mainColor
+                    //     : ColorMap.gray_200,
+                    backgroundColor: signUpController.backgroundColor.value,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(100),
+                    ),
                   ),
                 ),
               ),
