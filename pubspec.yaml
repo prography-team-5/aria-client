@@ -62,8 +62,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/logo.svg
-    - assets/logo_white.svg
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -79,10 +78,10 @@ flutter:
   fonts:
      - family: Pretendard
        fonts:
-         - asset: assets/Pretendard-Regular.ttf
+         - asset: assets/fonts/Pretendard-Regular.ttf
      - family: PretendardBold
        fonts:
-         - asset: assets/Pretendard-SemiBold.ttf
+         - asset: assets/fonts/Pretendard-SemiBold.ttf
 
 
   # For details regarding fonts from package dependencies,
