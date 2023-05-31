@@ -5,7 +5,7 @@
 ## TODO
 
 - [x] models 작성
-- [ ] fake service 작성(테스트 데이터)
+- [x] fake service 작성(테스트 데이터)
 - [ ] viewmodel / simple view 작성 및 연동 테스트
 - [ ] real service 작성(백엔드 API 참고) => 소셜로그인 관련 포함
 - [ ] 전체 동작 점검
