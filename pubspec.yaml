@@ -34,6 +34,11 @@ dependencies:
   flutter_screenutil: ^5.7.0
   http:
 
+  # social login
+  flutter_naver_login: ^1.8.0
+  kakao_flutter_sdk: ^1.4.3
+  sign_in_with_apple: ^4.3.0
+
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -76,13 +81,12 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-     - family: Pretendard
-       fonts:
-         - asset: assets/fonts/Pretendard-Regular.ttf
-     - family: PretendardBold
-       fonts:
-         - asset: assets/fonts/Pretendard-SemiBold.ttf
-
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/Pretendard-Regular.ttf
+    - family: PretendardBold
+      fonts:
+        - asset: assets/fonts/Pretendard-SemiBold.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
