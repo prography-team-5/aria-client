@@ -11,6 +11,6 @@ class ColorMap {
   static const gray_400 = Color(0xff8d8989);
   static const gray_300 = Color(0xffc6c0c0);
   static const gray_200 = Color(0xffe4e2e2);
-  static const grey_100 = Color(0xfff4f2f2);
+  static const gray_100 = Color(0xfff4f2f2);
   static const white = Color(0xffffffff);
 }
