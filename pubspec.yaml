@@ -82,6 +82,9 @@ flutter:
      - family: PretendardBold
        fonts:
          - asset: assets/fonts/Pretendard-SemiBold.ttf
+     - family: NanumMyeongjo
+       fonts:
+           - asset: assets/fonts/NanumMyeongjo.ttf
 
 
   # For details regarding fonts from package dependencies,
