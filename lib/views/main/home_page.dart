@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
-          fit: BoxFit.fill, // TODO: 아니면 fill?,
+          fit: BoxFit.fill,
           image: AssetImage('assets/images/example_image.png'),
         ),
       ),
@@ -108,24 +108,7 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   Spacer(),
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: ClipPath(
-                      clipper: ShapeBorderClipper(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
-                      ),
-                      child: Container(
-                        key: key,
-                        width: 342,
-                        height: 592,
-                        alignment: Alignment.centerLeft,
-                        child: _cardFlipAnimation(),
-                      ),
-                    ),
-                  ),
+                  _cardFlipAnimation(),
                   Spacer(),
                   Row(
                     children: [
@@ -193,13 +176,11 @@ class _HomePageState extends State<HomePage> {
   Widget _cardFlipAnimation() {
     return GestureDetector(
       onTap: () => {
-        print(_displayFront),
         setState(() => _displayFront = !_displayFront),
       },
       child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 600),
+        duration: Duration(milliseconds: 1000),
         transitionBuilder: __transitionBuilder,
-        // layoutBuilder: (widget, list) => Stack(children: [widget, ...list]),
         child: _displayFront ? _cardFrontWidget() : _cardRearWidget(),
         switchInCurve: Curves.easeInBack,
         switchOutCurve: Curves.easeInBack.flipped,
@@ -208,111 +189,148 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _cardFrontWidget() {
-    return Column(
-      children: [
-        Image.asset(
-          'assets/images/example_image.png',
-          fit: BoxFit.cover,
-          height: 456,
+    return Card(
+      key: key,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ClipPath(
+        clipper: ShapeBorderClipper(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
-        Container(
-          margin: EdgeInsets.fromLTRB(24, 16, 0, 0),
+        child: Container(
+          width: 342,
+          height: 592,
+          alignment: Alignment.centerLeft,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                '제목',
-                style: _TextStyles.Title,
+              Image.asset(
+                'assets/images/example_image.png',
+                fit: BoxFit.cover,
+                height: 456,
               ),
-              SizedBox(height: 4),
-              Row(
-                children: [
-                  Text(
-                    '2023' + '  |  ' + '아크릴 캔버스' + '  |  ' + '35.8 * 42.6',
-                    style: _TextStyles.Feature,
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 42, // TODO: 글자수 길이에 따른 변수로 변경
-                    height: 24,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: FittedBox(
-                        fit: BoxFit.fitHeight,
-                        child: Text('현대',
-                            style: TextStyle(color: Color(0xff595959))),
-                      ),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                        backgroundColor: ColorMap.gray_100,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3),
-                        ),
-                      ),
+              Container(
+                margin: EdgeInsets.fromLTRB(24, 16, 0, 0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '제목',
+                      style: _TextStyles.Title,
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  SizedBox(
-                    width: 54,
-                    height: 24,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: FittedBox(
-                        fit: BoxFit.fitHeight,
-                        child: Text('아크릴',
-                            style: TextStyle(color: Color(0xff595959))),
-                      ),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                        backgroundColor: ColorMap.gray_100,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3),
+                    SizedBox(height: 4),
+                    Row(
+                      children: [
+                        Text(
+                          '2023' +
+                              '  |  ' +
+                              '아크릴 캔버스' +
+                              '  |  ' +
+                              '35.8 * 42.6',
+                          style: _TextStyles.Feature,
                         ),
-                      ),
+                      ],
                     ),
-                  ),
-                  SizedBox(width: 8),
-                  SizedBox(
-                    width: 81,
-                    height: 24,
-                    child: TextButton(
-                      onPressed: () {},
-                      child: FittedBox(
-                        fit: BoxFit.fitHeight,
-                        child: Text('공예 캔버스',
-                            style: TextStyle(color: Color(0xff595959))),
-                      ),
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                        backgroundColor: ColorMap.gray_100,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(3),
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 42, // TODO: 글자수 길이에 따른 변수로 변경
+                          height: 24,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Text('현대',
+                                  style: TextStyle(color: Color(0xff595959))),
+                            ),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                              backgroundColor: ColorMap.gray_100,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                        SizedBox(width: 8),
+                        SizedBox(
+                          width: 54,
+                          height: 24,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Text('아크릴',
+                                  style: TextStyle(color: Color(0xff595959))),
+                            ),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                              backgroundColor: ColorMap.gray_100,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8),
+                        SizedBox(
+                          width: 81,
+                          height: 24,
+                          child: TextButton(
+                            onPressed: () {},
+                            child: FittedBox(
+                              fit: BoxFit.fitHeight,
+                              child: Text('공예 캔버스',
+                                  style: TextStyle(color: Color(0xff595959))),
+                            ),
+                            style: TextButton.styleFrom(
+                              padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                              backgroundColor: ColorMap.gray_100,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(3),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 
   Widget _cardRearWidget() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(24, 0, 24, 0),
-      child: Center(
-        child: Text(
-            style: _TextStyles.Description,
-            '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-            '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-            '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
+    return Card(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: ClipPath(
+        clipper: ShapeBorderClipper(
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16)),
+        ),
+        child: Container(
+          width: 342,
+          height: 592,
+          alignment: Alignment.centerLeft,
+          child: Container(
+            margin: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+            child: Center(
+              child: Text(
+                  style: _TextStyles.Description,
+                  '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+                      '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+                      '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
+            ),
+          ),
+        ),
       ),
     );
   }
