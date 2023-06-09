@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       title: 'test',
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Pretendard'),
       home: TestPage(),
-      initialRoute: '/',
+      initialRoute: '/signin',
       initialBinding: InitialBinding(),
       getPages: [
         // TODO: BindingBuilder 사용여부에 따라 Routing 수정 필요
