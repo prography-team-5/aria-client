@@ -9,6 +9,7 @@
 // 7. (client) 유저 정보를 가공, 저장
 // 8. (client) 유저 정보를 반환
 
+import 'package:aria_client/helpers/env.dart';
 import 'package:aria_client/helpers/network_adapter.dart';
 import 'package:aria_client/models/member.dart';
 import 'package:flutter/services.dart';
@@ -62,22 +63,21 @@ class AuthService extends GetxService {
         break;
     }
 
-    // 2. 토큰 가져옴
+    // 2. 토큰 가져옴, 서버에 signIn 시도(jwt 가져오기)
     accessToken = data['accessToken'];
     refreshToken = data['refreshToken'];
+    data = await signInWithServer(
+        accessToken: accessToken, refreshToken: refreshToken);
     statusCode = data['statusCode'];
 
     // 2-1. 200이면 회원가입된 회원이므로 회원 정보 가져와서 반환
     if (statusCode == 200) {
-      // 3. 서버에 signIn 수행, jwt 발급
-      data = await signInWithServer(
-          accessToken: accessToken, refreshToken: refreshToken);
       jwt = data['jwt'];
-      // 4. 회원 정보 가져옴
+      // 3. 회원 정보 가져옴
       data = await fetchMember(jwt: jwt);
       member = data['member'];
       statusCode = 200;
-      // 5. 최종 결과 Map으로 반환
+      // 4. 최종 결과 Map으로 반환
       return {
         'accessToken': accessToken,
         'refreshToken': refreshToken,
@@ -174,38 +174,63 @@ class AuthService extends GetxService {
 
   Future<Map<String, dynamic>> signInWithServer(
       {required String accessToken, required String refreshToken}) async {
-    String jwt = '';
+    String jwt = 'testjwtsignin';
+    NetworkAdapter networkAdapter = NetworkAdapter();
 
-    return {
-      'jwt': jwt,
-      'accessToken': accessToken,
-      'refreshToken': refreshToken
-    };
+    if (Env.env == Environ.dev) {
+      return {'jwt': jwt, 'statusCode': 200};
+    }
+
+    Map<String, dynamic> data = await networkAdapter.post(
+        path: '/login',
+        params: {'accessToken': accessToken, 'refreshToken': refreshToken});
+
+    return {'jwt': data['jwt'], 'statusCode': data['statusCode']};
   }
 
   Future<Map<String, dynamic>> signUpWithServer(
       {required String accessToken,
       required String refreshToken,
       required String nickname}) async {
-    String jwt = '';
+    String jwt = 'testjwtsignup';
+    NetworkAdapter networkAdapter = NetworkAdapter();
 
-    return {'jwt': jwt};
+    if (Env.env == Environ.dev) {
+      return {'jwt': jwt, 'statusCode': 200};
+    }
+
+    Map<String, dynamic> data = await networkAdapter.post(
+        path: '/sign-up',
+        params: {
+          'accessToken': accessToken,
+          'refreshToken': refreshToken,
+          'nickname': nickname
+        });
+    return {'jwt': data['jwt'], 'statusCode': data['statusCode']};
   }
 
   Future<Map<String, dynamic>> fetchMember({required String jwt}) async {
     Member? member;
     NetworkAdapter networkAdapter = NetworkAdapter();
 
-    member = await Member(
-      id: 1,
-      email: 'test@test.com',
-      password: 'test',
-      role: 'artist',
-      nickname: 'test',
-      profile_image_url: 'https://picsum.photos/200/300',
-      sign_type: 'kakao',
-    );
+    if (Env.env == Environ.dev) {
+      member = await Member(
+        id: 1,
+        email: 'test@test.com',
+        password: 'test',
+        role: 'artist',
+        nickname: 'test',
+        profile_image_url: 'https://picsum.photos/200/300',
+        sign_type: 'kakao',
+      );
+      return {
+        'member': member,
+      };
+    }
 
+    Map<String, dynamic> data =
+        await networkAdapter.get(path: '/member', params: {'jwt': jwt});
+    member = Member.fromJson(data['member']);
     return {
       'member': member,
     };
