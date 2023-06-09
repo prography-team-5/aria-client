@@ -1,14 +1,3 @@
-// signIn() => signUp에서 분기로 함께 처리되므로(200/401) 생략
-// signUp()
-// 1. signUpMethod 확인
-// 2. signUpMethod 별로 분기, signup실행
-// 3. (social) 각 서비스에게 로그인 요청
-// 4. (social) 각 서비스마다 토큰 발급받음
-// 5. (server) 토큰을 서버에 전달(이때 서버는 회원가입된 회원인지 확인, 아니면 닉네임과 함께 토큰 재전달 필요)
-// 6. (server) 유저 정보를 전달받음
-// 7. (client) 유저 정보를 가공, 저장
-// 8. (client) 유저 정보를 반환
-
 import 'package:aria_client/helpers/env.dart';
 import 'package:aria_client/helpers/network_adapter.dart';
 import 'package:aria_client/models/member.dart';
