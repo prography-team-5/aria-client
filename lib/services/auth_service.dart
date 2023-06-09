@@ -1,14 +1,15 @@
-// signIn()
+// signIn() => signUp에서 분기로 함께 처리되므로(200/401) 생략
 // signUp()
 // 1. signUpMethod 확인
 // 2. signUpMethod 별로 분기, signup실행
 // 3. (social) 각 서비스에게 로그인 요청
 // 4. (social) 각 서비스마다 토큰 발급받음
-// 5. (server) 토큰을 서버에 전달
+// 5. (server) 토큰을 서버에 전달(이때 서버는 회원가입된 회원인지 확인, 아니면 닉네임과 함께 토큰 재전달 필요)
 // 6. (server) 유저 정보를 전달받음
 // 7. (client) 유저 정보를 가공, 저장
 // 8. (client) 유저 정보를 반환
 
+import 'package:aria_client/helpers/network_adapter.dart';
 import 'package:aria_client/models/member.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -18,7 +19,6 @@ import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
 enum LoginPlatform { email, naver, kakao, apple }
 
 class AuthService extends GetxService {
-  Future<void> signIn() async {}
   Future<Member?> signUp(LoginPlatform method) async {
     Member? member;
     // check signup method
@@ -44,12 +44,30 @@ class AuthService extends GetxService {
   Future<Member?> signUpWithKaKao() async {
     // TODO: Kakao SDK 절차에 따라서 aos, ios 플랫폼 등록, 키 세팅
     Member? member;
+    NetworkAdapter networkAdapter = NetworkAdapter();
+    String jwt = '';
     if (await isKakaoTalkInstalled()) {
       try {
         await UserApi.instance.loginWithKakaoTalk();
         print('[+] KakaoTalk Login Success');
-        // TODO: Pass tokens to the server
-        // TODO: Get user info from the server
+        // TODO: Pass tokens to the server(real)
+        // var res = networkAdapter.post(
+        //     path: '/login', params: {'access_token': '', 'refresh_token': ''});
+        if (200 == 200) {
+          // res['statusCode'] == 200
+          jwt = ''; // res['jwt']
+        } else {
+          // 401
+          // var res = networkAdapter.post(path: '/sign-up', params: {
+          //   'access_token': '',
+          //   'refresh_token': '',
+          //   'nickname': ''
+          // });
+          // jwt = res['jwt'];
+          jwt = '';
+        }
+        // TODO: Get user info from the server(real)
+        // res = networkAdapter.get(path: '/member', params: {'jwt': jwt});
         member = await Member(
           id: 1,
           email: 'test@test.com',
