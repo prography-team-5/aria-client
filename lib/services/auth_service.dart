@@ -171,7 +171,7 @@ class AuthService extends GetxService {
     NetworkAdapter networkAdapter = NetworkAdapter();
 
     if (Env.env == Environ.dev) {
-      return {'jwt': jwt, 'statusCode': 200};
+      return {'jwt': jwt, 'statusCode': 401};
     }
 
     Map<String, dynamic> data = await networkAdapter.post(

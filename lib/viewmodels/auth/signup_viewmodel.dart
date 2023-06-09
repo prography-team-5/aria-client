@@ -14,7 +14,7 @@ class SignupViewModel extends GetxController {
   String nickname = '';
   String jwt = '';
 
-  Future<void> signUp() async {
+  Future<void> signUp({required String nickname}) async {
     Map<String, dynamic> res = await authService.signUp(nickname: nickname);
     final signinViewModel = Get.put(SigninViewModel());
     member = res['member'];
@@ -28,5 +28,6 @@ class SignupViewModel extends GetxController {
         member: member!);
     update();
     // navigate to main page
+    Get.offAllNamed('/home');
   }
 }

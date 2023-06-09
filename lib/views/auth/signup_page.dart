@@ -1,5 +1,6 @@
 import 'package:aria_client/constants/colormap.dart';
 import 'package:aria_client/constants/text_styles.dart';
+import 'package:aria_client/viewmodels/auth/signup_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -33,7 +34,7 @@ class SignUpController extends GetxController {
   }
 }
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends GetView<SignupViewModel> {
   const SignupPage({super.key});
 
   @override
@@ -80,7 +81,9 @@ class SignupPage extends StatelessWidget {
             ),
             TextField(
               controller: signUpController.nicknameController,
-              onChanged: (text) { signUpController.changeColor(); },
+              onChanged: (text) {
+                signUpController.changeColor();
+              },
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -100,7 +103,10 @@ class SignupPage extends StatelessWidget {
               height: 64,
               child: Obx(
                 () => TextButton(
-                  onPressed: () {}, // TODO: 회원가입 제출 이후 동작
+                  onPressed: () async {
+                    await controller.signUp(
+                        nickname: signUpController.nicknameController.text);
+                  }, // TODO: 회원가입 제출 이후 동작
                   child: Text(
                     '회원가입',
                     style: TextStyle(

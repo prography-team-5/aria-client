@@ -1,10 +1,12 @@
 import 'package:aria_client/constants/colormap.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 import '../../constants/text_styles.dart';
+import '../../viewmodels/auth/signin_viewmodel.dart';
 
-class SigninPage extends StatelessWidget {
+class SigninPage extends GetView<SigninViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,22 +32,37 @@ class SigninPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  'assets/images/kakao_login_button.svg',
-                  width: 64,
-                  height: 64,
+                InkWell(
+                  child: SvgPicture.asset(
+                    'assets/images/kakao_login_button.svg',
+                    width: 64,
+                    height: 64,
+                  ),
+                  onTap: () async {
+                    await controller.signInWithKaKao();
+                  },
                 ),
                 SizedBox(width: 16),
-                SvgPicture.asset(
-                  'assets/images/naver_login_button.svg',
-                  width: 64,
-                  height: 64,
+                InkWell(
+                  child: SvgPicture.asset(
+                    'assets/images/naver_login_button.svg',
+                    width: 64,
+                    height: 64,
+                  ),
+                  onTap: () async {
+                    controller.signInWithNaver();
+                  },
                 ),
                 SizedBox(width: 16),
-                SvgPicture.asset(
-                  'assets/images/apple_login_button.svg',
-                  width: 64,
-                  height: 64,
+                InkWell(
+                  child: SvgPicture.asset(
+                    'assets/images/apple_login_button.svg',
+                    width: 64,
+                    height: 64,
+                  ),
+                  onTap: () async {
+                    controller.signInWithApple();
+                  },
                 ),
               ],
             ),
@@ -55,10 +72,6 @@ class SigninPage extends StatelessWidget {
               height: 54,
               child: OutlinedButton(
                 onPressed: () {},
-                // child: Text(
-                //   '둘러보기',
-                //   style: TextStyle(color: Colors.black),
-                // ),
                 child: FittedBox(
                   fit: BoxFit.fitHeight,
                   child: Text(
@@ -75,7 +88,9 @@ class SigninPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 62,)
+            SizedBox(
+              height: 62,
+            )
           ],
         ),
       ),

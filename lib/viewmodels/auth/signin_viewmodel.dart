@@ -20,8 +20,10 @@ class SigninViewModel extends GetxController {
       refreshToken = res['refreshToken'];
       jwt = res['jwt'];
       update();
+      Get.offAllNamed('/home');
     } else {
       // navigate to signup page
+      Get.offAllNamed('/signup');
     }
   }
 
@@ -33,6 +35,7 @@ class SigninViewModel extends GetxController {
       refreshToken = res['refreshToken'];
       jwt = res['jwt'];
       update();
+      Get.offAllNamed('/home');
     } else {
       // navigate to signup page
     }
@@ -46,6 +49,7 @@ class SigninViewModel extends GetxController {
       refreshToken = res['refreshToken'];
       jwt = res['jwt'];
       update();
+      Get.offAllNamed('/home');
     } else {
       // navigate to signup page
     }
