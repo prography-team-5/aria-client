@@ -216,16 +216,12 @@ class AuthService extends GetxService {
         profile_image_url: 'https://picsum.photos/200/300',
         sign_type: 'kakao',
       );
-      return {
-        'member': member,
-      };
+      return {'member': member};
     }
 
     Map<String, dynamic> data =
         await networkAdapter.get(path: '/member', params: {'jwt': jwt});
     member = Member.fromJson(data['member']);
-    return {
-      'member': member,
-    };
+    return {'member': member};
   }
 }
