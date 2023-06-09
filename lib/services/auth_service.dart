@@ -112,8 +112,12 @@ class AuthService extends GetxService {
   Future<Map<String, dynamic>> signInWithKaKao() async {
     // TODO: Kakao SDK 절차에 따라서 aos, ios 플랫폼 등록, 키 세팅
     NetworkAdapter networkAdapter = NetworkAdapter();
-    String accessToken = '';
-    String refreshToken = '';
+    String accessToken = 'testaccesskakao';
+    String refreshToken = 'testrefreshkakao';
+
+    if (Env.env == Environ.dev) {
+      return {'accessToken': accessToken, 'refreshToken': refreshToken};
+    }
 
     if (await isKakaoTalkInstalled()) {
       try {
