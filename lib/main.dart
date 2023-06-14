@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'test',
       theme: ThemeData(primarySwatch: Colors.blue, fontFamily: 'Pretendard'),
+      debugShowCheckedModeBanner: false,
       home: TestPage(),
       initialRoute: '/signin',
       initialBinding: InitialBinding(),

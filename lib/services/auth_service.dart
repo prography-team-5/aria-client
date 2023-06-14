@@ -115,7 +115,7 @@ class AuthService extends GetxService {
     String accessToken = 'testaccesskakao';
     String refreshToken = 'testrefreshkakao';
 
-    if (Env.env == Environ.dev) {
+    if (Env.env != Environ.dev) {
       return {'accessToken': accessToken, 'refreshToken': refreshToken};
     }
 
