@@ -3,6 +3,7 @@ import 'package:aria_client/views/test/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
 import 'views/art/detail_page.dart';
 import 'views/artist/add_art_page.dart';
@@ -20,6 +21,7 @@ void main() {
     statusBarIconBrightness: Brightness.light,
     statusBarColor: Colors.transparent,
   ));
+  KakaoSdk.init(nativeAppKey: '');
   runApp(const MyApp());
 }
 
