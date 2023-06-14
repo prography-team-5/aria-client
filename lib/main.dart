@@ -1,4 +1,5 @@
 import 'package:aria_client/bindings/initial_bindings.dart';
+import 'package:aria_client/helpers/env.dart';
 import 'package:aria_client/views/test/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -21,7 +22,7 @@ void main() {
     statusBarIconBrightness: Brightness.light,
     statusBarColor: Colors.transparent,
   ));
-  KakaoSdk.init(nativeAppKey: '');
+  KakaoSdk.init(nativeAppKey: Env.kakaoNativeKey);
   runApp(const MyApp());
 }
 

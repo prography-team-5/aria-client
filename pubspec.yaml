@@ -35,7 +35,6 @@ dependencies:
   http:
 
   # social login
-  flutter_naver_login: ^1.8.0
   kakao_flutter_sdk: ^1.4.3
   sign_in_with_apple: ^4.3.0
 
