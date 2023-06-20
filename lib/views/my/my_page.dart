@@ -16,7 +16,7 @@ class _MyPageState extends State<MyPage> {
   ScrollController scrollController = ScrollController();
   PageController pageController = PageController(initialPage: 0);
 
-  final double sliverMinHeight = 80.0, sliverMaxHeight = 140.0;
+  final double sliverMinHeight = 80.0, sliverMaxHeight = 400.0;
   int pageIndex = 0;
 
   final colors = [
@@ -113,19 +113,19 @@ class _MyPageState extends State<MyPage> {
   Widget minTopChild() {
     return Column(
       children: <Widget>[
-        Expanded(
-          child: Container(
-            alignment: Alignment.center,
-            color: Color(0xFF014F90),
-            child: Text(
-              "Min Top Bar",
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: 23,
-              ),
-            ),
-          ),
-        ),
+        // Expanded(
+        //   child: Container(
+        //     alignment: Alignment.center,
+        //     color: Color(0xFF014F90),
+        //     child: Text(
+        //       "Min Top Bar",
+        //       style: TextStyle(
+        //         color: Color(0xFFFFFFFF),
+        //         fontSize: 23,
+        //       ),
+        //     ),
+        //   ),
+        // ),
         pageButtonLayout(),
       ],
     );
@@ -136,16 +136,10 @@ class _MyPageState extends State<MyPage> {
       children: <Widget>[
         Expanded(
           child: Container(
-            alignment: Alignment.center,
-            color: Color(0xFFFF1D1D),
-            child: Text(
-              "Max Top Bar",
-              style: TextStyle(
-                color: Color(0xFFFFFFFF),
-                fontSize: 23,
-              ),
-            ),
-          ),
+              child: Image.asset(
+            'assets/images/profile_background.png',
+            fit: BoxFit.fill,
+          )),
         ),
         pageButtonLayout(),
       ],
@@ -159,8 +153,6 @@ class _MyPageState extends State<MyPage> {
         children: <Widget>[
           Expanded(child: pageButton("page 1", 0)),
           Expanded(child: pageButton("page 2", 1)),
-          Expanded(child: pageButton("page 3", 2)),
-          Expanded(child: pageButton("page 4", 3)),
         ],
       ),
     );
@@ -206,9 +198,6 @@ class _MyPageState extends State<MyPage> {
     return PageView(
       controller: pageController,
       children: <Widget>[
-        pageItem(
-          Text("page 1"),
-        ),
         pageItem(Center(
           child: Text(
             "page 2\n\n두번째\n\n페이지\n\n스크롤이\n\n되도록\n\n내용을\n\n길게\n\n길게",
@@ -216,9 +205,6 @@ class _MyPageState extends State<MyPage> {
           ),
         )),
         pageListView(),
-        pageItem(Center(
-          child: Text("page 4"),
-        )),
       ],
       onPageChanged: (index) => setState(() => pageIndex = index),
     );
