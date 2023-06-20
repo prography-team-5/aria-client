@@ -81,7 +81,13 @@ class AuthService extends GetxService {
     }
     // 2-2. 401이면 회원가입 안된 회원이므로 회원가입 화면으로 돌아가기 위해 그대로 반환
     else if (statusCode == 401) {
-      return {'statusCode': statusCode};
+      // !TEST CODE!
+      return {
+        'accessToken': accessToken,
+        'refreshToken': refreshToken,
+        'statusCode': 200
+      };
+      // return {'statusCode': statusCode};
     }
     return {};
   }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-class HomePage extends StatelessWidget {
+import '../../viewmodels/main/home_viewmodel.dart';
+
+class HomePage extends GetView<HomeViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +38,44 @@ class HomePage extends StatelessWidget {
           elevation: 0.0, // appBar 그림자 제거
         ),
       ),
-      body: Container(),
+      body: Column(children: [
+        Padding(padding: EdgeInsets.all(20)),
+        Row(
+          children: [
+            Flexible(
+              child: Text(
+                'AccessToken : ' + controller.signinViewModel.accessToken,
+                style: TextStyle(color: Colors.black),
+                softWrap: true,
+              ),
+            ),
+            TextButton(
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(
+                      text: controller.signinViewModel.accessToken));
+                },
+                child: Text('Copy'))
+          ],
+        ),
+        Padding(padding: EdgeInsets.all(20)),
+        Row(
+          children: [
+            Flexible(
+              child: Text(
+                'RefreshToken : ' + controller.signinViewModel.refreshToken,
+                style: TextStyle(color: Colors.black),
+                softWrap: true,
+              ),
+            ),
+            TextButton(
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(
+                      text: controller.signinViewModel.refreshToken));
+                },
+                child: Text('Copy'))
+          ],
+        ),
+      ]),
     );
   }
 }

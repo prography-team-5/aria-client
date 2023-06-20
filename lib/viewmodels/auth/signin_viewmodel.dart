@@ -15,10 +15,12 @@ class SigninViewModel extends GetxController {
   Future<void> signInWithKaKao() async {
     Map<String, dynamic> res = await authService.signIn(LoginPlatform.kakao);
     if (res['statusCode'] == 200) {
-      member = res['member'];
+      // TEST
+      // member = res['member'];
       accessToken = res['accessToken'];
       refreshToken = res['refreshToken'];
-      jwt = res['jwt'];
+      print(accessToken);
+      // jwt = res['jwt'];
       update();
       Get.offAllNamed('/home');
     } else {

@@ -1,3 +1,7 @@
 import 'package:get/get.dart';
 
-class HomeViewModel extends GetxController {}
+import '../auth/signin_viewmodel.dart';
+
+class HomeViewModel extends GetxController {
+  final signinViewModel = Get.find<SigninViewModel>();
+}
