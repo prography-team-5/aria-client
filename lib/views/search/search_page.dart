@@ -45,26 +45,7 @@ class SearchPage extends StatelessWidget {
             height: 48,
             // color: Colors.white,
             child: Center(
-              child: TextField(
-                decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(10),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: ColorMap.gray_200, width: 1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: ColorMap.gray_200, width: 1),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  hintText: '검색어를 입력하세요.',
-                  hintStyle: _TextStyles.Hint,
-                  prefixIcon: Icon(
-                    Icons.search,
-                    size: 20,
-                    color: ColorMap.gray_400,
-                  ),
-                ),
-              ),
+              child: SearchField(),
             ),
           ),
           actions: [
@@ -94,3 +75,84 @@ class SearchPage extends StatelessWidget {
     );
   }
 }
+
+class SearchField extends StatefulWidget {
+  const SearchField({Key? key}) : super(key: key);
+
+  @override
+  State<SearchField> createState() => _SearchFieldState();
+}
+
+class _SearchFieldState extends State<SearchField> {
+  final FocusNode _focusNode = FocusNode();
+  late OverlayEntry _overlayEntry;
+
+  @override
+  void initState() {
+    _focusNode.addListener(
+          () {
+        if (_focusNode.hasFocus) {
+          _overlayEntry = _createOverlayEntry();
+          Overlay.of(context).insert(_overlayEntry);
+        } else {
+          _overlayEntry.remove();
+        }
+      },
+    );
+  }
+
+  OverlayEntry _createOverlayEntry() {
+    RenderBox? renderBox = context.findRenderObject() as RenderBox;
+    var size = renderBox.size;
+    var offset = renderBox.localToGlobal(Offset.zero);
+
+    return OverlayEntry(
+      builder: (context) => Positioned(
+        left: offset.dx,
+        top: offset.dy + size.height + 5,
+        width: size.width,
+        child: Material(
+          elevation: 4,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            children: [
+              ListTile(
+                title: Text('애니메이션'),
+              ),
+              ListTile(
+                title: Text('일러스트'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      focusNode: _focusNode,
+      decoration: InputDecoration(
+        contentPadding: EdgeInsets.all(10),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: ColorMap.gray_200, width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: ColorMap.gray_200, width: 1),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        hintText: '검색어를 입력하세요.',
+        hintStyle: _TextStyles.Hint,
+        prefixIcon: Icon(
+          Icons.search,
+          size: 20,
+          color: ColorMap.gray_400,
+        ),
+      ),
+    );
+  }
+}
+
