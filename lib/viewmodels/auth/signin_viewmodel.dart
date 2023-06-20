@@ -30,6 +30,8 @@ class SigninViewModel extends GetxController {
   }
 
   Future<void> signInWithNaver() async {
+    // TEST
+    Get.offAllNamed('/home');
     Map<String, dynamic> res = await authService.signIn(LoginPlatform.naver);
     if (res['statusCode'] == 200) {
       member = res['member'];
