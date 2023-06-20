@@ -37,6 +37,10 @@ class AuthService extends GetxService {
   Future<Map<String, dynamic>> signIn(LoginPlatform method) async {
     Map<String, dynamic> data = {};
 
+    // TEST
+    String keyhash = await KakaoSdk.origin;
+    print(keyhash);
+
     // 1. 각 소셜 로그인 방법대로 signin, tokens 가져오기
     switch (method) {
       case LoginPlatform.naver:
@@ -110,7 +114,6 @@ class AuthService extends GetxService {
   }
 
   Future<Map<String, dynamic>> signInWithKaKao() async {
-    // TODO: Kakao SDK 절차에 따라서 aos, ios 플랫폼 등록, 키 세팅
     NetworkAdapter networkAdapter = NetworkAdapter();
     String accessToken = 'testaccesskakao';
     String refreshToken = 'testrefreshkakao';
@@ -121,10 +124,10 @@ class AuthService extends GetxService {
 
     if (await isKakaoTalkInstalled()) {
       try {
-        await UserApi.instance.loginWithKakaoTalk();
+        OAuthToken oAuthToken = await UserApi.instance.loginWithKakaoTalk();
         print('[+] KakaoTalk Login Success');
-        // accessToken = (await AccessTokenStore.instance.fromStore())!.token;
-        // refreshToken = (await AccessTokenStore.instance.fromStore())!.refreshToken;
+        accessToken = oAuthToken.accessToken;
+        refreshToken = oAuthToken.refreshToken ?? '';
         return {'accessToken': accessToken, 'refreshToken': refreshToken};
       } catch (error) {
         print('[-] KakaoTalk Login Failed');
@@ -134,10 +137,11 @@ class AuthService extends GetxService {
           return {};
         }
         try {
-          await UserApi.instance.loginWithKakaoAccount();
-          print('[+] Kakao Account Login Success');
-          // accessToken = (await AccessTokenStore.instance.fromStore())!.token;
-          // refreshToken = (await AccessTokenStore.instance.fromStore())!.refreshToken;
+          OAuthToken oAuthToken =
+              await UserApi.instance.loginWithKakaoAccount();
+          print('[+] KakaoTalk Login Success');
+          accessToken = oAuthToken.accessToken;
+          refreshToken = oAuthToken.refreshToken ?? '';
           return {'accessToken': accessToken, 'refreshToken': refreshToken};
         } catch (error) {
           print('[-] Kakao Account Login Failed');
@@ -147,10 +151,10 @@ class AuthService extends GetxService {
       }
     } else {
       try {
-        await UserApi.instance.loginWithKakaoAccount();
+        OAuthToken oAuthToken = await UserApi.instance.loginWithKakaoAccount();
         print('[+] Kakao Account Login Success');
-        // accessToken = (await AccessTokenStore.instance.fromStore())!.token;
-        // refreshToken = (await AccessTokenStore.instance.fromStore())!.refreshToken;
+        accessToken = oAuthToken.accessToken;
+        refreshToken = oAuthToken.refreshToken ?? '';
         return {'accessToken': accessToken, 'refreshToken': refreshToken};
       } catch (error) {
         print('[-] Kakao Account Login Failed');

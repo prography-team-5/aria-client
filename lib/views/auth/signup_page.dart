@@ -54,8 +54,10 @@ class SignupPage extends GetView<SignupViewModel> {
           ),
           leading: Padding(
             padding: EdgeInsets.fromLTRB(12, 16, 0, 16),
-            child: GestureDetector(
-              onTap: () => Get.back(),
+            child: InkWell(
+              onTap: () {
+                Get.toNamed('/signin');
+              },
               child: SvgPicture.asset(
                 'assets/images/leading_button.svg',
               ),
