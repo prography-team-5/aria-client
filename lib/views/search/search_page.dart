@@ -18,6 +18,13 @@ class _TextStyles {
       fontWeight: FontWeight.w400,
       height: 1.5,
       letterSpacing: -0.25);
+
+  static const SearchedWords = TextStyle(
+      color: ColorMap.gray_500,
+      fontSize: 16,
+      fontWeight: FontWeight.w400,
+      height: 1.5,
+      letterSpacing: -0.25);
 }
 
 class SearchPage extends StatelessWidget {
@@ -71,69 +78,40 @@ class SearchPage extends StatelessWidget {
           elevation: 0.0, // appBar 그림자 제거
         ),
       ),
-      body: Container(),
-    );
-  }
-}
-
-class SearchField extends StatefulWidget {
-  const SearchField({Key? key}) : super(key: key);
-
-  @override
-  State<SearchField> createState() => _SearchFieldState();
-}
-
-class _SearchFieldState extends State<SearchField> {
-  final FocusNode _focusNode = FocusNode();
-  late OverlayEntry _overlayEntry;
-
-  @override
-  void initState() {
-    _focusNode.addListener(
-          () {
-        if (_focusNode.hasFocus) {
-          _overlayEntry = _createOverlayEntry();
-          Overlay.of(context).insert(_overlayEntry);
-        } else {
-          _overlayEntry.remove();
-        }
-      },
-    );
-  }
-
-  OverlayEntry _createOverlayEntry() {
-    RenderBox? renderBox = context.findRenderObject() as RenderBox;
-    var size = renderBox.size;
-    var offset = renderBox.localToGlobal(Offset.zero);
-
-    return OverlayEntry(
-      builder: (context) => Positioned(
-        left: offset.dx,
-        top: offset.dy + size.height + 5,
-        width: size.width,
-        child: Material(
-          elevation: 4,
-          child: ListView(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            children: [
-              ListTile(
-                title: Text('애니메이션'),
+      body: Container(
+        margin: EdgeInsets.fromLTRB(24, 4, 24, 12),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true,
+          children: [
+            ListTile(
+              contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+              title: Text(
+                '검색어',
+                style: _TextStyles.SearchedWords,
               ),
-              ListTile(
-                title: Text('일러스트'),
+              trailing: SvgPicture.asset(
+                'assets/images/cancel_button.svg',
               ),
-            ],
-          ),
+            ),
+            ListTile(
+              contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+              title: Text(
+                '검색어',
+                style: _TextStyles.SearchedWords,
+              ),
+              trailing: SvgPicture.asset(
+                'assets/images/cancel_button.svg',
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  Widget SearchField() {
     return TextField(
-      focusNode: _focusNode,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(10),
         focusedBorder: OutlineInputBorder(
@@ -155,4 +133,3 @@ class _SearchFieldState extends State<SearchField> {
     );
   }
 }
-
