@@ -19,7 +19,7 @@ class _TextStyles {
 
   static final Feature = TextStyle(
     color: ColorMap.gray_400,
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: FontWeight.w400,
     height: 1.5,
     letterSpacing: -0.25,
@@ -44,10 +44,34 @@ class _HomePageState extends State<HomePage> {
   @required
   Key key = ValueKey(false);
   bool _displayFront = true;
+  Size size = Size.zero;
 
   final List<String> images = ['example_image.png', 'example_image_2.jpg'];
   final _currentCardNotifier = ValueNotifier<RxInt>(0.obs);
   final PageController _pageController = PageController(initialPage: 0);
+
+  final GlobalKey _cadsPageKey = GlobalKey();
+  Size? _getSize() {
+    if (_cadsPageKey.currentContext != null) {
+      final RenderBox renderBox =
+      _cadsPageKey.currentContext!.findRenderObject() as RenderBox;
+      Size size = renderBox.size;
+      return size;
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      setState(() {
+        size = _getSize()!;
+      });
+    });
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
+      print("컨테이너 정보\nwidth:${size?.width}\nheight:${size?.height}");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -100,17 +124,19 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             body: Container(
-              margin: const EdgeInsets.fromLTRB(24, 0, 24, 0),
+              margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Spacer(),
                   SizedBox(
-                    height: 650, // TODO: 전체 높이 기준으로 전시회 방문하기 버튼이 잘리기 않는 정도 계산하기
+                    // height: 637,
+                    key: _cadsPageKey,
+                    height: MediaQuery.of(context).size.height - 208 , // H56 T24 SB24 BT64 B40
                     child: _cardsPageView(),
                   ),
-                  // _cardFlipAnimation(1),
-                  Spacer(),
+                  SizedBox(height: 24),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextButton(
                         onPressed: () {},
@@ -125,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(width: 9),
                       SizedBox(
-                        width: 256, // TODO: flexible하게 바꿀 것
+                        width: MediaQuery.of(context).size.width - 121, // L24 R24 BT64 SB 9
                         height: 64,
                         child: TextButton(
                           onPressed: () {},
@@ -143,7 +169,6 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 40)
                 ],
               ),
             ),
@@ -215,24 +240,28 @@ class _HomePageState extends State<HomePage> {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         child: Container(
-          width: 342,
-          height: 592,
+          width: double.infinity,
           alignment: Alignment.centerLeft,
           child: Column(
             children: [
               Image.asset(
                 'assets/images/${images[index]}',
                 fit: BoxFit.cover,
-                height: 456,
+                // height: 456,
+                height: size.height - 144, // TODO: 8px의 행방을 찾아서...
               ),
               Container(
-                margin: EdgeInsets.fromLTRB(24, 16, 0, 0),
+                height: 96,
+                margin: EdgeInsets.fromLTRB(24, 16, 24, 24),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      '제목',
-                      style: _TextStyles.Title,
+                    SizedBox(
+                      height: 30,
+                      child: Text(
+                        '제목',
+                        style: _TextStyles.Title,
+                      ),
                     ),
                     SizedBox(height: 4),
                     Row(

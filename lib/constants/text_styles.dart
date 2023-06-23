@@ -20,7 +20,7 @@ class TextStyles {
   static const Body1 = TextStyle(
       fontSize: 16, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: -0.25);
   static const Body2 = TextStyle(
-      fontSize: 16, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: -0.25);
+      fontSize: 14, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: -0.25);
   static const Caption = TextStyle(
       fontSize: 13, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: -0.25);
   static const Badge = TextStyle(
