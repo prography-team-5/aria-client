@@ -16,7 +16,7 @@ class _MyPageState extends State<MyPage> {
   ScrollController scrollController = ScrollController();
   PageController pageController = PageController(initialPage: 0);
 
-  final double sliverMinHeight = 80.0, sliverMaxHeight = 400.0;
+  final double sliverMinHeight = 0.0;
   int pageIndex = 0;
 
   final colors = [
@@ -80,7 +80,9 @@ class _MyPageState extends State<MyPage> {
             elevation: 0.0, // appBar 그림자 제거
           ),
         ),
-        body: NestedScrollView(
+        body:
+            // topChild()
+            NestedScrollView(
           controller: scrollController,
           headerSliverBuilder: headerSliverBuilder,
           body: Container(
@@ -100,8 +102,8 @@ class _MyPageState extends State<MyPage> {
         sliver: SliverPersistentHeader(
           pinned: true,
           delegate: SliverHeaderDelegateCS(
-            minHeight: sliverMinHeight,
-            maxHeight: sliverMaxHeight,
+            minHeight: 40,
+            maxHeight: MediaQuery.of(context).size.height,
             minChild: minTopChild(),
             maxChild: topChild(),
           ),
@@ -111,44 +113,88 @@ class _MyPageState extends State<MyPage> {
   }
 
   Widget minTopChild() {
-    return Column(
-      children: <Widget>[
-        // Expanded(
-        //   child: Container(
-        //     alignment: Alignment.center,
-        //     color: Color(0xFF014F90),
-        //     child: Text(
-        //       "Min Top Bar",
-        //       style: TextStyle(
-        //         color: Color(0xFFFFFFFF),
-        //         fontSize: 23,
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        pageButtonLayout(),
-      ],
-    );
+    // return Container();
+    return pageButtonLayout();
   }
 
   Widget topChild() {
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: Container(
+    return Stack(
+      alignment: Alignment.center,
+      children: [
+        Column(
+          children: [
+            Container(
+              height: 400,
               child: Image.asset(
-            'assets/images/profile_background.png',
-            fit: BoxFit.fill,
-          )),
+                'assets/images/profile_background.png',
+                fit: BoxFit.fill,
+              ),
+            ),
+            Expanded(
+              // height: 200,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 50 + 5),
+                child: Column(
+                  children: [
+                    Text('작가 아리아'),
+                    Text('현대 아크릴 공예'),
+                    Text('32 Followers'),
+                    Container(
+                      width: 350,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: ColorMap.gray_200,
+                        borderRadius: BorderRadius.circular(15),
+                      ),
+                      child: Center(child: Text('1000자')),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        TextButton(onPressed: () {}, child: Text('프로필 수정')),
+                        TextButton(onPressed: () {}, child: Text('프로필 수정'))
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Container(
+                          height: 56,
+                          width: 56,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: ColorMap.gray_200),
+                          ),
+                        ),
+                        Container(),
+                        Container(),
+                        Container(),
+                      ],
+                    ),
+                    pageButtonLayout(),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
-        pageButtonLayout(),
+        Positioned(
+          top: 400 - 50,
+          child: Container(
+            height: 100.0,
+            width: 100.0,
+            child: Image.asset('assets/images/profile_avatar.png'),
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+            ),
+          ),
+        )
       ],
     );
   }
 
   Widget pageButtonLayout() {
     return SizedBox(
-      height: sliverMinHeight / 2,
+      height: 50,
       child: Row(
         children: <Widget>[
           Expanded(child: pageButton("page 1", 0)),
@@ -215,10 +261,12 @@ class _MyPageState extends State<MyPage> {
     double height = MediaQuery.of(context).size.height;
     double minHeight = height - statusHeight - sliverMinHeight;
 
+    print('$statusHeight, $height, $minHeight');
+
     return SingleChildScrollView(
       child: Container(
         color: Colors.white,
-        constraints: BoxConstraints(minHeight: minHeight),
+        constraints: BoxConstraints(minHeight: 600),
         child: child,
       ),
     );
@@ -271,6 +319,8 @@ class SliverHeaderDelegateCS extends SliverPersistentHeaderDelegate {
     visibleMainHeight = max(maxExtent - shrinkOffset, minExtent);
     animationVal = scrollAnimationValue(shrinkOffset);
 
+    print(visibleMainHeight);
+
     return Container(
         height: visibleMainHeight,
         width: MediaQuery.of(context).size.width,
@@ -287,7 +337,7 @@ class SliverHeaderDelegateCS extends SliverPersistentHeaderDelegate {
     return Positioned(
       bottom: 0.0,
       child: Opacity(
-        opacity: animationVal,
+        opacity: animationVal != 0 ? 1 : 0,
         child: SizedBox(
           height: maxHeight,
           width: width,
@@ -299,7 +349,7 @@ class SliverHeaderDelegateCS extends SliverPersistentHeaderDelegate {
 
   Widget getMinTop() {
     return Opacity(
-      opacity: 1 - animationVal,
+      opacity: animationVal != 0 ? 0 : 1,
       child:
           Container(height: visibleMainHeight, width: width, child: minChild),
     );
