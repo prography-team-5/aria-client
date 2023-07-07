@@ -261,8 +261,6 @@ class _MyPageState extends State<MyPage> {
     double height = MediaQuery.of(context).size.height;
     double minHeight = height - statusHeight - sliverMinHeight;
 
-    print('$statusHeight, $height, $minHeight');
-
     return SingleChildScrollView(
       child: Container(
         color: Colors.white,
@@ -318,8 +316,6 @@ class SliverHeaderDelegateCS extends SliverPersistentHeaderDelegate {
     width = MediaQuery.of(context).size.width;
     visibleMainHeight = max(maxExtent - shrinkOffset, minExtent);
     animationVal = scrollAnimationValue(shrinkOffset);
-
-    print(visibleMainHeight);
 
     return Container(
         height: visibleMainHeight,

@@ -4,7 +4,6 @@ import 'package:aria_client/models/member.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk_talk.dart';
-import 'package:kakao_flutter_sdk/kakao_flutter_sdk_template.dart';
 
 enum LoginPlatform { email, naver, kakao, apple }
 
@@ -185,8 +184,8 @@ class AuthService extends GetxService {
     }
 
     Map<String, dynamic> data = await networkAdapter.post(
-        path: '/login',
-        params: {'accessToken': accessToken, 'refreshToken': refreshToken});
+        path: '/auth/sign-in',
+        params: {'accessToken': accessToken, 'platformType': 'KAKAO'});
 
     return {'jwt': data['jwt'], 'statusCode': data['statusCode']};
   }
@@ -203,7 +202,7 @@ class AuthService extends GetxService {
     }
 
     Map<String, dynamic> data = await networkAdapter.post(
-        path: '/sign-up',
+        path: '/auth/sign-up',
         params: {
           'accessToken': accessToken,
           'refreshToken': refreshToken,

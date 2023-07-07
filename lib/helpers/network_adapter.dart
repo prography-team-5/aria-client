@@ -46,6 +46,8 @@ class NetworkAdapter {
       },
       body: json.encode(params),
     );
+    print('response: ${response.statusCode}');
+    print('response: ${utf8.decode(response.bodyBytes)}');
     return response;
   }
 

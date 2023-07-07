@@ -19,8 +19,9 @@ class SigninViewModel extends GetxController {
       // member = res['member'];
       accessToken = res['accessToken'];
       refreshToken = res['refreshToken'];
-      print(accessToken);
-      // jwt = res['jwt'];
+      print('[*] accessToken: $accessToken');
+      jwt = res['jwt'];
+      print('[*] jwt: $jwt');
       update();
       Get.offAllNamed('/home');
     } else {
