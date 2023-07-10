@@ -25,20 +25,34 @@ class _TextStyles {
   );
 }
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @required
+  Key key = ValueKey(false);
+  bool _displayFront = true;
+
+  final List<String> images = ['example_image.png', 'example_image_2.jpg'];
+  final _currentCardNotifier = ValueNotifier<RxInt>(0.obs);
+  final PageController _pageController = PageController(initialPage: 0);
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
           fit: BoxFit.fill,
-          image: AssetImage('assets/images/example_image.png'),
+          image: AssetImage(
+              'assets/images/${images[_currentCardNotifier.value.toInt()]}'),
         ),
       ),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16), // 배경 블러
         child: Container(
-          color: Color(0xffD9D9D9).withOpacity(0.1),
+          color: Color(0xffD9D9D9).withOpacity(0.7),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             appBar: PreferredSize(
@@ -81,7 +95,11 @@ class HomePage extends StatelessWidget {
               child: Column(
                 children: [
                   Spacer(),
-                  _cardFlipAnimation(),
+                  SizedBox(
+                    height: 650, // TODO: 전체 높이 기준으로 전시회 방문하기 버튼이 잘리기 않는 정도 계산하기
+                    child: _cardsPageView(),
+                  ),
+                  // _cardFlipAnimation(1),
                   Spacer(),
                   Row(
                     children: [
@@ -147,7 +165,21 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _cardFlipAnimation() {
+  Widget _cardsPageView() {
+    return PageView.builder(
+        itemCount: images.length,
+        controller: _pageController,
+        itemBuilder: (BuildContext context, int index) {
+          return _cardFlipAnimation(index);
+        },
+        onPageChanged: (int index) {
+          // TODO: 둘다 바로 적용이 안됨, 상태관리 문제 해결
+          _currentCardNotifier.value = index.obs;
+          _displayFront = true;
+        });
+  }
+
+  Widget _cardFlipAnimation(int index) {
     return GestureDetector(
       onTap: () => {
         setState(() => _displayFront = !_displayFront),
@@ -155,14 +187,14 @@ class HomePage extends StatelessWidget {
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 1000),
         transitionBuilder: __transitionBuilder,
-        child: _displayFront ? _cardFrontWidget() : _cardRearWidget(),
+        child: _displayFront ? _cardFrontWidget(index) : _cardRearWidget(index),
         switchInCurve: Curves.easeInBack,
         switchOutCurve: Curves.easeInBack.flipped,
       ),
     );
   }
 
-  Widget _cardFrontWidget() {
+  Widget _cardFrontWidget(int index) {
     return Card(
       key: key,
       shape: RoundedRectangleBorder(
@@ -180,7 +212,7 @@ class HomePage extends StatelessWidget {
           child: Column(
             children: [
               Image.asset(
-                'assets/images/example_image.png',
+                'assets/images/${images[index]}',
                 fit: BoxFit.cover,
                 height: 456,
               ),
@@ -280,7 +312,7 @@ class HomePage extends StatelessWidget {
     );
   }
 
-  Widget _cardRearWidget() {
+  Widget _cardRearWidget(int index) {
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -297,11 +329,16 @@ class HomePage extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.fromLTRB(24, 0, 24, 0),
             child: Center(
-              child: Text(
-                  style: _TextStyles.Description,
-                  '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-                  '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-                  '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
+              child: index == 1
+                  ? Text(
+                      style: _TextStyles.Description,
+                      '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+                      '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+                      '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.')
+                  : Text(
+                      style: _TextStyles.Description,
+                      '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+                      '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
             ),
           ),
         ),
