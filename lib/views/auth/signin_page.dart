@@ -71,7 +71,9 @@ class SigninPage extends GetView<SigninViewModel> {
               width: 225,
               height: 54,
               child: OutlinedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed('/test_page');
+                },
                 child: FittedBox(
                   fit: BoxFit.fitHeight,
                   child: Text(

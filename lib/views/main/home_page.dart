@@ -25,10 +25,11 @@ class _TextStyles {
   );
 
   static final Description = TextStyle(
-    color: ColorMap.gray_400,
-    fontSize: 14,
+    fontFamily: 'NanumMyeongjo',
+    color: ColorMap.gray_700,
+    fontSize: 16,
     fontWeight: FontWeight.w400,
-    height: 1.5,
+    height: 2,
     letterSpacing: -0.25,
   );
 }
