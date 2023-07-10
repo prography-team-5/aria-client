@@ -1,42 +1,48 @@
+import 'package:aria_client/models/size.dart';
+
 class Art {
-  final int id;
-  final int member_id;
-  final String image_url;
+  final int artId;
+  final int memberId;
+  final String mainImageUrl;
+  final String style;
   final String title;
   final int year;
-  final String style;
-  final int size;
+  final List<String> artTags;
+  final Size size;
   final String description;
 
   Art({
-    required this.id,
-    required this.member_id,
-    required this.image_url,
+    required this.artId,
+    required this.memberId,
+    required this.mainImageUrl,
+    required this.style,
     required this.title,
     required this.year,
-    required this.style,
+    required this.artTags,
     required this.size,
     required this.description,
   });
 
   factory Art.fromJson(Map<String, dynamic> json) => Art(
-    id: json['id'],
-    member_id: json['member_id'],
-    image_url: json['image_url'],
+    artId: json['artId'],
+    memberId: json['memberId'],
+    mainImageUrl: json['mainImageUrl'],
+    style: json['style'],
     title: json['title'],
     year: json['year'],
-    style: json['style'],
+    artTags: json['artTags'],
     size: json['size'],
     description: json['description'],
   );
 
   Map<String, dynamic> toJson() => {
-    'id': id,
-    'member_id': member_id,
-    'image_url': image_url,
+    'artId': artId,
+    'memberId': memberId,
+    'mainImageUrl': mainImageUrl,
+    'style': style,
     'title': title,
     'year': year,
-    'style': style,
+    'artTags' : artTags,
     'size': size,
     'description': description,
   };
