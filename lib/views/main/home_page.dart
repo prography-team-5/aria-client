@@ -45,27 +45,6 @@ class _HomePageController extends GetxController {
   }
 }
 
-class _HomePageController extends GetxController {
-  final cardScrollController = ScrollController();
-
-  RxDouble cardScrollOffset = 0.0.obs;
-
-  @override
-  void onClose() {
-    cardScrollController.dispose();
-    super.onClose();
-  }
-
-  @override
-  void onInit() {
-    cardScrollController.addListener(() {
-      cardScrollOffset.value = cardScrollController.offset;
-      print('offset = ${cardScrollOffset.value}');
-    });
-    super.onInit();
-  }
-}
-
 class HomePage extends StatefulWidget {
   @override
   State<HomePage> createState() => _HomePageState();
