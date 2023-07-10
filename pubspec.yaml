@@ -35,6 +35,7 @@ dependencies:
   http:
 
   # social login
+  flutter_naver_login: ^1.8.0
   kakao_flutter_sdk: ^1.4.3
   sign_in_with_apple: ^4.3.0
 
@@ -87,9 +88,15 @@ flutter:
     - family: PretendardBold
       fonts:
         - asset: assets/fonts/Pretendard-SemiBold.ttf
-    - family: NanumMyeongjo
-      fonts:
-        - asset: assets/fonts/NanumMyeongjo.ttf
+     - family: Pretendard
+       fonts:
+         - asset: assets/fonts/Pretendard-Regular.ttf
+     - family: PretendardBold
+       fonts:
+         - asset: assets/fonts/Pretendard-SemiBold.ttf
+     - family: NanumMyeongjo
+       fonts:
+           - asset: assets/fonts/NanumMyeongjo.ttf
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
