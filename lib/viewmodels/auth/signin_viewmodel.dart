@@ -9,7 +9,6 @@ class SigninViewModel extends GetxController {
   Member? member;
   String accessToken = '';
   String refreshToken = '';
-  String nickname = '';
   String jwt = '';
 
   Future<void> signInWithKaKao() async {
