@@ -5,9 +5,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
-import '../../viewmodels/main/home_viewmodel.dart';
+import '../../constants/text_styles.dart';
 
-class HomePage extends GetView<HomeViewModel> {
+class _TextStyles {
+  static final Title = TextStyle(
+    color: ColorMap.gray_600,
+    fontSize: 20,
+    fontWeight: FontWeight.w800,
+    height: 1.5,
+    letterSpacing: -0.25,
+  );
+
+  static final Description = TextStyle(
+    color: ColorMap.gray_400,
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    letterSpacing: -0.25,
+  );
+}
+
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -75,39 +93,107 @@ class HomePage extends GetView<HomeViewModel> {
                       child: Container(
                         width: 342,
                         height: 592,
-                        // decoration: BoxDecoration(
-                        //   border: Border(
-                        //       left: BorderSide(color: Colors.red, width: 15)),
-                        //   color: Colors.yellowAccent.shade100,
-                        // ),
-                        // padding: EdgeInsets.all(20.0),
                         alignment: Alignment.centerLeft,
                         child: Column(
                           children: [
                             Image.asset(
                               'assets/images/example_image.png',
-                              fit: BoxFit.fitWidth,
+                              fit: BoxFit.cover,
+                              height: 456,
                             ),
                             Container(
-                              height: 136,
+                              margin: EdgeInsets.fromLTRB(24, 16, 0, 0),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('제목'),
+                                  Text(
+                                    '제목',
+                                    style: _TextStyles.Title,
+                                  ),
+                                  SizedBox(height: 4),
                                   Row(
                                     children: [
-                                      Text('2023'),
-                                      Text(' | '),
-                                      Text('아크릴 캔버스'),
-                                      Text(' | '),
-                                      Text('35.8 * 42.6'),
+                                      Text(
+                                        '2023' +
+                                            '  |  ' +
+                                            '아크릴 캔버스' +
+                                            '  |  ' +
+                                            '35.8 * 42.6',
+                                        style: _TextStyles.Description,
+                                      ),
                                     ],
                                   ),
+                                  SizedBox(height: 16),
                                   Row(
                                     children: [
-                                      TextButton(onPressed: () {}, child: Text('현대')),
-                                      TextButton(onPressed: () {}, child: Text('아크릴')),
-                                      TextButton(onPressed: () {}, child: Text('공예 캔버스')),
+                                      SizedBox(
+                                        width: 42, // TODO: 글자수 길이에 따른 변수로 변경
+                                        height: 24,
+                                        child: TextButton(
+                                          onPressed: () {},
+                                          child: FittedBox(
+                                            fit: BoxFit.fitHeight,
+                                            child: Text('현대',
+                                                style: TextStyle(
+                                                    color: Color(0xff595959))),
+                                          ),
+                                          style: TextButton.styleFrom(
+                                            padding:
+                                                EdgeInsets.fromLTRB(9, 1, 9, 1),
+                                            backgroundColor: ColorMap.gray_100,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      SizedBox(
+                                        width: 54,
+                                        height: 24,
+                                        child: TextButton(
+                                          onPressed: () {},
+                                          child: FittedBox(
+                                            fit: BoxFit.fitHeight,
+                                            child: Text('아크릴',
+                                                style: TextStyle(
+                                                    color: Color(0xff595959))),
+                                          ),
+                                          style: TextButton.styleFrom(
+                                            padding:
+                                                EdgeInsets.fromLTRB(9, 1, 9, 1),
+                                            backgroundColor: ColorMap.gray_100,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8),
+                                      SizedBox(
+                                        width: 81,
+                                        height: 24,
+                                        child: TextButton(
+                                          onPressed: () {},
+                                          child: FittedBox(
+                                            fit: BoxFit.fitHeight,
+                                            child: Text('공예 캔버스',
+                                                style: TextStyle(
+                                                    color: Color(0xff595959))),
+                                          ),
+                                          style: TextButton.styleFrom(
+                                            padding:
+                                                EdgeInsets.fromLTRB(9, 1, 9, 1),
+                                            backgroundColor: ColorMap.gray_100,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(3),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ],
                                   ),
                                 ],
