@@ -40,6 +40,11 @@ class HomePage extends GetView<HomeViewModel> {
       ),
       body: Column(children: [
         Padding(padding: EdgeInsets.all(20)),
+        Text(
+          controller.signinViewModel.member!.nickname,
+          style: TextStyle(color: Colors.black),
+        ),
+        Padding(padding: EdgeInsets.all(20)),
         Row(
           children: [
             Flexible(
