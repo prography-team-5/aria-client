@@ -303,7 +303,7 @@ packages:
       sha256: c7fa519c8d3437cf7d17793e67ce6f7f9929879d25b4be106e9f9dfb13f6766d
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.7"
+    version: "0.6.5"
   lints:
     dependency: transitive
     description:
