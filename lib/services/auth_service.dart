@@ -61,6 +61,7 @@ class AuthService extends GetxService {
     data = await signInWithServer(
         accessToken: accessToken, refreshToken: refreshToken);
     statusCode = data['statusCode'];
+    print('[+] Server Login Success');
 
     // 2-1. 200이면 회원가입된 회원이므로 회원 정보 가져와서 반환
     if (statusCode == 200) {
@@ -133,7 +134,11 @@ class AuthService extends GetxService {
         print('[+] KakaoTalk Login Success');
         accessToken = oAuthToken.accessToken;
         refreshToken = oAuthToken.refreshToken ?? '';
-        return {'accessToken': accessToken, 'refreshToken': refreshToken};
+        return {
+          'accessToken': accessToken,
+          'refreshToken': refreshToken,
+          'statusCode': '200'
+        };
       } catch (error) {
         print('[-] KakaoTalk Login Failed');
         print(error);
@@ -147,7 +152,11 @@ class AuthService extends GetxService {
           print('[+] KakaoTalk Login Success');
           accessToken = oAuthToken.accessToken;
           refreshToken = oAuthToken.refreshToken ?? '';
-          return {'accessToken': accessToken, 'refreshToken': refreshToken};
+          return {
+            'accessToken': accessToken,
+            'refreshToken': refreshToken,
+            'statusCode': '200'
+          };
         } catch (error) {
           print('[-] Kakao Account Login Failed');
           print(error);
@@ -160,7 +169,11 @@ class AuthService extends GetxService {
         print('[+] Kakao Account Login Success');
         accessToken = oAuthToken.accessToken;
         refreshToken = oAuthToken.refreshToken ?? '';
-        return {'accessToken': accessToken, 'refreshToken': refreshToken};
+        return {
+          'accessToken': accessToken,
+          'refreshToken': refreshToken,
+          'statusCode': '200'
+        };
       } catch (error) {
         print('[-] Kakao Account Login Failed');
         print(error);
@@ -187,7 +200,10 @@ class AuthService extends GetxService {
         path: '/auth/sign-in',
         params: {'accessToken': accessToken, 'platformType': 'KAKAO'});
 
-    return {'jwt': data['jwt'], 'statusCode': data['statusCode']};
+    return {
+      'jwt': data['body']['accessToken'] ?? 'null',
+      'statusCode': data['statusCode']
+    };
   }
 
   Future<Map<String, dynamic>> signUpWithServer(
@@ -208,7 +224,10 @@ class AuthService extends GetxService {
           'refreshToken': refreshToken,
           'nickname': nickname
         });
-    return {'jwt': data['jwt'], 'statusCode': data['statusCode']};
+    return {
+      'jwt': data['body']['accessToken'] ?? 'null',
+      'statusCode': data['statusCode']
+    };
   }
 
   Future<Map<String, dynamic>> fetchMember({required String jwt}) async {
@@ -217,20 +236,17 @@ class AuthService extends GetxService {
 
     if (Env.env == Environ.dev) {
       member = await Member(
-        id: 1,
-        email: 'test@test.com',
-        password: 'test',
+        memberId: 1,
         role: 'artist',
         nickname: 'test',
-        profile_image_url: 'https://picsum.photos/200/300',
-        sign_type: 'kakao',
+        profileImageUrl: 'https://picsum.photos/200/300',
       );
       return {'member': member};
     }
 
     Map<String, dynamic> data =
-        await networkAdapter.get(path: '/member', params: {'jwt': jwt});
-    member = Member.fromJson(data['member']);
+        await networkAdapter.get(path: '/members/me', token: jwt, params: {});
+    member = Member.fromJson(data['body']);
     return {'member': member};
   }
 }

@@ -22,9 +22,13 @@ class NetworkAdapter {
     final response = await http.get(url, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'X-AUTH-TOKEN': '$token'
+      'X-AUTH-TOKEN': '$token',
+      'Authorization': 'Bearer $token'
     });
-    return response;
+    return {
+      'statusCode': response.statusCode,
+      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+    };
   }
 
   Future<dynamic> post(
@@ -46,9 +50,10 @@ class NetworkAdapter {
       },
       body: json.encode(params),
     );
-    print('response: ${response.statusCode}');
-    print('response: ${utf8.decode(response.bodyBytes)}');
-    return response;
+    return {
+      'statusCode': response.statusCode,
+      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+    };
   }
 
   Future<dynamic> put(
@@ -65,7 +70,10 @@ class NetworkAdapter {
       },
       body: json.encode(params),
     );
-    return json.decode(response.body);
+    return {
+      'statusCode': response.statusCode,
+      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+    };
   }
 
   Future<dynamic> patch(
@@ -82,7 +90,10 @@ class NetworkAdapter {
       },
       body: json.encode(params),
     );
-    return json.decode(response.body);
+    return {
+      'statusCode': response.statusCode,
+      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+    };
   }
 
   Future<dynamic> delete(
@@ -101,7 +112,9 @@ class NetworkAdapter {
       },
       body: json.encode(params),
     );
-
-    return json.decode(response.body);
+    return {
+      'statusCode': response.statusCode,
+      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+    };
   }
 }

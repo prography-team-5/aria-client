@@ -1,39 +1,27 @@
 class Member {
-  final int id;
-  final String email;
-  final String password;
-  final String role;
+  final int memberId;
   final String nickname;
-  final String profile_image_url;
-  final String sign_type;
+  final String profileImageUrl;
+  final String role;
 
   Member({
-    required this.id,
-    required this.email,
-    required this.password,
-    required this.role,
+    required this.memberId,
     required this.nickname,
-    required this.profile_image_url,
-    required this.sign_type,
+    required this.profileImageUrl,
+    required this.role,
   });
 
   factory Member.fromJson(Map<String, dynamic> json) => Member(
-        id: json['id'],
-        email: json['email'],
-        password: json['password'],
-        role: json['role'],
+        memberId: json['memberId'],
         nickname: json['nickname'],
-        profile_image_url: json['profile_image_url'],
-        sign_type: json['sign_type'],
+        profileImageUrl: json['profileImageUrl'],
+        role: json['role'],
       );
 
   Map<String, dynamic> toJson() => {
-        'id': id,
-        'email': email,
-        'password': password,
-        'role': role,
+        'memberId': memberId,
         'nickname': nickname,
-        'profile_image_url': profile_image_url,
-        'sign_type': sign_type,
+        'profileImageUrl': profileImageUrl,
+        'role': role,
       };
 }
