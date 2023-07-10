@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:aria_client/constants/colormap.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
