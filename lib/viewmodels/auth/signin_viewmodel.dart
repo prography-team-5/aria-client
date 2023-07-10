@@ -14,8 +14,7 @@ class SigninViewModel extends GetxController {
   Future<void> signInWithKaKao() async {
     Map<String, dynamic> res = await authService.signIn(LoginPlatform.kakao);
     if (res['statusCode'] == 200) {
-      // TEST
-      // member = res['member'];
+      member = res['member'];
       accessToken = res['accessToken'];
       refreshToken = res['refreshToken'];
       print('[*] accessToken: $accessToken');
