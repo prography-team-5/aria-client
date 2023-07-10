@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:ui';
 
 import 'package:aria_client/constants/colormap.dart';
@@ -11,6 +12,14 @@ class _TextStyles {
     color: ColorMap.gray_600,
     fontSize: 20,
     fontWeight: FontWeight.w800,
+    height: 1.5,
+    letterSpacing: -0.25,
+  );
+
+  static final Feature = TextStyle(
+    color: ColorMap.gray_400,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
     height: 1.5,
     letterSpacing: -0.25,
   );
