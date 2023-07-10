@@ -1,7 +1,14 @@
+import 'package:aria_client/models/art.dart';
+import 'package:aria_client/services/art_service.dart';
 import 'package:get/get.dart';
 
-import '../auth/signin_viewmodel.dart';
-
 class HomeViewModel extends GetxController {
-  final signinViewModel = Get.find<SigninViewModel>();
+  final artService = ArtService();
+
+  final Rx<List<Art>?> _arts = Rx<List<Art>?>(null);
+  List<Art>? get arts => _arts.value;
+
+  Future<void> _fetchArts() async {
+    _arts.value = await artService.fetchArts();
+  }
 }
