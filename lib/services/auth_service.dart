@@ -123,9 +123,9 @@ class AuthService extends GetxService {
     String accessToken = 'testaccesskakao';
     String refreshToken = 'testrefreshkakao';
 
-    if (Env.env != Environ.dev) {
-      return {'accessToken': accessToken, 'refreshToken': refreshToken};
-    }
+    // if (Env.env != Environ.dev) {
+    //   return {'accessToken': accessToken, 'refreshToken': refreshToken};
+    // }
 
     if (await isKakaoTalkInstalled()) {
       try {
