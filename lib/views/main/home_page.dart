@@ -80,22 +80,23 @@ class _HomePageState extends State<HomePage> {
     if (_cadsPageKey.currentContext != null) {
       print('here');
       final RenderBox renderBox =
-      _cadsPageKey.currentContext!.findRenderObject() as RenderBox;
+          _cadsPageKey.currentContext!.findRenderObject() as RenderBox;
       Size size = renderBox.size;
       return size;
     }
+    return Size.zero;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    // 위젯이 모두 그려진 다음 실행
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
-      setState(() {
-        size = _getSize()!; // TODO: 여기에 !를 붙인게 문제라고 함
-      });
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   // 위젯이 모두 그려진 다음 실행
+  //   WidgetsBinding.instance!.addPostFrameCallback((_) async {
+  //     setState(() {
+  //       size = _getSize()!;
+  //     });
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -104,13 +105,18 @@ class _HomePageState extends State<HomePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           RxList<Art> artsList = snapshot.data!;
+          if (snapshot.connectionState == ConnectionState.done) {
+            // TODO: 계속 호출되는 문제 해결, valuenotifier 사용하기?
+            WidgetsBinding.instance.addPostFrameCallback((_) async {
+              setState(() {
+                size = _getSize()!;
+              });
+            });
+          }
           return Container(
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.fill,
-                // image: AssetImage(
-                //     'assets/images/${images[_currentCardNotifier.value
-                //         .toInt()]}'),
                 image: NetworkImage(
                     artsList[_currentCardNotifier.value.toInt()].mainImageUrl),
               ),
@@ -157,65 +163,56 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   body: Container(
-                    margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          // height: 637,
-                          key: _cadsPageKey,
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height -
-                              208, // H56 T24 SB24 BT64 B40
-                          child: _cardsPageView(artsList),
-                        ),
-                        SizedBox(height: 24),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextButton(
-                              onPressed: () {},
-                              child: SvgPicture.asset(
-                                'assets/images/share_button.svg',
-                              ),
-                              style: TextButton.styleFrom(
-                                backgroundColor: ColorMap.subColor,
-                                shape: const CircleBorder(),
-                                fixedSize: Size(64, 64),
-                              ),
-                            ),
-                            SizedBox(width: 9),
-                            SizedBox(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width -
-                                  121, // L24 R24 BT64 SB 9
-                              height: 64,
-                              child: TextButton(
+                      margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            // height: 637,
+                            key: _cadsPageKey,
+                            height: MediaQuery.of(context).size.height -
+                                208, // H56 T24 SB24 BT64 B40
+                            child: _cardsPageView(artsList),
+                          ),
+                          SizedBox(height: 24),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextButton(
                                 onPressed: () {},
-                                child: FittedBox(
-                                  child: Text('전시회 방문하기',
-                                      style: TextStyle(
-                                          color: Colors.white)),
+                                child: SvgPicture.asset(
+                                  'assets/images/share_button.svg',
                                 ),
                                 style: TextButton.styleFrom(
-                                  backgroundColor: ColorMap.mainColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        100),
-                                  ),
-                                  // fixedSize: Size(double.infinity, 64),
+                                  backgroundColor: ColorMap.subColor,
+                                  shape: const CircleBorder(),
+                                  fixedSize: Size(64, 64),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    )
-                  ),
+                              SizedBox(width: 9),
+                              SizedBox(
+                                width: MediaQuery.of(context).size.width -
+                                    121, // L24 R24 BT64 SB 9
+                                height: 64,
+                                child: TextButton(
+                                  onPressed: () {},
+                                  child: FittedBox(
+                                    child: Text('전시회 방문하기',
+                                        style: TextStyle(color: Colors.white)),
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    backgroundColor: ColorMap.mainColor,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    // fixedSize: Size(double.infinity, 64),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      )),
                 ),
               ),
             ),
@@ -225,7 +222,8 @@ class _HomePageState extends State<HomePage> {
         }
         // 기본적으로 로딩 Spinner
         return CircularProgressIndicator();
-      },);
+      },
+    );
   }
 
   Widget __transitionBuilder(Widget widget, Animation<double> animation) {
@@ -238,10 +236,9 @@ class _HomePageState extends State<HomePage> {
         var tilt = ((animation.value - 0.5).abs() - 0.5) * 0.003;
         tilt *= isUnder ? -1.0 : 1.0;
         final value =
-        isUnder ? min(rotateAnim.value, pi / 2) : rotateAnim.value;
+            isUnder ? min(rotateAnim.value, pi / 2) : rotateAnim.value;
         return Transform(
-          transform: Matrix4.rotationY(value)
-            ..setEntry(3, 0, tilt),
+          transform: Matrix4.rotationY(value)..setEntry(3, 0, tilt),
           child: widget,
           alignment: Alignment.center,
         );
@@ -267,8 +264,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _cardFlipAnimation(int index, RxList<Art> artsList) {
     return GestureDetector(
-      onTap: () =>
-      {
+      onTap: () => {
         setState(() => _displayFront = !_displayFront),
       },
       child: AnimatedSwitcher(
@@ -293,10 +289,10 @@ class _HomePageState extends State<HomePage> {
       child: ClipPath(
         clipper: ShapeBorderClipper(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         child: Container(
-          width: double.infinity,
+          // width: double.infinity,
           alignment: Alignment.centerLeft,
           child: Column(
             children: [
@@ -304,6 +300,7 @@ class _HomePageState extends State<HomePage> {
                 art.mainImageUrl,
                 fit: BoxFit.cover,
                 height: size.height - 144, // TODO: 8px의 행방을 찾아서...
+                width: double.infinity,
               ),
               Container(
                 height: 96,
@@ -417,7 +414,7 @@ class _HomePageState extends State<HomePage> {
       child: ClipPath(
         clipper: ShapeBorderClipper(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         child: Container(
           width: double.infinity,
