@@ -26,18 +26,18 @@ class ArtService extends GetxService {
     }
   }
 
-  Future<List<Art>?> fetchArts() async {
+  Future<List<Art>> fetchArts() async {
     if (Env.env == Environ.dev) {
       return [
         Art(
             artId: 1,
             memberId: 1,
-            mainImageUrl: 'assets/images/example_image.png',
+            mainImageUrl: 'https://i.pinimg.com/564x/d9/17/15/d9171548cadc8164d8e987b160e51286.jpg',
             style: '아크릴 캔버스',
             title: 'Art Title',
             year: 2021,
             artTags: ['현대', '아크릴', '공예 캔버스'],
-            size: Size(width: 100, height: 100),
+            size: Size(width: 100.34, height: 50.28),
             description: '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
                 '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
                 '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
@@ -103,7 +103,7 @@ class ArtService extends GetxService {
       ];
     } else {
       // TODO: fetch from API
-      return null;
+      return [];
     }
   }
 }

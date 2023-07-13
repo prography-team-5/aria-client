@@ -5,10 +5,12 @@ import 'package:get/get.dart';
 class HomeViewModel extends GetxController {
   final artService = ArtService();
 
-  final Rx<List<Art>?> _arts = Rx<List<Art>?>(null);
+  // final Rx<List<Art>?> _arts = Rx<List<Art>?>(null);
+  final RxList<Art> _arts = RxList<Art>([]);
   List<Art>? get arts => _arts.value;
 
-  Future<void> _fetchArts() async {
+  Future<RxList<Art>> fetchArts() async {
     _arts.value = await artService.fetchArts();
+    return _arts;
   }
 }

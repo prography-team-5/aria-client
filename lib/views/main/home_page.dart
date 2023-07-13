@@ -2,6 +2,8 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:aria_client/constants/colormap.dart';
+import 'package:aria_client/models/art.dart';
+import 'package:aria_client/viewmodels/main/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -66,16 +68,19 @@ class _HomePageState extends State<HomePage> {
   bool _displayFront = true;
   Size size = Size.zero;
 
-  final List<String> images = ['example_image.png', 'example_image_2.jpg'];
+  // final List<String> images = ['example_image.png', 'example_image_2.jpg'];
+  final _homeViewModel = HomeViewModel();
   final _currentCardNotifier = ValueNotifier<RxInt>(0.obs);
   final PageController _pageController = PageController(initialPage: 0);
 
   final GlobalKey _cadsPageKey = GlobalKey();
 
   Size? _getSize() {
+    print('hereee');
     if (_cadsPageKey.currentContext != null) {
+      print('here');
       final RenderBox renderBox =
-          _cadsPageKey.currentContext!.findRenderObject() as RenderBox;
+      _cadsPageKey.currentContext!.findRenderObject() as RenderBox;
       Size size = renderBox.size;
       return size;
     }
@@ -87,118 +92,140 @@ class _HomePageState extends State<HomePage> {
     // 위젯이 모두 그려진 다음 실행
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       setState(() {
-        size = _getSize()!;
+        size = _getSize()!; // TODO: 여기에 !를 붙인게 문제라고 함
       });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.fill,
-          image: AssetImage(
-              'assets/images/${images[_currentCardNotifier.value.toInt()]}'),
-        ),
-      ),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16), // 배경 블러
-        child: Container(
-          color: Color(0xffD9D9D9).withOpacity(0.7),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: PreferredSize(
-              preferredSize: Size.fromHeight(56),
-              child: AppBar(
-                automaticallyImplyLeading: false,
-                leading: Padding(
-                  padding: EdgeInsets.fromLTRB(12, 16, 0, 16),
-                  child: SvgPicture.asset(
-                    'assets/images/logo.svg',
+    return FutureBuilder(
+      future: _homeViewModel.fetchArts(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          RxList<Art> artsList = snapshot.data!;
+          return Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.fill,
+                // image: AssetImage(
+                //     'assets/images/${images[_currentCardNotifier.value
+                //         .toInt()]}'),
+                image: NetworkImage(
+                    artsList[_currentCardNotifier.value.toInt()].mainImageUrl),
+              ),
+            ),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16), // 배경 블러
+              child: Container(
+                color: Color(0xffD9D9D9).withOpacity(0.7),
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: PreferredSize(
+                    preferredSize: Size.fromHeight(56),
+                    child: AppBar(
+                      automaticallyImplyLeading: false,
+                      leading: Padding(
+                        padding: EdgeInsets.fromLTRB(12, 16, 0, 16),
+                        child: SvgPicture.asset(
+                          'assets/images/logo.svg',
+                        ),
+                      ),
+                      actions: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                          child: GestureDetector(
+                            onTap: () => Get.toNamed('/search'),
+                            child: SvgPicture.asset(
+                              'assets/images/search_button.svg',
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                          child: GestureDetector(
+                            onTap: () => Get.toNamed('/my'),
+                            child: SvgPicture.asset(
+                              'assets/images/my_button.svg',
+                            ),
+                          ),
+                        ),
+                      ],
+                      centerTitle: true,
+                      backgroundColor: Colors.transparent,
+                      elevation: 0.0, // appBar 그림자 제거
+                    ),
+                  ),
+                  body: Container(
+                    margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          // height: 637,
+                          key: _cadsPageKey,
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height -
+                              208, // H56 T24 SB24 BT64 B40
+                          child: _cardsPageView(artsList),
+                        ),
+                        SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              onPressed: () {},
+                              child: SvgPicture.asset(
+                                'assets/images/share_button.svg',
+                              ),
+                              style: TextButton.styleFrom(
+                                backgroundColor: ColorMap.subColor,
+                                shape: const CircleBorder(),
+                                fixedSize: Size(64, 64),
+                              ),
+                            ),
+                            SizedBox(width: 9),
+                            SizedBox(
+                              width: MediaQuery
+                                  .of(context)
+                                  .size
+                                  .width -
+                                  121, // L24 R24 BT64 SB 9
+                              height: 64,
+                              child: TextButton(
+                                onPressed: () {},
+                                child: FittedBox(
+                                  child: Text('전시회 방문하기',
+                                      style: TextStyle(
+                                          color: Colors.white)),
+                                ),
+                                style: TextButton.styleFrom(
+                                  backgroundColor: ColorMap.mainColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(
+                                        100),
+                                  ),
+                                  // fixedSize: Size(double.infinity, 64),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
                   ),
                 ),
-                actions: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                    child: GestureDetector(
-                      onTap: () => Get.toNamed('/search'),
-                      child: SvgPicture.asset(
-                        'assets/images/search_button.svg',
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                    child: GestureDetector(
-                      onTap: () => Get.toNamed('/my'),
-                      child: SvgPicture.asset(
-                        'assets/images/my_button.svg',
-                      ),
-                    ),
-                  ),
-                ],
-                centerTitle: true,
-                backgroundColor: Colors.transparent,
-                elevation: 0.0, // appBar 그림자 제거
               ),
             ),
-            body: Container(
-              margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    // height: 637,
-                    key: _cadsPageKey,
-                    height: MediaQuery.of(context).size.height -
-                        208, // H56 T24 SB24 BT64 B40
-                    child: _cardsPageView(),
-                  ),
-                  SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () {},
-                        child: SvgPicture.asset(
-                          'assets/images/share_button.svg',
-                        ),
-                        style: TextButton.styleFrom(
-                          backgroundColor: ColorMap.subColor,
-                          shape: const CircleBorder(),
-                          fixedSize: Size(64, 64),
-                        ),
-                      ),
-                      SizedBox(width: 9),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width -
-                            121, // L24 R24 BT64 SB 9
-                        height: 64,
-                        child: TextButton(
-                          onPressed: () {},
-                          child: FittedBox(
-                            child: Text('전시회 방문하기',
-                                style: TextStyle(color: Colors.white)),
-                          ),
-                          style: TextButton.styleFrom(
-                            backgroundColor: ColorMap.mainColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            // fixedSize: Size(double.infinity, 64),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
+          );
+        } else if (snapshot.hasError) {
+          return Text("${snapshot.error}");
+        }
+        // 기본적으로 로딩 Spinner
+        return CircularProgressIndicator();
+      },);
   }
 
   Widget __transitionBuilder(Widget widget, Animation<double> animation) {
@@ -211,9 +238,10 @@ class _HomePageState extends State<HomePage> {
         var tilt = ((animation.value - 0.5).abs() - 0.5) * 0.003;
         tilt *= isUnder ? -1.0 : 1.0;
         final value =
-            isUnder ? min(rotateAnim.value, pi / 2) : rotateAnim.value;
+        isUnder ? min(rotateAnim.value, pi / 2) : rotateAnim.value;
         return Transform(
-          transform: Matrix4.rotationY(value)..setEntry(3, 0, tilt),
+          transform: Matrix4.rotationY(value)
+            ..setEntry(3, 0, tilt),
           child: widget,
           alignment: Alignment.center,
         );
@@ -221,12 +249,12 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _cardsPageView() {
+  Widget _cardsPageView(RxList<Art> artsList) {
     return PageView.builder(
-      itemCount: images.length,
+      itemCount: artsList.length,
       controller: _pageController,
       itemBuilder: (BuildContext context, int index) {
-        return _cardFlipAnimation(index);
+        return _cardFlipAnimation(index, artsList);
       },
       onPageChanged: (int index) {
         setState(() {
@@ -237,22 +265,26 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _cardFlipAnimation(int index) {
+  Widget _cardFlipAnimation(int index, RxList<Art> artsList) {
     return GestureDetector(
-      onTap: () => {
+      onTap: () =>
+      {
         setState(() => _displayFront = !_displayFront),
       },
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 1000),
         transitionBuilder: __transitionBuilder,
-        child: _displayFront ? _cardFrontWidget(index) : _cardRearWidget(index),
+        child: _displayFront
+            ? _cardFrontWidget(index, artsList)
+            : _cardRearWidget(index, artsList),
         switchInCurve: Curves.easeInBack,
         switchOutCurve: Curves.easeInBack.flipped,
       ),
     );
   }
 
-  Widget _cardFrontWidget(int index) {
+  Widget _cardFrontWidget(int index, RxList<Art> artsList) {
+    final art = artsList[index];
     return Card(
       key: key,
       shape: RoundedRectangleBorder(
@@ -261,15 +293,15 @@ class _HomePageState extends State<HomePage> {
       child: ClipPath(
         clipper: ShapeBorderClipper(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         child: Container(
           width: double.infinity,
           alignment: Alignment.centerLeft,
           child: Column(
             children: [
-              Image.asset(
-                'assets/images/${images[index]}',
+              Image.network(
+                art.mainImageUrl,
                 fit: BoxFit.cover,
                 height: size.height - 144, // TODO: 8px의 행방을 찾아서...
               ),
@@ -282,7 +314,7 @@ class _HomePageState extends State<HomePage> {
                     SizedBox(
                       height: 30,
                       child: Text(
-                        '제목',
+                        art.title,
                         style: _TextStyles.Title,
                       ),
                     ),
@@ -290,11 +322,13 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       children: [
                         Text(
-                          '2023' +
+                          art.year.toString() +
                               '  |  ' +
-                              '아크릴 캔버스' +
+                              art.style +
                               '  |  ' +
-                              '35.8 * 42.6',
+                              art.size.width.toString() +
+                              ' * ' +
+                              art.size.height.toString(),
                           style: _TextStyles.Feature,
                         ),
                       ],
@@ -373,8 +407,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _cardRearWidget(int index) {
+  Widget _cardRearWidget(int index, RxList<Art> artsList) {
     final homePageController = Get.put(_HomePageController());
+    final art = artsList[index];
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -382,7 +417,7 @@ class _HomePageState extends State<HomePage> {
       child: ClipPath(
         clipper: ShapeBorderClipper(
           shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         child: Container(
           width: double.infinity,
@@ -404,24 +439,7 @@ class _HomePageState extends State<HomePage> {
               child: SingleChildScrollView(
                 controller: homePageController.cardScrollController,
                 child: Center(
-                  child: index == 1
-                      ? Text(
-                          style: _TextStyles.Description,
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.')
-                      : Text(
-                          style: _TextStyles.Description,
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
-                          '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
+                  child: Text(style: _TextStyles.Description, art.description),
                 ),
               ),
             ),
