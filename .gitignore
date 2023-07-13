@@ -1,6 +1,9 @@
 # Env
 lib/helpers/env.dart
 
+# pubspec.lock is automatically generated when dependencies are added in pubspec.yaml
+pubspec.lock
+
 # Miscellaneous
 *.class
 *.log

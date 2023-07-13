@@ -5,14 +5,12 @@ import 'package:get/get.dart';
 
 import '../../constants/colormap.dart';
 
-class MyPage extends StatefulWidget {
-  static const String routeName = '/my';
-
+class ArtistMyPage extends StatefulWidget {
   @override
-  _MyPageState createState() => _MyPageState();
+  _ArtistMyPageState createState() => _ArtistMyPageState();
 }
 
-class _MyPageState extends State<MyPage> {
+class _ArtistMyPageState extends State<ArtistMyPage> {
   ScrollController scrollController = ScrollController();
   PageController pageController = PageController(initialPage: 0);
 
@@ -62,7 +60,7 @@ class _MyPageState extends State<MyPage> {
               padding: EdgeInsets.fromLTRB(12, 16, 0, 16),
               child: InkWell(
                 onTap: () {
-                  Get.toNamed('/signin');
+                  Get.back();
                 },
                 child: SvgPicture.asset(
                   'assets/images/leading_button.svg',
