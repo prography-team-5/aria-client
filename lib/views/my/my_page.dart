@@ -62,7 +62,7 @@ class _MyPageState extends State<MyPage> {
               padding: EdgeInsets.fromLTRB(12, 16, 0, 16),
               child: InkWell(
                 onTap: () {
-                  Get.toNamed('/signin');
+                  Get.back();
                 },
                 child: SvgPicture.asset(
                   'assets/images/leading_button.svg',
