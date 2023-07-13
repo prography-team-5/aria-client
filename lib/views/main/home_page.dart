@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:aria_client/constants/colormap.dart';
+import 'package:aria_client/viewmodels/auth/signin_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
@@ -131,7 +132,13 @@ class _HomePageState extends State<HomePage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
                     child: GestureDetector(
-                      onTap: () => Get.toNamed('/my'),
+                      // TODO: Getx 컨트롤러 가져올 수 있도록 리팩토링 필요(StatefulWidget 문제인지, GetView 아니라서 문제인지 확인 필요)
+                      onTap: () => Get.toNamed('/artist_my'),
+                      // onTap: () => signInViewModel.member == null
+                      //     ? Get.toNamed('/signin')
+                      //     : signInViewModel.member!.role == 'ROLE_ARTIST'
+                      //         ? Get.toNamed('/artist_my')
+                      //         : Get.toNamed('/user_my'), // ROLE_MEMBER
                       child: SvgPicture.asset(
                         'assets/images/my_button.svg',
                       ),

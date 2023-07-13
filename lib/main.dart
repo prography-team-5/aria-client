@@ -1,5 +1,8 @@
 import 'package:aria_client/bindings/initial_bindings.dart';
 import 'package:aria_client/helpers/env.dart';
+import 'package:aria_client/views/my/artist_add_art_page.dart';
+import 'package:aria_client/views/my/user_edit_profile_page.dart';
+import 'package:aria_client/views/my/user_my_page.dart';
 import 'package:aria_client/views/test/test_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -13,8 +16,8 @@ import 'views/auth/signin_page.dart';
 import 'views/auth/signup_page.dart';
 import 'views/auth/splash_page.dart';
 import 'views/main/home_page.dart';
-import 'views/my/edit_profile_page.dart';
-import 'views/my/my_page.dart';
+import 'views/my/artist_edit_profile_page.dart';
+import 'views/my/artist_my_page.dart';
 import 'views/search/search_page.dart';
 
 void main() {
@@ -45,8 +48,12 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/home", page: () => HomePage()),
         GetPage(name: "/signin", page: () => SigninPage()),
         GetPage(name: "/signup", page: () => SignupPage()),
-        GetPage(name: "/my", page: () => MyPage()),
-        GetPage(name: "/edit_profile", page: () => EditProfilePage()),
+        GetPage(name: "/artist_my", page: () => ArtistMyPage()),
+        GetPage(
+            name: "/artist_edit_profile", page: () => ArtistEditProfilePage()),
+        GetPage(name: "/artist_add_art", page: () => ArtistAddArtPage()),
+        GetPage(name: "/user_my", page: () => UserMyPage()),
+        GetPage(name: "/user_edit_profile", page: () => UserEditProfilePage()),
         GetPage(name: "/search", page: () => SearchPage()),
         GetPage(name: "/artist_home", page: () => ArtistHomePage()),
         GetPage(name: "/add_art", page: () => AddArtPage()),
