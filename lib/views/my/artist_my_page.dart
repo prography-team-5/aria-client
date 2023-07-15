@@ -5,44 +5,38 @@ import 'package:get/get.dart';
 
 import '../../constants/colormap.dart';
 
-class ArtistMyPage extends StatefulWidget {
-  @override
-  _ArtistMyPageState createState() => _ArtistMyPageState();
+class ArtistMyScrollController extends GetxController {
+  var scrollController = ScrollController().obs;
 }
 
-class _ArtistMyPageState extends State<ArtistMyPage> {
-  ScrollController scrollController = ScrollController();
-  PageController pageController = PageController(initialPage: 0);
+class ArtistMyPageController extends GetxController {
+  var pageController = PageController(initialPage: 0).obs;
+  RxInt pageIndex = 0.obs;
 
+  bool isCurrentPage(int page) {
+    return page == pageIndex.value;
+  }
+
+  void pageBtnOnTap(int page) {
+    pageIndex.value = page;
+    pageController.value.animateToPage(pageIndex.value,
+        duration: Duration(milliseconds: 700), curve: Curves.easeOutCirc);
+    update();
+  }
+
+  void onPageChanged(int page) {
+    pageIndex.value = page;
+    update();
+  }
+}
+
+class ArtistMyPage extends StatelessWidget {
   final double sliverMinHeight = 0.0;
-  int pageIndex = 0;
-
-  final colors = [
-    Colors.red,
-    Colors.purple,
-    Colors.green,
-    Colors.orange,
-    Colors.yellow,
-    Colors.pink,
-    Colors.cyan,
-    Colors.indigo,
-    Colors.blue,
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    scrollController.dispose();
-    pageController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final scrollController = Get.put(ArtistMyScrollController());
+
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
@@ -78,16 +72,15 @@ class _ArtistMyPageState extends State<ArtistMyPage> {
             elevation: 0.0, // appBar 그림자 제거
           ),
         ),
-        body:
-            // topChild()
-            NestedScrollView(
-          controller: scrollController,
-          headerSliverBuilder: headerSliverBuilder,
-          body: Container(
-            margin: EdgeInsets.only(top: sliverMinHeight),
-            child: mainPageView(),
-          ),
-        ),
+        body: Obx(() => (NestedScrollView(
+              controller: scrollController.scrollController.value,
+              headerSliverBuilder: headerSliverBuilder,
+              body: Container(
+                margin: EdgeInsets.only(top: sliverMinHeight),
+                child: CustomPageView(),
+              ),
+            ))),
+        // topChild()
       ),
     );
   }
@@ -102,173 +95,133 @@ class _ArtistMyPageState extends State<ArtistMyPage> {
           delegate: SliverHeaderDelegateCS(
             minHeight: 40,
             maxHeight: MediaQuery.of(context).size.height,
-            minChild: minTopChild(),
-            maxChild: topChild(),
+            minChild: SizedBox(
+              height: 50,
+              child: Row(
+                children: <Widget>[
+                  Expanded(child: CustomPageButton(title: "page 1", page: 0)),
+                  Expanded(child: CustomPageButton(title: "page 2", page: 1)),
+                ],
+              ),
+            ),
+            maxChild: Stack(
+              alignment: Alignment.center,
+              children: [
+                Column(
+                  children: [
+                    Container(
+                      height: 400,
+                      child: Image.asset(
+                        'assets/images/profile_background.png',
+                        fit: BoxFit.fill,
+                      ),
+                    ),
+                    Expanded(
+                      // height: 200,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 50 + 5),
+                        child: Column(
+                          children: [
+                            Text('작가 아리아'),
+                            Text('현대 아크릴 공예'),
+                            Text('32 Followers'),
+                            Container(
+                              width: 350,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                color: ColorMap.gray_200,
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              child: Center(child: Text('1000자')),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                TextButton(
+                                    onPressed: () {}, child: Text('프로필 수정')),
+                                TextButton(
+                                    onPressed: () {}, child: Text('프로필 수정'))
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                  height: 56,
+                                  width: 56,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border:
+                                        Border.all(color: ColorMap.gray_200),
+                                  ),
+                                ),
+                                Container(),
+                                Container(),
+                                Container(),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 50,
+                              child: Row(
+                                children: <Widget>[
+                                  Expanded(
+                                      child: CustomPageButton(
+                                          title: "page 1", page: 0)),
+                                  Expanded(
+                                      child: CustomPageButton(
+                                          title: "page 2", page: 1)),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: 400 - 50,
+                  child: Container(
+                    height: 100.0,
+                    width: 100.0,
+                    child: Image.asset('assets/images/profile_avatar.png'),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),
     ];
   }
+}
 
-  Widget minTopChild() {
-    // return Container();
-    return pageButtonLayout();
-  }
-
-  Widget topChild() {
-    return Stack(
-      alignment: Alignment.center,
-      children: [
-        Column(
-          children: [
-            Container(
-              height: 400,
-              child: Image.asset(
-                'assets/images/profile_background.png',
-                fit: BoxFit.fill,
-              ),
-            ),
-            Expanded(
-              // height: 200,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 50 + 5),
-                child: Column(
-                  children: [
-                    Text('작가 아리아'),
-                    Text('현대 아크릴 공예'),
-                    Text('32 Followers'),
-                    Container(
-                      width: 350,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: ColorMap.gray_200,
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      child: Center(child: Text('1000자')),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        TextButton(onPressed: () {}, child: Text('프로필 수정')),
-                        TextButton(onPressed: () {}, child: Text('프로필 수정'))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          height: 56,
-                          width: 56,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: ColorMap.gray_200),
-                          ),
-                        ),
-                        Container(),
-                        Container(),
-                        Container(),
-                      ],
-                    ),
-                    pageButtonLayout(),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-        Positioned(
-          top: 400 - 50,
-          child: Container(
-            height: 100.0,
-            width: 100.0,
-            child: Image.asset('assets/images/profile_avatar.png'),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-          ),
-        )
-      ],
-    );
-  }
-
-  Widget pageButtonLayout() {
-    return SizedBox(
-      height: 50,
-      child: Row(
-        children: <Widget>[
-          Expanded(child: pageButton("page 1", 0)),
-          Expanded(child: pageButton("page 2", 1)),
-        ],
-      ),
-    );
-  }
-
-  Widget pageButton(String title, int page) {
-    final fontColor = pageIndex == page ? Color(0xFF2C313C) : Color(0xFF9E9E9E);
-    final lineColor = pageIndex == page ? Color(0xFF014F90) : Color(0xFFF1F1F1);
-
-    return InkWell(
-      splashColor: Color(0xFF204D7E),
-      onTap: () => pageBtnOnTap(page),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Center(
-              child: Text(
-                title,
-                style: TextStyle(
-                  color: fontColor,
-                ),
-              ),
-            ),
-          ),
-          Container(
-            height: 1,
-            color: lineColor,
-          ),
-        ],
-      ),
-    );
-  }
-
-  pageBtnOnTap(int page) {
-    setState(() {
-      pageIndex = page;
-      pageController.animateToPage(pageIndex,
-          duration: Duration(milliseconds: 700), curve: Curves.easeOutCirc);
-    });
-  }
-
-  Widget mainPageView() {
+class CustomPageView extends GetView<ArtistMyPageController> {
+  Widget build(BuildContext context) {
     return PageView(
-      controller: pageController,
-      children: <Widget>[
-        pageItem(Center(
-          child: Text(
-            "page 2\n\n두번째\n\n페이지\n\n스크롤이\n\n되도록\n\n내용을\n\n길게\n\n길게",
-            style: TextStyle(fontSize: 100),
-          ),
-        )),
-        pageListView(),
+      controller: controller.pageController.value,
+      children: [
+        firstPage(),
+        secondPage(),
       ],
-      onPageChanged: (index) => setState(() => pageIndex = index),
+      onPageChanged: (index) => controller.onPageChanged(index),
     );
   }
 
-  Widget pageItem(Widget child) {
-    double statusHeight = MediaQuery.of(context).padding.top;
-    double height = MediaQuery.of(context).size.height;
-    double minHeight = height - statusHeight - sliverMinHeight;
-
-    return SingleChildScrollView(
-      child: Container(
-        color: Colors.white,
-        constraints: BoxConstraints(minHeight: 600),
-        child: child,
-      ),
-    );
-  }
-
-  Widget pageListView() {
+  Widget firstPage() {
+    final colors = [
+      Colors.red,
+      Colors.purple,
+      Colors.green,
+      Colors.orange,
+      Colors.yellow,
+      Colors.pink,
+      Colors.cyan,
+      Colors.indigo,
+      Colors.blue,
+    ];
     return ListView.builder(
       itemCount: colors.length,
       itemBuilder: (BuildContext context, int index) {
@@ -277,6 +230,65 @@ class _ArtistMyPageState extends State<ArtistMyPage> {
           height: 150,
         );
       },
+    );
+  }
+
+  Widget secondPage() {
+    final colors = [
+      Colors.yellow,
+      Colors.pink,
+      Colors.red,
+      Colors.purple,
+      Colors.green,
+      Colors.cyan,
+      Colors.indigo,
+      Colors.blue,
+      Colors.orange,
+    ];
+
+    return ListView.builder(
+      itemCount: colors.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          color: colors[index],
+          height: 150,
+        );
+      },
+    );
+  }
+}
+
+class CustomPageButton extends GetView<ArtistMyPageController> {
+  final int page;
+  final String title;
+
+  CustomPageButton({required this.page, required this.title});
+
+  Widget build(BuildContext context) {
+    return InkWell(
+      splashColor: Color(0xFF204D7E),
+      onTap: () => controller.pageBtnOnTap(page),
+      child: Column(
+        children: <Widget>[
+          Expanded(
+            child: Center(
+              child: Text(
+                title,
+                style: TextStyle(
+                    color: controller.isCurrentPage(page)
+                        ? Color(0xFF2C313C)
+                        : Color(0xFF9E9E9E)),
+              ),
+            ),
+          ),
+          Container(
+            height: 1,
+            color: controller.isCurrentPage(page)
+                ? Color(0xFF014F90)
+                : Color(0xFFF1F1F1),
+          ),
+        ],
+      ),
     );
   }
 }
