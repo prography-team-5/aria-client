@@ -200,6 +200,7 @@ class ArtistMyPage extends StatelessWidget {
 
 class CustomPageView extends GetView<ArtistMyPageController> {
   Widget build(BuildContext context) {
+    Get.put(ArtistMyPageController());
     return PageView(
       controller: controller.pageController.value,
       children: [
@@ -265,29 +266,32 @@ class CustomPageButton extends GetView<ArtistMyPageController> {
   CustomPageButton({required this.page, required this.title});
 
   Widget build(BuildContext context) {
+    Get.put(ArtistMyPageController());
     return InkWell(
       splashColor: Color(0xFF204D7E),
       onTap: () => controller.pageBtnOnTap(page),
-      child: Column(
-        children: <Widget>[
-          Expanded(
-            child: Center(
-              child: Text(
-                title,
-                style: TextStyle(
-                    color: controller.isCurrentPage(page)
-                        ? Color(0xFF2C313C)
-                        : Color(0xFF9E9E9E)),
+      child: Obx(
+        () => Column(
+          children: <Widget>[
+            Expanded(
+              child: Center(
+                child: Text(
+                  title,
+                  style: TextStyle(
+                      color: controller.isCurrentPage(page)
+                          ? Color(0xFF2C313C)
+                          : Color(0xFF9E9E9E)),
+                ),
               ),
             ),
-          ),
-          Container(
-            height: 1,
-            color: controller.isCurrentPage(page)
-                ? Color(0xFF014F90)
-                : Color(0xFFF1F1F1),
-          ),
-        ],
+            Container(
+              height: 1,
+              color: controller.isCurrentPage(page)
+                  ? Color(0xFF014F90)
+                  : Color(0xFFF1F1F1),
+            ),
+          ],
+        ),
       ),
     );
   }
