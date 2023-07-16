@@ -170,7 +170,6 @@ class _HomePageState extends State<HomePage> {
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(100),
                                     ),
-                                    // fixedSize: Size(double.infinity, 64),
                                   ),
                                 ),
                               ),
@@ -265,7 +264,6 @@ class _HomePageState extends State<HomePage> {
                   art.mainImageUrl,
                   fit: BoxFit.cover,
                   height: constraints.maxHeight - 136,
-                  // TODO: 8px의 행방을 찾아서...
                   width: double.infinity,
                 ),
                 Container(
@@ -297,70 +295,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       SizedBox(height: 16),
-                      // Row(
-                      //   children: [
-                      //     SizedBox(
-                      //       width: 42, // TODO: 글자수 길이에 따른 변수로 변경
-                      //       height: 24,
-                      //       child: TextButton(
-                      //         onPressed: () {},
-                      //         child: FittedBox(
-                      //           fit: BoxFit.fitHeight,
-                      //           child: Text('현대',
-                      //               style: TextStyle(color: Color(0xff595959))),
-                      //         ),
-                      //         style: TextButton.styleFrom(
-                      //           padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                      //           backgroundColor: ColorMap.gray_100,
-                      //           shape: RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(3),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     SizedBox(width: 8),
-                      //     SizedBox(
-                      //       width: 54,
-                      //       height: 24,
-                      //       child: TextButton(
-                      //         onPressed: () {},
-                      //         child: FittedBox(
-                      //           fit: BoxFit.fitHeight,
-                      //           child: Text('아크릴',
-                      //               style: TextStyle(color: Color(0xff595959))),
-                      //         ),
-                      //         style: TextButton.styleFrom(
-                      //           padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                      //           backgroundColor: ColorMap.gray_100,
-                      //           shape: RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(3),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //     SizedBox(width: 8),
-                      //     SizedBox(
-                      //       width: 81,
-                      //       height: 24,
-                      //       child: TextButton(
-                      //         onPressed: () {},
-                      //         child: FittedBox(
-                      //           fit: BoxFit.fitHeight,
-                      //           child: Text('공예 캔버스',
-                      //               style: TextStyle(color: Color(0xff595959))),
-                      //         ),
-                      //         style: TextButton.styleFrom(
-                      //           padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                      //           backgroundColor: ColorMap.gray_100,
-                      //           shape: RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(3),
-                      //           ),
-                      //         ),
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
-                      _tagWidgets(art.artTags),
+                      _tagsWidget(art.artTags),
                     ],
                   ),
                 ),
@@ -414,39 +349,42 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _tagWidgets(List<String> artTags) {
+  Widget _tagsWidget(List<String> artTags) {
     final _tagStyle = TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,
       letterSpacing: -0.25,
     );
-    return Row(
-      children: artTags
-          .map(
-            (item) => Container(
-              margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
-              child: SizedBox(
-                width: TextLayoutHelper.getTextSize(text: item, style: _tagStyle).width + 18,
-                height: 24,
-                child: TextButton(
-                  onPressed: () {},
-                  child: FittedBox(
-                    fit: BoxFit.fitHeight,
-                    child: Text(item, style: TextStyle(color: Color(0xFF595959))),
-                  ),
-                  // child: Text(item, style: TextStyle(color: Color(0xff595959))),
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                    backgroundColor: ColorMap.gray_100,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(3),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: artTags
+            .map(
+              (item) => Container(
+                margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+                child: SizedBox(
+                  width: TextLayoutHelper.getTextSize(text: item, style: _tagStyle).width + 18,
+                  height: 24,
+                  child: TextButton(
+                    onPressed: () {},
+                    child: FittedBox(
+                      fit: BoxFit.fitHeight,
+                      child: Text(item, style: TextStyle(color: Color(0xFF595959))),
+                    ),
+                    // child: Text(item, style: TextStyle(color: Color(0xff595959))),
+                    style: TextButton.styleFrom(
+                      padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                      backgroundColor: ColorMap.gray_100,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(3),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
-          )
-          .toList(),
+            )
+            .toList(),
+      ),
     );
   }
 }
