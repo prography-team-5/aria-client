@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:aria_client/constants/colormap.dart';
+import 'package:aria_client/helpers/text_layout_helper.dart';
 import 'package:aria_client/models/art.dart';
 import 'package:aria_client/viewmodels/main/home_viewmodel.dart';
 import 'package:flutter/material.dart';
@@ -263,7 +264,8 @@ class _HomePageState extends State<HomePage> {
                 Image.network(
                   art.mainImageUrl,
                   fit: BoxFit.cover,
-                  height: constraints.maxHeight - 136, // TODO: 8px의 행방을 찾아서...
+                  height: constraints.maxHeight - 136,
+                  // TODO: 8px의 행방을 찾아서...
                   width: double.infinity,
                 ),
                 Container(
@@ -295,96 +297,75 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       SizedBox(height: 16),
-                      Row(
-                        children: [
-                          SizedBox(
-                            width: 42, // TODO: 글자수 길이에 따른 변수로 변경
-                            height: 24,
-                            child: TextButton(
-                              onPressed: () {},
-                              child: FittedBox(
-                                fit: BoxFit.fitHeight,
-                                child: Text('현대',
-                                    style: TextStyle(color: Color(0xff595959))),
-                              ),
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                                backgroundColor: ColorMap.gray_100,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          SizedBox(
-                            width: 54,
-                            height: 24,
-                            child: TextButton(
-                              onPressed: () {},
-                              child: FittedBox(
-                                fit: BoxFit.fitHeight,
-                                child: Text('아크릴',
-                                    style: TextStyle(color: Color(0xff595959))),
-                              ),
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                                backgroundColor: ColorMap.gray_100,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                              ),
-                            ),
-                          ),
-                          SizedBox(width: 8),
-                          SizedBox(
-                            width: 81,
-                            height: 24,
-                            child: TextButton(
-                              onPressed: () {},
-                              child: FittedBox(
-                                fit: BoxFit.fitHeight,
-                                child: Text('공예 캔버스',
-                                    style: TextStyle(color: Color(0xff595959))),
-                              ),
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                                backgroundColor: ColorMap.gray_100,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(3),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      // Row(
+                      //   children: [
+                      //     SizedBox(
+                      //       width: 42, // TODO: 글자수 길이에 따른 변수로 변경
+                      //       height: 24,
+                      //       child: TextButton(
+                      //         onPressed: () {},
+                      //         child: FittedBox(
+                      //           fit: BoxFit.fitHeight,
+                      //           child: Text('현대',
+                      //               style: TextStyle(color: Color(0xff595959))),
+                      //         ),
+                      //         style: TextButton.styleFrom(
+                      //           padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                      //           backgroundColor: ColorMap.gray_100,
+                      //           shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(3),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     SizedBox(width: 8),
+                      //     SizedBox(
+                      //       width: 54,
+                      //       height: 24,
+                      //       child: TextButton(
+                      //         onPressed: () {},
+                      //         child: FittedBox(
+                      //           fit: BoxFit.fitHeight,
+                      //           child: Text('아크릴',
+                      //               style: TextStyle(color: Color(0xff595959))),
+                      //         ),
+                      //         style: TextButton.styleFrom(
+                      //           padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                      //           backgroundColor: ColorMap.gray_100,
+                      //           shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(3),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     SizedBox(width: 8),
+                      //     SizedBox(
+                      //       width: 81,
+                      //       height: 24,
+                      //       child: TextButton(
+                      //         onPressed: () {},
+                      //         child: FittedBox(
+                      //           fit: BoxFit.fitHeight,
+                      //           child: Text('공예 캔버스',
+                      //               style: TextStyle(color: Color(0xff595959))),
+                      //         ),
+                      //         style: TextButton.styleFrom(
+                      //           padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                      //           backgroundColor: ColorMap.gray_100,
+                      //           shape: RoundedRectangleBorder(
+                      //             borderRadius: BorderRadius.circular(3),
+                      //           ),
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // ),
+                      _tagWidgets(art.artTags),
                     ],
                   ),
                 ),
               ],
             ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _tagDesignWidget(String tag) {
-    // LayoutBuilder로 텍스트 길이에 따른 위젯 width 설정
-    return SizedBox(
-      width: 81,
-      height: 24,
-      child: TextButton(
-        onPressed: () {},
-        child: FittedBox(
-          fit: BoxFit.fitHeight,
-          child: Text(tag, style: TextStyle(color: Color(0xff595959))),
-        ),
-        style: TextButton.styleFrom(
-          padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-          backgroundColor: ColorMap.gray_100,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(3),
           ),
         ),
       ),
@@ -432,4 +413,61 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  Widget _tagWidgets(List<String> artTags) {
+    final _tagStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      letterSpacing: -0.25,
+    );
+    return Row(
+      children: artTags
+          .map(
+            (item) => Container(
+              margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
+              child: SizedBox(
+                width: TextLayoutHelper.getTextSize(text: item, style: _tagStyle).width + 18,
+                height: 24,
+                child: TextButton(
+                  onPressed: () {},
+                  child: FittedBox(
+                    fit: BoxFit.fitHeight,
+                    child: Text(item, style: TextStyle(color: Color(0xFF595959))),
+                  ),
+                  // child: Text(item, style: TextStyle(color: Color(0xff595959))),
+                  style: TextButton.styleFrom(
+                    padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                    backgroundColor: ColorMap.gray_100,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(3),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          )
+          .toList(),
+    );
+  }
 }
+
+
+// class TextLayoutHelper {
+//   TextLayoutHelper._();
+//
+//   //특정 텍스트의 크기 구하기
+//   static Size getTextSize({
+//     required String text,
+//     required TextStyle style,
+//     int? maxLines,
+//     TextDirection? textDirection,
+//   }) {
+//     final TextPainter textPainter = TextPainter(
+//       text: TextSpan(text: text, style: style),
+//       maxLines: maxLines ?? 1,
+//       textDirection: textDirection ?? TextDirection.ltr,
+//     )
+//       ..layout(minWidth: 0, maxWidth: double.infinity);
+//     return textPainter.size;
+//   }
+// }

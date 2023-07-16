@@ -32,11 +32,11 @@ class ArtService extends GetxService {
         Art(
             artId: 1,
             memberId: 1,
-            mainImageUrl: 'https://i.pinimg.com/564x/d9/17/15/d9171548cadc8164d8e987b160e51286.jpg',
+            mainImageUrl: 'https://i.pinimg.com/564x/82/0b/91/820b91b0ed6f1d37f4688da8eaf030fa.jpg',
             style: '아크릴 캔버스',
             title: 'Art Title',
             year: 2021,
-            artTags: ['현대', '아크릴', '공예 캔버스'],
+            artTags: ['현대대대대대대ㅐ', '아크릴아아아ㅏ', '공예 캔버스'],
             size: Size(width: 100.34, height: 50.28),
             description: '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
                 '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
@@ -44,7 +44,7 @@ class ArtService extends GetxService {
         Art(
             artId: 2,
             memberId: 1,
-            mainImageUrl: 'assets/images/example_image_2.jpg',
+            mainImageUrl: 'https://i.pinimg.com/564x/42/9f/14/429f142e244ac812ce81d32030e1191b.jpg',
             style: '아크릴 캔버스',
             title: 'Art Title 2',
             year: 2023,
@@ -63,9 +63,9 @@ class ArtService extends GetxService {
         Art(
             artId: 3,
             memberId: 1,
-            mainImageUrl: 'assets/images/example_image_2.jpg',
+            mainImageUrl: 'https://i.pinimg.com/564x/9c/d3/ba/9cd3ba37ee042e5d610c100670473f18.jpg',
             style: '아크릴 캔버스',
-            title: 'Art Title 3',
+            title: '일러스트',
             year: 2023,
             artTags: ['현대', '아크릴', '공예 캔버스'],
             size: Size(width: 100.28, height: 50.4),
@@ -73,7 +73,7 @@ class ArtService extends GetxService {
         Art(
             artId: 4,
             memberId: 1,
-            mainImageUrl: 'assets/images/example_image_2.jpg',
+            mainImageUrl: 'https://i.pinimg.com/564x/d9/17/15/d9171548cadc8164d8e987b160e51286.jpg',
             style: '아크릴 캔버스',
             title: 'Art Title 4',
             year: 2023,
@@ -83,7 +83,7 @@ class ArtService extends GetxService {
         Art(
             artId: 5,
             memberId: 1,
-            mainImageUrl: 'assets/images/example_image_2.jpg',
+            mainImageUrl: 'https://i.pinimg.com/564x/f8/32/9d/f8329dc4cc8fa50086be9abc710124ea.jpg',
             style: '아크릴 캔버스',
             title: 'Art Title 5',
             year: 2023,
@@ -93,7 +93,7 @@ class ArtService extends GetxService {
         Art(
             artId: 6,
             memberId: 1,
-            mainImageUrl: 'assets/images/example_image_2.jpg',
+            mainImageUrl: 'https://i.pinimg.com/564x/63/17/70/6317705051deb0f18512f35dd5da9e0c.jpg',
             style: '아크릴 캔버스',
             title: 'Art Title 6',
             year: 2023,
