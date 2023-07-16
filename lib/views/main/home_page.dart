@@ -66,37 +66,11 @@ class _HomePageState extends State<HomePage> {
   @required
   Key key = ValueKey(false);
   bool _displayFront = true;
-  Size size = Size.zero;
 
   // final List<String> images = ['example_image.png', 'example_image_2.jpg'];
   final _homeViewModel = HomeViewModel();
   final _currentCardNotifier = ValueNotifier<RxInt>(0.obs);
   final PageController _pageController = PageController(initialPage: 0);
-
-  final GlobalKey _cadsPageKey = GlobalKey();
-
-  Size? _getSize() {
-    print('hereee');
-    if (_cadsPageKey.currentContext != null) {
-      print('here');
-      final RenderBox renderBox =
-          _cadsPageKey.currentContext!.findRenderObject() as RenderBox;
-      Size size = renderBox.size;
-      return size;
-    }
-    return Size.zero;
-  }
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   // 위젯이 모두 그려진 다음 실행
-  //   WidgetsBinding.instance!.addPostFrameCallback((_) async {
-  //     setState(() {
-  //       size = _getSize()!;
-  //     });
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -105,14 +79,6 @@ class _HomePageState extends State<HomePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           RxList<Art> artsList = snapshot.data!;
-          if (snapshot.connectionState == ConnectionState.done) {
-            // TODO: 계속 호출되는 문제 해결, valuenotifier 사용하기?
-            WidgetsBinding.instance.addPostFrameCallback((_) async {
-              setState(() {
-                size = _getSize()!;
-              });
-            });
-          }
           return Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -168,8 +134,6 @@ class _HomePageState extends State<HomePage> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           SizedBox(
-                            // height: 637,
-                            key: _cadsPageKey,
                             height: MediaQuery.of(context).size.height -
                                 208, // H56 T24 SB24 BT64 B40
                             child: _cardsPageView(artsList),
@@ -291,113 +255,136 @@ class _HomePageState extends State<HomePage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
-        child: Container(
-          // width: double.infinity,
-          alignment: Alignment.centerLeft,
-          child: Column(
-            children: [
-              Image.network(
-                art.mainImageUrl,
-                fit: BoxFit.cover,
-                height: size.height - 144, // TODO: 8px의 행방을 찾아서...
-                width: double.infinity,
-              ),
-              Container(
-                height: 96,
-                margin: EdgeInsets.fromLTRB(24, 16, 24, 24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                      height: 30,
-                      child: Text(
-                        art.title,
-                        style: _TextStyles.Title,
-                      ),
-                    ),
-                    SizedBox(height: 4),
-                    Row(
-                      children: [
-                        Text(
-                          art.year.toString() +
-                              '  |  ' +
-                              art.style +
-                              '  |  ' +
-                              art.size.width.toString() +
-                              ' * ' +
-                              art.size.height.toString(),
-                          style: _TextStyles.Feature,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 42, // TODO: 글자수 길이에 따른 변수로 변경
-                          height: 24,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: Text('현대',
-                                  style: TextStyle(color: Color(0xff595959))),
-                            ),
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                              backgroundColor: ColorMap.gray_100,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        SizedBox(
-                          width: 54,
-                          height: 24,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: Text('아크릴',
-                                  style: TextStyle(color: Color(0xff595959))),
-                            ),
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                              backgroundColor: ColorMap.gray_100,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        SizedBox(
-                          width: 81,
-                          height: 24,
-                          child: TextButton(
-                            onPressed: () {},
-                            child: FittedBox(
-                              fit: BoxFit.fitHeight,
-                              child: Text('공예 캔버스',
-                                  style: TextStyle(color: Color(0xff595959))),
-                            ),
-                            style: TextButton.styleFrom(
-                              padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
-                              backgroundColor: ColorMap.gray_100,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(3),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+        child: LayoutBuilder(
+          builder: (context, constraints) => Container(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              children: [
+                Image.network(
+                  art.mainImageUrl,
+                  fit: BoxFit.cover,
+                  height: constraints.maxHeight - 136, // TODO: 8px의 행방을 찾아서...
+                  width: double.infinity,
                 ),
-              ),
-            ],
+                Container(
+                  height: 96,
+                  margin: EdgeInsets.fromLTRB(24, 16, 24, 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        child: Text(
+                          art.title,
+                          style: _TextStyles.Title,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Text(
+                            art.year.toString() +
+                                '  |  ' +
+                                art.style +
+                                '  |  ' +
+                                art.size.width.toString() +
+                                ' * ' +
+                                art.size.height.toString(),
+                            style: _TextStyles.Feature,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 42, // TODO: 글자수 길이에 따른 변수로 변경
+                            height: 24,
+                            child: TextButton(
+                              onPressed: () {},
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text('현대',
+                                    style: TextStyle(color: Color(0xff595959))),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                                backgroundColor: ColorMap.gray_100,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          SizedBox(
+                            width: 54,
+                            height: 24,
+                            child: TextButton(
+                              onPressed: () {},
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text('아크릴',
+                                    style: TextStyle(color: Color(0xff595959))),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                                backgroundColor: ColorMap.gray_100,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          SizedBox(
+                            width: 81,
+                            height: 24,
+                            child: TextButton(
+                              onPressed: () {},
+                              child: FittedBox(
+                                fit: BoxFit.fitHeight,
+                                child: Text('공예 캔버스',
+                                    style: TextStyle(color: Color(0xff595959))),
+                              ),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+                                backgroundColor: ColorMap.gray_100,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _tagDesignWidget(String tag) {
+    // LayoutBuilder로 텍스트 길이에 따른 위젯 width 설정
+    return SizedBox(
+      width: 81,
+      height: 24,
+      child: TextButton(
+        onPressed: () {},
+        child: FittedBox(
+          fit: BoxFit.fitHeight,
+          child: Text(tag, style: TextStyle(color: Color(0xff595959))),
+        ),
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
+          backgroundColor: ColorMap.gray_100,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(3),
           ),
         ),
       ),
