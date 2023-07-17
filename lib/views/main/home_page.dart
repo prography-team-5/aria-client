@@ -162,8 +162,14 @@ class _HomePageState extends State<HomePage> {
                                 child: TextButton(
                                   onPressed: () {},
                                   child: FittedBox(
-                                    child: Text('전시회 방문하기',
-                                        style: TextStyle(color: Colors.white)),
+                                    child: Text(
+                                      '전시회 방문하기',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
                                   ),
                                   style: TextButton.styleFrom(
                                     backgroundColor: ColorMap.mainColor,
@@ -363,13 +369,17 @@ class _HomePageState extends State<HomePage> {
               (item) => Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
                 child: SizedBox(
-                  width: TextLayoutHelper.getTextSize(text: item, style: _tagStyle).width + 18,
+                  width:
+                      TextLayoutHelper.getTextSize(text: item, style: _tagStyle)
+                              .width +
+                          18,
                   height: 24,
                   child: TextButton(
-                    onPressed: () {},
+                    onPressed: null,
                     child: FittedBox(
                       fit: BoxFit.fitHeight,
-                      child: Text(item, style: TextStyle(color: Color(0xFF595959))),
+                      child: Text(item,
+                          style: TextStyle(color: Color(0xFF595959))),
                     ),
                     // child: Text(item, style: TextStyle(color: Color(0xff595959))),
                     style: TextButton.styleFrom(
@@ -388,24 +398,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-
-// class TextLayoutHelper {
-//   TextLayoutHelper._();
-//
-//   //특정 텍스트의 크기 구하기
-//   static Size getTextSize({
-//     required String text,
-//     required TextStyle style,
-//     int? maxLines,
-//     TextDirection? textDirection,
-//   }) {
-//     final TextPainter textPainter = TextPainter(
-//       text: TextSpan(text: text, style: style),
-//       maxLines: maxLines ?? 1,
-//       textDirection: textDirection ?? TextDirection.ltr,
-//     )
-//       ..layout(minWidth: 0, maxWidth: double.infinity);
-//     return textPainter.size;
-//   }
-// }
