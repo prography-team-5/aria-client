@@ -138,7 +138,7 @@ class ArtistMyPage extends StatelessWidget {
                     Expanded(
                       // height: 200,
                       child: Padding(
-                        padding: const EdgeInsets.only(top: 50 + 5),
+                        padding: const EdgeInsets.only(top: 30 + 5),
                         child: Column(
                           children: [
                             Text(
