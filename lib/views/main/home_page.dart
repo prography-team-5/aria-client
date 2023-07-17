@@ -54,6 +54,7 @@ class _HomePageController extends GetxController {
     cardScrollController.addListener(() {
       cardScrollOffset.value = cardScrollController.offset;
       print('offset = ${cardScrollOffset.value}');
+      update();
     });
     super.onInit();
   }
@@ -246,7 +247,7 @@ class _HomePageState extends State<HomePage> {
         transitionBuilder: __transitionBuilder,
         child: _displayFront
             ? _cardFrontWidget(index, artsList)
-            : _cardRearWidget(index, artsList),
+            : RearWidget(index: index, artsList: artsList),
         switchInCurve: Curves.easeInBack,
         switchOutCurve: Curves.easeInBack.flipped,
       ),
@@ -317,48 +318,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _cardRearWidget(int index, RxList<Art> artsList) {
-    final homePageController = Get.put(_HomePageController());
-    final art = artsList[index];
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: ClipPath(
-        clipper: ShapeBorderClipper(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        ),
-        child: Container(
-          width: double.infinity,
-          alignment: Alignment.centerLeft,
-          child: ShaderMask(
-            shaderCallback: (Rect bounds) {
-              return LinearGradient(
-                begin: Alignment.center,
-                end: Alignment.bottomCenter,
-                colors: [Colors.white, Colors.white.withOpacity(0.04)],
-                stops: [0.8, 0.9],
-                tileMode: homePageController.cardScrollOffset.value == 0.0
-                    ? TileMode.clamp
-                    : TileMode.mirror,
-              ).createShader(bounds);
-            },
-            child: Container(
-              margin: const EdgeInsets.all(24),
-              child: SingleChildScrollView(
-                controller: homePageController.cardScrollController,
-                child: Center(
-                  child: Text(style: _TextStyles.Description, art.description),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget _tagsWidget(List<String> artTags) {
     final _tagStyle = TextStyle(
       fontSize: 14,
@@ -399,5 +358,60 @@ class _HomePageState extends State<HomePage> {
             .toList(),
       ),
     );
+  }
+}
+
+class RearWidget extends StatelessWidget {
+  final int index;
+  final RxList<Art> artsList;
+
+  RearWidget({required this.index, required this.artsList});
+
+  @override
+  Widget build(BuildContext context) {
+    final art = artsList[index];
+    return GetBuilder<_HomePageController>(
+        init: _HomePageController(),
+        builder: (context) {
+          final homePageController = Get.find<_HomePageController>();
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: ClipPath(
+              clipper: ShapeBorderClipper(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+              ),
+              child: Container(
+                width: double.infinity,
+                alignment: Alignment.centerLeft,
+                child: ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return LinearGradient(
+                      begin: Alignment.center,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.white, Colors.white.withOpacity(0.04)],
+                      stops: [0.8, 0.9],
+                      tileMode: homePageController.cardScrollOffset == 0.0
+                          ? TileMode.clamp
+                          : TileMode.mirror,
+                    ).createShader(bounds);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(24),
+                    child: SingleChildScrollView(
+                      controller: homePageController.cardScrollController,
+                      child: Center(
+                        child: Text(
+                            style: _TextStyles.Description, art.description),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
   }
 }

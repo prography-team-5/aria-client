@@ -192,7 +192,7 @@ class AuthService extends GetxService {
     String jwt = 'testjwtsignin';
     NetworkAdapter networkAdapter = NetworkAdapter();
 
-    if (Env.env == Environ.dev) {
+    if (Env.env == Environ.prod) {
       return {'jwt': jwt, 'statusCode': 401};
     }
 
@@ -213,7 +213,7 @@ class AuthService extends GetxService {
     String jwt = 'testjwtsignup';
     NetworkAdapter networkAdapter = NetworkAdapter();
 
-    if (Env.env == Environ.dev) {
+    if (Env.env == Environ.prod) {
       return {'jwt': jwt, 'statusCode': 200};
     }
 
@@ -234,7 +234,7 @@ class AuthService extends GetxService {
     Member? member;
     NetworkAdapter networkAdapter = NetworkAdapter();
 
-    if (Env.env == Environ.dev) {
+    if (Env.env == Environ.prod) {
       member = await Member(
         memberId: 1,
         role: 'artist',

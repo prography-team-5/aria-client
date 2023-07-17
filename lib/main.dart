@@ -1,6 +1,7 @@
 import 'package:aria_client/bindings/initial_bindings.dart';
 import 'package:aria_client/helpers/env.dart';
 import 'package:aria_client/views/my/artist_add_art_page.dart';
+import 'package:aria_client/views/my/my_page.dart';
 import 'package:aria_client/views/my/user_edit_profile_page.dart';
 import 'package:aria_client/views/my/user_my_page.dart';
 import 'package:aria_client/views/test/test_page.dart';
@@ -26,6 +27,7 @@ void main() {
     statusBarColor: Colors.transparent,
   ));
   KakaoSdk.init(nativeAppKey: Env.kakaoNativeKey);
+  InitialBinding().dependencies();
   runApp(const MyApp());
 }
 
@@ -40,7 +42,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: TestPage(),
       initialRoute: '/signin',
-      initialBinding: InitialBinding(),
+      // initialBinding: InitialBinding(), // GetMaterialApp이 실행되기 전 의존성부터 주입해야 된다는 의견이 있어서, main에서 InitialBinding 수행함
       getPages: [
         // TODO: BindingBuilder 사용여부에 따라 Routing 수정 필요
         GetPage(name: "/", page: () => TestPage()),
@@ -48,11 +50,10 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/home", page: () => HomePage()),
         GetPage(name: "/signin", page: () => SigninPage()),
         GetPage(name: "/signup", page: () => SignupPage()),
-        GetPage(name: "/artist_my", page: () => ArtistMyPage()),
+        GetPage(name: "/my", page: () => MyPage()),
         GetPage(
             name: "/artist_edit_profile", page: () => ArtistEditProfilePage()),
         GetPage(name: "/artist_add_art", page: () => ArtistAddArtPage()),
-        GetPage(name: "/user_my", page: () => UserMyPage()),
         GetPage(name: "/user_edit_profile", page: () => UserEditProfilePage()),
         GetPage(name: "/search", page: () => SearchPage()),
         GetPage(name: "/artist_home", page: () => ArtistHomePage()),
