@@ -64,7 +64,7 @@ class ArtistMyPage extends StatelessWidget {
             actions: [
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 16, 12, 16),
-                child: OutlinedButton(
+                child: TextButton(
                   onPressed: () {},
                   child: Text(
                     '작품 등록',
@@ -74,10 +74,11 @@ class ArtistMyPage extends StatelessWidget {
                       fontWeight: FontWeight.w700,
                     ),
                   ),
-                  style: OutlinedButton.styleFrom(
+                  style: TextButton.styleFrom(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                     backgroundColor: ColorMap.mainColor,
                     shape: RoundedRectangleBorder(
+                      side: BorderSide.none,
                       borderRadius: BorderRadius.circular(15),
                     ),
                   ),
@@ -116,8 +117,8 @@ class ArtistMyPage extends StatelessWidget {
               height: 50,
               child: Row(
                 children: <Widget>[
-                  Expanded(child: CustomPageButton(title: "page 1", page: 0)),
-                  Expanded(child: CustomPageButton(title: "page 2", page: 1)),
+                  Expanded(child: CustomPageButton(title: "내 작품", page: 0)),
+                  Expanded(child: CustomPageButton(title: "팔로워", page: 1)),
                 ],
               ),
             ),
@@ -143,7 +144,7 @@ class ArtistMyPage extends StatelessWidget {
                             Text('현대 아크릴 공예'),
                             Text('32 Followers'),
                             Container(
-                              width: 350,
+                              width: 300,
                               height: 40,
                               decoration: BoxDecoration(
                                 color: ColorMap.gray_200,
@@ -152,12 +153,40 @@ class ArtistMyPage extends StatelessWidget {
                               child: Center(child: Text('1000자')),
                             ),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 TextButton(
-                                    onPressed: () {}, child: Text('프로필 수정')),
+                                  onPressed: () {},
+                                  child: Text(
+                                    '프로필 수정',
+                                    style: TextStyle(color: ColorMap.gray_700),
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24, vertical: 13),
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: ColorMap.gray_200, width: 1),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                ),
                                 TextButton(
-                                    onPressed: () {}, child: Text('프로필 수정'))
+                                  onPressed: () {},
+                                  child: Text(
+                                    '프로필 공유',
+                                    style: TextStyle(color: ColorMap.gray_700),
+                                  ),
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 24, vertical: 13),
+                                    shape: RoundedRectangleBorder(
+                                      side: BorderSide(
+                                          color: ColorMap.gray_200, width: 1),
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                             Row(
@@ -182,10 +211,10 @@ class ArtistMyPage extends StatelessWidget {
                                 children: <Widget>[
                                   Expanded(
                                       child: CustomPageButton(
-                                          title: "page 1", page: 0)),
+                                          title: "내 작품", page: 0)),
                                   Expanded(
                                       child: CustomPageButton(
-                                          title: "page 2", page: 1)),
+                                          title: "팔로워", page: 1)),
                                 ],
                               ),
                             ),
@@ -304,7 +333,7 @@ class CustomPageButton extends GetView<ArtistMyPageController> {
             Container(
               height: 1,
               color: controller.isCurrentPage(page)
-                  ? Color(0xFF014F90)
+                  ? ColorMap.mainColor
                   : Color(0xFFF1F1F1),
             ),
           ],
