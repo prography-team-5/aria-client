@@ -64,7 +64,24 @@ class ArtistMyPage extends StatelessWidget {
             actions: [
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 16, 12, 16),
-                child: OutlinedButton(onPressed: () {}, child: Text('작가 신청')),
+                child: OutlinedButton(
+                  onPressed: () {},
+                  child: Text(
+                    '작품 등록',
+                    style: TextStyle(
+                      color: ColorMap.white,
+                      fontFamily: 'Prentendard',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                    backgroundColor: ColorMap.mainColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                  ),
+                ),
               ),
             ],
             centerTitle: true,
