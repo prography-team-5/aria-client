@@ -51,11 +51,9 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/signin", page: () => SigninPage()),
         GetPage(name: "/signup", page: () => SignupPage()),
         GetPage(name: "/my", page: () => MyPage()),
-        GetPage(name: "/artist_my", page: () => ArtistMyPage()),
         GetPage(
             name: "/artist_edit_profile", page: () => ArtistEditProfilePage()),
         GetPage(name: "/artist_add_art", page: () => ArtistAddArtPage()),
-        GetPage(name: "/user_my", page: () => UserMyPage()),
         GetPage(name: "/user_edit_profile", page: () => UserEditProfilePage()),
         GetPage(name: "/search", page: () => SearchPage()),
         GetPage(name: "/artist_home", page: () => ArtistHomePage()),
