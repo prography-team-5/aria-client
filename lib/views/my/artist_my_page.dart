@@ -6,6 +6,8 @@ import 'package:get/get.dart';
 import '../../constants/colormap.dart';
 import '../../constants/text_styles.dart';
 
+class ArtistMyController extends GetxController {}
+
 class ArtistMyScrollController extends GetxController {
   var scrollController = ScrollController().obs;
 }
