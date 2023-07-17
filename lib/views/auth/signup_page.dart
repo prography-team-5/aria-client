@@ -14,32 +14,12 @@ class GrayTextStyles {
       letterSpacing: -0.25);
 }
 
-class SignUpController extends GetxController {
-  final nicknameController = TextEditingController();
-
-  Rx<Color> backgroundColor = ColorMap.gray_200.obs;
-
-  @override
-  void onClose() {
-    nicknameController.dispose();
-    super.onClose();
-  }
-
-  void changeColor() {
-    nicknameController.addListener(() {
-      backgroundColor.value = nicknameController.text.isNotEmpty
-          ? ColorMap.mainColor
-          : ColorMap.gray_200;
-    });
-  }
-}
-
-class SignupPage extends GetView<SignupViewModel> {
+class SignupPage extends StatelessWidget {
   const SignupPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final signUpController = Get.put(SignUpController());
+    final controller = Get.find<SignupViewModel>();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(56),
@@ -82,9 +62,9 @@ class SignupPage extends GetView<SignupViewModel> {
               height: 8,
             ),
             TextField(
-              controller: signUpController.nicknameController,
+              controller: controller.nicknameController,
               onChanged: (text) {
-                signUpController.changeColor();
+                controller.changeColor();
               },
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
@@ -107,7 +87,7 @@ class SignupPage extends GetView<SignupViewModel> {
                 () => TextButton(
                   onPressed: () async {
                     await controller.signUp(
-                        nickname: signUpController.nicknameController.text);
+                        nickname: controller.nicknameController.text);
                   }, // TODO: 회원가입 제출 이후 동작
                   child: Text(
                     '회원가입',
@@ -119,7 +99,7 @@ class SignupPage extends GetView<SignupViewModel> {
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    backgroundColor: signUpController.backgroundColor.value,
+                    backgroundColor: controller.backgroundColor.value,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),

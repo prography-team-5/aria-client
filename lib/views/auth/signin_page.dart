@@ -6,7 +6,9 @@ import 'package:get/get.dart';
 import '../../constants/text_styles.dart';
 import '../../viewmodels/auth/signin_viewmodel.dart';
 
-class SigninPage extends GetView<SigninViewModel> {
+class SigninPage extends StatelessWidget {
+  final SigninViewModel controller = Get.find<SigninViewModel>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
