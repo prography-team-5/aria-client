@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../constants/colormap.dart';
+import '../../constants/text_styles.dart';
 
 class ArtistMyScrollController extends GetxController {
   var scrollController = ScrollController().obs;
@@ -140,7 +141,10 @@ class ArtistMyPage extends StatelessWidget {
                         padding: const EdgeInsets.only(top: 50 + 5),
                         child: Column(
                           children: [
-                            Text('작가 아리아'),
+                            Text(
+                              '작가 아리아',
+                              style: TextStyles.Heading2,
+                            ),
                             Text('현대 아크릴 공예'),
                             Text('32 Followers'),
                             Container(
