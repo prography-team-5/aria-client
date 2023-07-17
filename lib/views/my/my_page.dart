@@ -9,7 +9,8 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final signinViewModel = Get.find<SigninViewModel>();
-    return signinViewModel.member!.role == "ROLE_USER"
+    print(signinViewModel.member!.role);
+    return signinViewModel.member!.role == "ROLE_MEMBER"
         ? UserMyPage()
         : ArtistMyPage();
   }
