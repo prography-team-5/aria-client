@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
 
   final _homeViewModel = HomeViewModel();
   final _currentCardNotifier = ValueNotifier<RxInt>(0.obs);
-  final PageController _pageController = PageController(initialPage: 0);
+  final _pageController = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
@@ -385,7 +385,6 @@ class _HomePageState extends State<HomePage> {
                       child: Text(item,
                           style: TextStyle(color: Color(0xFF595959))),
                     ),
-                    // child: Text(item, style: TextStyle(color: Color(0xff595959))),
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.fromLTRB(9, 1, 9, 1),
                       backgroundColor: ColorMap.gray_100,
