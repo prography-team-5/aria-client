@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:aria_client/constants/colormap.dart';
 import 'package:aria_client/helpers/text_layout_helper.dart';
 import 'package:aria_client/models/art.dart';
+import 'package:aria_client/viewmodels/auth/signin_viewmodel.dart';
 import 'package:aria_client/viewmodels/main/home_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -68,13 +69,13 @@ class _HomePageState extends State<HomePage> {
   Key key = ValueKey(false);
   bool _displayFront = true;
 
-  // final List<String> images = ['example_image.png', 'example_image_2.jpg'];
   final _homeViewModel = HomeViewModel();
   final _currentCardNotifier = ValueNotifier<RxInt>(0.obs);
   final PageController _pageController = PageController(initialPage: 0);
 
   @override
   Widget build(BuildContext context) {
+    final signinViewModel = Get.put(SigninViewModel());
     return FutureBuilder(
       future: _homeViewModel.fetchArts(),
       builder: (context, snapshot) {
@@ -114,15 +115,18 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        Padding(
+                        signinViewModel.member?.role != null ? Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
                           child: GestureDetector(
-                            onTap: () => Get.toNamed('/my'),
+                            onTap: () =>
+                                signinViewModel.member!.role == "ROLE_MEMBER"
+                                    ? Get.toNamed('/user_my')
+                                    : Get.toNamed('/artist_my'),
                             child: SvgPicture.asset(
                               'assets/images/my_button.svg',
                             ),
                           ),
-                        ),
+                        ) : Container(),
                       ],
                       centerTitle: true,
                       backgroundColor: Colors.transparent,
