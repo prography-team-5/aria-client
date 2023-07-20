@@ -1,3 +1,4 @@
+import 'package:aria_client/models/follow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,11 @@ import 'package:get/get.dart';
 import '../../constants/colormap.dart';
 import '../../constants/text_styles.dart';
 import '../../viewmodels/auth/signin_viewmodel.dart';
+
+class UserMyPageViewModel extends GetxController {
+  final SigninViewModel signinViewModel = Get.find<SigninViewModel>();
+  RxList<Follow> followList = <Follow>[].obs;
+}
 
 class UserMyPage extends StatelessWidget {
   @override
