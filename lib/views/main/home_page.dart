@@ -42,6 +42,7 @@ class _HomePageController extends GetxController {
   final cardScrollController = ScrollController();
 
   RxDouble cardScrollOffset = 0.0.obs;
+  RxDouble cardScrollBottomOffset = 0.0.obs;
 
   @override
   void onClose() {
@@ -53,7 +54,8 @@ class _HomePageController extends GetxController {
   void onInit() {
     cardScrollController.addListener(() {
       cardScrollOffset.value = cardScrollController.offset;
-      print('offset = ${cardScrollOffset.value}');
+      cardScrollBottomOffset.value =
+          cardScrollController.position.maxScrollExtent;
       update();
     });
     super.onInit();
@@ -116,18 +118,20 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        signinViewModel.member?.role != null ? Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                          child: GestureDetector(
-                            onTap: () =>
-                                signinViewModel.member!.role == "ROLE_MEMBER"
-                                    ? Get.toNamed('/user_my')
-                                    : Get.toNamed('/artist_my'),
-                            child: SvgPicture.asset(
-                              'assets/images/my_button.svg',
-                            ),
-                          ),
-                        ) : Container(),
+                        signinViewModel.member?.role != null
+                            ? Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                                child: GestureDetector(
+                                  onTap: () => signinViewModel.member!.role ==
+                                          "ROLE_MEMBER"
+                                      ? Get.toNamed('/user_my')
+                                      : Get.toNamed('/artist_my'),
+                                  child: SvgPicture.asset(
+                                    'assets/images/my_button.svg',
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ],
                       centerTitle: true,
                       backgroundColor: Colors.transparent,
@@ -388,15 +392,39 @@ class RearWidget extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: ShaderMask(
                   shaderCallback: (Rect bounds) {
-                    return LinearGradient(
-                      begin: Alignment.center,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.white, Colors.white.withOpacity(0.04)],
-                      stops: [0.8, 0.9],
-                      tileMode: homePageController.cardScrollOffset == 0.0
-                          ? TileMode.clamp
-                          : TileMode.mirror,
-                    ).createShader(bounds);
+                    return homePageController.cardScrollOffset == 0.0
+                        ? LinearGradient(
+                                begin: Alignment.center,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.white,
+                                  Colors.white.withOpacity(0.04)
+                                ],
+                                stops: [0.8, 0.9],
+                                tileMode: TileMode.clamp)
+                            .createShader(bounds)
+                        : homePageController.cardScrollOffset ==
+                                homePageController.cardScrollBottomOffset
+                            ? LinearGradient(
+                                    begin: Alignment.topCenter,
+                                    end: Alignment.center,
+                                    colors: [
+                                      Colors.white.withOpacity(0.04),
+                                      Colors.white,
+                                    ],
+                                    stops: [0.1, 0.2],
+                                    tileMode: TileMode.clamp)
+                                .createShader(bounds)
+                            : LinearGradient(
+                                begin: Alignment.center,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.white,
+                                  Colors.white.withOpacity(0.04)
+                                ],
+                                stops: [0.8, 0.9],
+                                tileMode: TileMode.mirror,
+                              ).createShader(bounds);
                   },
                   child: Container(
                     margin: const EdgeInsets.all(24),
