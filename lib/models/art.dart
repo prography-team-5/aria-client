@@ -3,7 +3,9 @@ import 'package:aria_client/models/size.dart';
 class Art {
   final int artId;
   final int memberId;
-  final String mainImageUrl;
+  final String? artistNickname;
+  final String? mainImageUrl;
+  final List<String>? imagesUrl;
   final String style;
   final String title;
   final int year;
@@ -14,7 +16,9 @@ class Art {
   Art({
     required this.artId,
     required this.memberId,
-    required this.mainImageUrl,
+    this.artistNickname,
+    this.mainImageUrl,
+    this.imagesUrl,
     required this.style,
     required this.title,
     required this.year,
@@ -26,7 +30,9 @@ class Art {
   factory Art.fromJson(Map<String, dynamic> json) => Art(
     artId: json['artId'],
     memberId: json['memberId'],
+    artistNickname: json['artistNickname'],
     mainImageUrl: json['mainImageUrl'],
+    imagesUrl: json['imagesUrl'],
     style: json['style'],
     title: json['title'],
     year: json['year'],
@@ -38,7 +44,9 @@ class Art {
   Map<String, dynamic> toJson() => {
     'artId': artId,
     'memberId': memberId,
+    'artistNickname': artistNickname,
     'mainImageUrl': mainImageUrl,
+    'imagesUrl': imagesUrl,
     'style': style,
     'title': title,
     'year': year,

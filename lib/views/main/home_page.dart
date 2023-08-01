@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
               image: DecorationImage(
                 fit: BoxFit.fill,
                 image: NetworkImage(
-                    artsList[_currentCardNotifier.value.toInt()].mainImageUrl),
+                    artsList[_currentCardNotifier.value.toInt()].mainImageUrl!),
               ),
             ),
             child: BackdropFilter(
@@ -276,7 +276,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Image.network(
-                  art.mainImageUrl,
+                  art.mainImageUrl!,
                   fit: BoxFit.cover,
                   height: constraints.maxHeight - 136,
                   width: double.infinity,
