@@ -8,18 +8,20 @@ import 'package:aria_client/models/size.dart';
 import 'package:get/get.dart';
 
 class ArtService extends GetxService {
-  Future<Art?> fetchArt() async {
+  Future<Art?> fetchArtDetails() async {
     if (Env.env == Environ.dev) {
+      //TODO: 작가에게 응원의 메세지 보내기 위한 sns 계정 정보 필요?
       return Art(
+          artistNickname: '작가 아리아',
           artId: 1,
           memberId: 1,
-          mainImageUrl: 'assets/images/example_image.png',
-          style: '아크릴 캔버스',
-          title: 'Art Title',
+          imagesUrl: ['https://i.pinimg.com/564x/9c/d3/ba/9cd3ba37ee042e5d610c100670473f18.jpg'],
+          title: '[from view model] 작가의 작품 제목 공간인데요 어디까지 쓸 수 있는지 테스트를 진행하고 있',
           year: 2021,
+          style: '아크릴 캔버스',
           artTags: ['현대', '아크릴', '공예 캔버스'],
-          size: Size(width: 100, height: 100),
-          description: 'Art Description');
+          size: Size(width: 30.5, height: 30.8),
+          description: '[from view model] 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명');
     } else {
       // TODO: fetch from API
       return null;
