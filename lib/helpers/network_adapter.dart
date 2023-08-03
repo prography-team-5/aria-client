@@ -25,10 +25,14 @@ class NetworkAdapter {
       'X-AUTH-TOKEN': '$token',
       'Authorization': 'Bearer $token'
     });
-    return {
-      'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))['data']
-    };
+
+    dynamic body = {};
+    try {
+      body = json.decode(utf8.decode(response.bodyBytes))['data'];
+    } catch (e) {
+      body = {};
+    }
+    return {'statusCode': response.statusCode, 'body': body};
   }
 
   Future<dynamic> post(

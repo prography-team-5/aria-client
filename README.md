@@ -14,6 +14,8 @@
 
 ## TAEBBONG TODO
 
+- TODO: 서비스는 한 파일에 다 모아 놔도 될 듯
+
 ### TODAY
 
 - [x] 작가 마이페이지 GetX로 리팩토링
