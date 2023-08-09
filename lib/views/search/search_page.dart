@@ -27,7 +27,19 @@ class _TextStyles {
       letterSpacing: -0.25);
 }
 
+class _SearchPageController extends GetxController {
+  final textFieldController = TextEditingController();
+
+  @override
+  void dispose() {
+    textFieldController.dispose();
+    super.dispose();
+  }
+}
+
 class SearchPage extends StatelessWidget {
+  final searchPageController = Get.put(_SearchPageController());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,17 +70,16 @@ class SearchPage extends StatelessWidget {
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-              child: GestureDetector(
-                onTap: () => {},
-                child: TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    '검색',
-                    style: _TextStyles.Search,
-                  ),
-                  style: TextButton.styleFrom(
-                    backgroundColor: Colors.transparent,
-                  ),
+              child: TextButton(
+                onPressed: () {
+                  print(searchPageController.textFieldController.text);
+                },
+                child: Text(
+                  '검색',
+                  style: _TextStyles.Search,
+                ),
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.transparent,
                 ),
               ),
             ),
@@ -112,6 +123,7 @@ class SearchPage extends StatelessWidget {
 
   Widget SearchField() {
     return TextField(
+      controller: searchPageController.textFieldController,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(10),
         focusedBorder: OutlineInputBorder(
