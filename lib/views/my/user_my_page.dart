@@ -149,10 +149,25 @@ class UserMyPage extends StatelessWidget {
                 ],
               ),
             ),
-            Column(
-                children: controller.followeeList
-                    .map((element) => FollowAvatar())
-                    .toList()),
+            Container(
+              padding: EdgeInsets.all(15),
+              child: Text('팔로우한 작가'),
+            ),
+            Container(
+              height: 500,
+              padding: EdgeInsets.all(15),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: controller.followeeList.length,
+                itemBuilder: (context, index) =>
+                    FollowAvatar(follow: controller.followeeList[index]),
+              ),
+            ),
           ],
         ),
       ),
@@ -161,11 +176,38 @@ class UserMyPage extends StatelessWidget {
 }
 
 class FollowAvatar extends StatelessWidget {
+  final ArtistInfo follow;
+  FollowAvatar({required this.follow});
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('hi'),
-      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.amber),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.amber,
+              image: DecorationImage(
+                image: AssetImage('assets/images/profile_avatar.png'),
+                // image: NetworkImage(follow.profile_art_image_url),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "nickname",
+              // follow.nickname,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

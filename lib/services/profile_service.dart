@@ -67,6 +67,31 @@ class ProfileService extends GetxService {
           member_id: 9,
           profile_art_image_url: 'https://picsum.photos/200/300',
           intro: ''),
+      ArtistInfo(
+          id: 9,
+          member_id: 9,
+          profile_art_image_url: 'https://picsum.photos/200/300',
+          intro: ''),
+      ArtistInfo(
+          id: 9,
+          member_id: 9,
+          profile_art_image_url: 'https://picsum.photos/200/300',
+          intro: ''),
+      ArtistInfo(
+          id: 9,
+          member_id: 9,
+          profile_art_image_url: 'https://picsum.photos/200/300',
+          intro: ''),
+      ArtistInfo(
+          id: 9,
+          member_id: 9,
+          profile_art_image_url: 'https://picsum.photos/200/300',
+          intro: ''),
+      ArtistInfo(
+          id: 9,
+          member_id: 9,
+          profile_art_image_url: 'https://picsum.photos/200/300',
+          intro: ''),
     ];
     return followeeList;
   }
