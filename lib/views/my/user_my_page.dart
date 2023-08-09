@@ -2,6 +2,7 @@ import 'package:aria_client/models/artist_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants/colormap.dart';
 import '../../constants/text_styles.dart';
@@ -17,9 +18,9 @@ class UserMyPageViewModel extends GetxController {
   }
 
   @override
-  void onInit() {
+  void onInit() async {
     super.onInit();
-    getFollowList();
+    await getFollowList();
   }
 }
 
@@ -55,7 +56,11 @@ class UserMyPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 16, 12, 16),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final uri = Uri.parse('https://google.com');
+                    if (!await launchUrl(uri))
+                      throw Exception('Could not launch ${uri.toString()}');
+                  },
                   child: Text(
                     '작가 신청',
                     style: TextStyle(

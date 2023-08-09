@@ -33,6 +33,7 @@ dependencies:
   get: ^4.6.5
   flutter_screenutil: ^5.7.0
   http:
+  url_launcher:
 
   # social login
   flutter_naver_login: ^1.8.0
