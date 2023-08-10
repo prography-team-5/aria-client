@@ -1,3 +1,4 @@
+import 'package:aria_client/helpers/sp_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class _TextStyles {
       height: 1.5,
       letterSpacing: -0.25);
 
-  static const SearchedWords = TextStyle(
+  static const SearchHistory = TextStyle(
       color: ColorMap.gray_500,
       fontSize: 16,
       fontWeight: FontWeight.w400,
@@ -38,6 +39,7 @@ class _SearchPageController extends GetxController {
 }
 
 class SearchPage extends StatelessWidget {
+  final helper = SPHelper();
   final searchPageController = Get.put(_SearchPageController());
 
   @override
@@ -64,15 +66,17 @@ class SearchPage extends StatelessWidget {
             height: 48,
             // color: Colors.white,
             child: Center(
-              child: SearchField(),
+              child: _searchField(),
             ),
           ),
           actions: [
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
               child: TextButton(
-                onPressed: () {
-                  print(searchPageController.textFieldController.text);
+                onPressed: () async {
+                  // print(searchPageController.textFieldController.text);
+                  final keyword = searchPageController.textFieldController.text;
+                  await helper.saveSearchHistory(keyword);
                 },
                 child: Text(
                   '검색',
@@ -91,37 +95,26 @@ class SearchPage extends StatelessWidget {
       ),
       body: Container(
         margin: EdgeInsets.fromLTRB(24, 4, 24, 12),
-        child: ListView(
-          padding: EdgeInsets.zero,
-          shrinkWrap: true,
-          children: [
-            ListTile(
-              contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-              title: Text(
-                '검색어',
-                style: _TextStyles.SearchedWords,
-              ),
-              trailing: SvgPicture.asset(
-                'assets/images/cancel_button.svg',
-              ),
-            ),
-            ListTile(
-              contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-              title: Text(
-                '검색어',
-                style: _TextStyles.SearchedWords,
-              ),
-              trailing: SvgPicture.asset(
-                'assets/images/cancel_button.svg',
-              ),
-            ),
-          ],
+        child: FutureBuilder(
+          future: helper.getSearchHistory(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              List<String> historyList = snapshot.data!;
+              if (historyList.isNotEmpty) {
+                return _searchHistory(historyList);
+              } else return Container();
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            // 기본적으로 로딩 Spinner
+            return CircularProgressIndicator();
+          },
         ),
       ),
     );
   }
 
-  Widget SearchField() {
+  Widget _searchField() {
     return TextField(
       controller: searchPageController.textFieldController,
       decoration: InputDecoration(
@@ -142,6 +135,28 @@ class SearchPage extends StatelessWidget {
           color: ColorMap.gray_400,
         ),
       ),
+    );
+  }
+
+  Widget _searchHistory(List<String> historyList) {
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      itemCount: historyList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return ListTile(
+          contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+          title: Text(historyList[index], style: _TextStyles.SearchHistory),
+          trailing: GestureDetector(
+            onTap: () {
+              helper.removeSearchHistory(index);
+            },
+            child: SvgPicture.asset(
+              'assets/images/cancel_button.svg',
+            ),
+          ),
+        );
+      }
     );
   }
 }

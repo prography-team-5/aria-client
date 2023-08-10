@@ -8,19 +8,19 @@ class SPHelper {
   }
 
   // 검색어
-  Future<List<String>> getSearchedKeywords() async {
+  Future<List<String>> getSearchHistory() async {
     List<String> searchedKeywordList = prefs.getStringList('searchedKeywordList') ?? [];
     return searchedKeywordList;
   }
 
-  Future saveSearchedKeyword(String searchedKeyword) async {
-    List<String> searchedKeywordList = await getSearchedKeywords();
+  Future saveSearchHistory(String searchedKeyword) async {
+    List<String> searchedKeywordList = await getSearchHistory();
     searchedKeywordList.add(searchedKeyword);
     prefs.setStringList('searchedKeywordList', searchedKeywordList);
   }
 
-  Future removeSearchedKeywords(idx) async {
-    List<String> searchedKeywordList = await getSearchedKeywords();
+  Future removeSearchHistory(idx) async {
+    List<String> searchedKeywordList = await getSearchHistory();
     searchedKeywordList.removeAt(idx);
     prefs.setStringList('searchedKeywordList', searchedKeywordList);
   }
