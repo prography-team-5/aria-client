@@ -63,14 +63,15 @@ class NetworkAdapter {
   Future<dynamic> put(
       {required String path,
       required Map<String, dynamic> params,
-      String? token}) async {
+      String? accessToken}) async {
     final url = Uri.parse(baseURL + path);
     final response = await http.put(
       url,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'X-AUTH-TOKEN': '$token'
+        'Authorization': 'Bearer $accessToken',
+        'X-AUTH-TOKEN': '$accessToken',
       },
       body: json.encode(params),
     );
@@ -83,14 +84,15 @@ class NetworkAdapter {
   Future<dynamic> patch(
       {required String path,
       required Map<String, dynamic> params,
-      String? token}) async {
+      String? accessToken}) async {
     final url = Uri.parse(baseURL + path);
     final response = await http.patch(
       url,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'X-AUTH-TOKEN': '$token'
+        'Authorization': 'Bearer $accessToken',
+        'X-AUTH-TOKEN': '$accessToken',
       },
       body: json.encode(params),
     );

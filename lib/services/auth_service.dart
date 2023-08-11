@@ -259,4 +259,14 @@ class AuthService extends GetxService {
     member = Member.fromJson(data['body']);
     return {'member': member};
   }
+
+  Future<Map<String, dynamic>> userEditProfile(
+      {required String nickname, required String accessToken}) async {
+    NetworkAdapter networkAdapter = NetworkAdapter();
+    Map<String, dynamic> data = await networkAdapter.patch(
+        path: '/members/nickname',
+        accessToken: accessToken,
+        params: {'nickname': nickname});
+    return data;
+  }
 }

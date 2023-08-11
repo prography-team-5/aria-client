@@ -110,7 +110,9 @@ class UserMyPage extends StatelessWidget {
                               ),
                               Padding(padding: EdgeInsets.all(5)),
                               TextButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.toNamed('/user_edit_profile');
+                                },
                                 child: Text(
                                   '프로필 수정',
                                   style: TextStyle(color: ColorMap.gray_700),

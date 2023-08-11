@@ -1,6 +1,6 @@
 class Member {
   final int memberId;
-  final String nickname;
+  String nickname;
   final String profileImageUrl;
   final String role;
 
