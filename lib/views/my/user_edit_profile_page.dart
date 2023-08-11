@@ -1,5 +1,6 @@
 import 'package:aria_client/constants/colormap.dart';
 import 'package:aria_client/constants/text_styles.dart';
+import 'package:aria_client/viewmodels/auth/signin_viewmodel.dart';
 import 'package:aria_client/viewmodels/auth/signup_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -88,9 +89,13 @@ class UserEditProfilePage extends StatelessWidget {
                   onPressed: () async {
                     await controller.userEditProfile(
                         nickname: controller.nicknameController.text);
-                  }, // TODO: 회원가입 제출 이후 동작
+                    controller.refresh();
+                    Get.find<SigninViewModel>().refresh();
+                    Get.offAllNamed(
+                        '/home'); // TODO: 닉네임 수정 후 마이페이지로 가야되는데 일단은 홈으로
+                  },
                   child: Text(
-                    '회원가입',
+                    '저장',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 16,

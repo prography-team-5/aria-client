@@ -59,7 +59,6 @@ class SignupViewModel extends GetxController {
       final signinViewModel = Get.find<SigninViewModel>();
       signinViewModel.userEditProfileDone(nickname: nickname);
       update();
-      Get.offAllNamed('/my');
     } else {
       // UserEditProfile 실패
       Get.offAllNamed('/home');
