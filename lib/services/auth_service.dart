@@ -237,8 +237,6 @@ class AuthService extends GetxService {
       statusCode = 401;
     }
 
-    print({'jwt': jwt, 'statusCode': statusCode});
-
     return {'jwt': jwt, 'statusCode': statusCode};
   }
 
