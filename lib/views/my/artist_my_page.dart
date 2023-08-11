@@ -68,7 +68,9 @@ class ArtistMyPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 16, 12, 16),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.toNamed('/artist_add_art');
+                  },
                   child: Text(
                     '작품 등록',
                     style: TextStyle(
