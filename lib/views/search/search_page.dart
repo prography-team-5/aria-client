@@ -31,7 +31,6 @@ class _TextStyles {
 class _SearchPageController extends GetxController {
   final helper = SPHelper();
   final textFieldController = TextEditingController();
-  // final RxList<String> historyList = RxList<String>([]);
 
   @override
   void dispose() {
@@ -155,7 +154,6 @@ class SearchPage extends StatelessWidget {
     );
   }
 
-  //TODO: GetX 사용하여 cancel_button 누를 때마다 getHistory 다시 하거나 ListTile 삭제하기
   Widget _searchHistory(List<String> historyList) {
     return ListView.builder(
       padding: EdgeInsets.zero,
