@@ -19,7 +19,7 @@ class SPHelper {
     prefs.setStringList('searchedKeywordList', searchedKeywordList);
   }
 
-  Future removeSearchHistory(idx) async {
+  Future removeSearchHistory(int idx) async {
     List<String> searchedKeywordList = await getSearchHistory();
     searchedKeywordList.removeAt(idx);
     prefs.setStringList('searchedKeywordList', searchedKeywordList);

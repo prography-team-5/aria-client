@@ -29,12 +29,24 @@ class _TextStyles {
 }
 
 class _SearchPageController extends GetxController {
+  final helper = SPHelper();
   final textFieldController = TextEditingController();
+  // final RxList<String> historyList = RxList<String>([]);
 
   @override
   void dispose() {
     textFieldController.dispose();
     super.dispose();
+  }
+
+  void saveSearchHistory(String keyword) async {
+    await helper.saveSearchHistory(keyword);
+    update(); //위젯 빌드 다시
+  }
+
+  void removeSearchHistory(int idx) async {
+    await helper.removeSearchHistory(idx);
+    update(); //위젯 빌드 다시
   }
 }
 
@@ -74,9 +86,10 @@ class SearchPage extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
               child: TextButton(
                 onPressed: () async {
-                  // print(searchPageController.textFieldController.text);
                   final keyword = searchPageController.textFieldController.text;
-                  await helper.saveSearchHistory(keyword);
+                  if (keyword.isNotEmpty) {
+                    searchPageController.saveSearchHistory(keyword);
+                  }
                 },
                 child: Text(
                   '검색',
@@ -95,19 +108,23 @@ class SearchPage extends StatelessWidget {
       ),
       body: Container(
         margin: EdgeInsets.fromLTRB(24, 4, 24, 12),
-        child: FutureBuilder(
-          future: helper.getSearchHistory(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              List<String> historyList = snapshot.data!;
-              if (historyList.isNotEmpty) {
-                return _searchHistory(historyList);
-              } else return Container();
-            } else if (snapshot.hasError) {
-              return Text("${snapshot.error}");
-            }
-            // 기본적으로 로딩 Spinner
-            return CircularProgressIndicator();
+        child: GetBuilder<_SearchPageController>(
+          builder: (controller) {
+            return FutureBuilder(
+              future: helper.getSearchHistory(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  List<String> historyList = snapshot.data!;
+                  if (historyList.isNotEmpty) {
+                    return _searchHistory(historyList);
+                  } else return Container();
+                } else if (snapshot.hasError) {
+                  return Text("${snapshot.error}");
+                }
+                // 기본적으로 로딩 Spinner
+                return CircularProgressIndicator();
+              },
+            );
           },
         ),
       ),
@@ -138,6 +155,7 @@ class SearchPage extends StatelessWidget {
     );
   }
 
+  //TODO: GetX 사용하여 cancel_button 누를 때마다 getHistory 다시 하거나 ListTile 삭제하기
   Widget _searchHistory(List<String> historyList) {
     return ListView.builder(
       padding: EdgeInsets.zero,
@@ -148,8 +166,8 @@ class SearchPage extends StatelessWidget {
           contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
           title: Text(historyList[index], style: _TextStyles.SearchHistory),
           trailing: GestureDetector(
-            onTap: () {
-              helper.removeSearchHistory(index);
+            onTap: () async {
+              searchPageController.removeSearchHistory(index);
             },
             child: SvgPicture.asset(
               'assets/images/cancel_button.svg',
