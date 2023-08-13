@@ -80,7 +80,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final signinViewModel = Get.put(SigninViewModel());
     return FutureBuilder(
-      future: _homeViewModel.fetchArts(),
+      future: _homeViewModel.fetchArtsApi(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           RxList<Art> artsList = snapshot.data!;
@@ -153,6 +153,7 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TextButton(
+                                //TODO: 시스템 공유 옵션 사용
                                 onPressed: () {},
                                 child: SvgPicture.asset(
                                   'assets/images/share_button.svg',
@@ -169,6 +170,7 @@ class _HomePageState extends State<HomePage> {
                                     121, // L24 R24 BT64 SB 9
                                 height: 64,
                                 child: TextButton(
+                                  //TODO: artist 페이지로 이동
                                   onPressed: () {},
                                   child: FittedBox(
                                     child: Text(
@@ -322,7 +324,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _tagsWidget(List<String> artTags) {
+  Widget _tagsWidget(List<dynamic> artTags) {
     final _tagStyle = TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,
