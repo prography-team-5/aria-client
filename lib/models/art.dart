@@ -9,8 +9,9 @@ class Art {
   final String style;
   final String title;
   final int year;
-  final List<String> artTags;
+  final List<dynamic> artTags;
   final Size size;
+  // final Map<String, dynamic> size;
   final String description;
 
   Art({
@@ -37,7 +38,7 @@ class Art {
     title: json['title'],
     year: json['year'],
     artTags: json['artTags'],
-    size: json['size'],
+    size: Size.fromJson(json['size']),
     description: json['description'],
   );
 
