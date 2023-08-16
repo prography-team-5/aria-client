@@ -29,21 +29,19 @@ class _TextStyles {
       height: 1.5,
       letterSpacing: -0.25);
 
-  static final ArtTitle = TextStyle(
-    color: ColorMap.gray_600,
-    fontSize: 20,
-    fontWeight: FontWeight.w800,
-    height: 1.5,
-    letterSpacing: -0.25,
-  );
+  static const ArtTitle = TextStyle(
+      color: ColorMap.gray_600,
+      fontSize: 20,
+      fontWeight: FontWeight.w800,
+      height: 1.5,
+      letterSpacing: -0.25);
 
-  static final ArtFeature = TextStyle(
-    color: ColorMap.gray_400,
-    fontSize: 14,
-    fontWeight: FontWeight.w400,
-    height: 1.5,
-    letterSpacing: -0.25,
-  );
+  static const ArtFeature = TextStyle(
+      color: ColorMap.gray_400,
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      height: 1.5,
+      letterSpacing: -0.25);
 }
 
 enum Status { before, after }
@@ -62,23 +60,23 @@ class _SearchPageController extends GetxController {
     super.dispose();
   }
 
-  void changeMode() async {
-    if (status == Status.before) {
-      status = Status.after;
-    } else {
+  void changeMode(String mode) async {
+    if (mode == 'before') {
       status = Status.before;
+    } else {
+      status = Status.after;
     }
     update();
   }
 
   void saveSearchHistory(String keyword) async {
     await helper.saveSearchHistory(keyword);
-    update(); //위젯 빌드 다시
+    update();
   }
 
   void removeSearchHistory(int idx) async {
     await helper.removeSearchHistory(idx);
-    update(); //위젯 빌드 다시
+    update();
   }
 
   void fetchData(String keyword) async {
@@ -127,11 +125,11 @@ class _SearchPageState extends State<SearchPage> {
               padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
               child: TextButton(
                 onPressed: () async {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   final keyword = searchPageController.textFieldController.text;
                   if (keyword.isNotEmpty) {
                     searchPageController.saveSearchHistory(keyword);
-                    searchPageController.status = Status.after;
-                    //TODO: keyboard disappeared
+                    searchPageController.changeMode('after');
                   }
                 },
                 child: Text(
@@ -150,7 +148,6 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: Container(
-        // margin: EdgeInsets.fromLTRB(24, 0, 24, 12),
         child: GetBuilder<_SearchPageController>(
           builder: (controller) {
             return searchPageController.status == Status.before
@@ -170,8 +167,7 @@ class _SearchPageState extends State<SearchPage> {
                       return CircularProgressIndicator();
                     },
                   )
-                : //TODO: 검색 결과 화면 UI 개발
-                _searchResult(searchPageController.artsList);
+                : _searchResult(searchPageController.artsList);
           },
         ),
       ),
@@ -182,7 +178,7 @@ class _SearchPageState extends State<SearchPage> {
     return TextField(
       controller: searchPageController.textFieldController,
       onTap: () {
-        searchPageController.changeMode();
+        searchPageController.changeMode('before');
       },
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(10),
@@ -216,9 +212,9 @@ class _SearchPageState extends State<SearchPage> {
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
             child: ListTile(
               onTap: () {
-                //TODO: historyList[index]로 search get api 호출
+                FocusManager.instance.primaryFocus?.unfocus();
                 searchPageController.fetchData(historyList[index]);
-                searchPageController.changeMode();
+                searchPageController.changeMode('after');
               },
               contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
               title: Text(historyList[index], style: _TextStyles.SearchHistory),
