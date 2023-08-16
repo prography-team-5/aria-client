@@ -60,6 +60,7 @@ class _SearchPageController extends GetxController {
     super.dispose();
   }
 
+  //TODO: 필요없는 update() 삭제하기
   void changeMode(String mode) async {
     if (mode == 'before') {
       status = Status.before;
@@ -129,6 +130,7 @@ class _SearchPageState extends State<SearchPage> {
                   final keyword = searchPageController.textFieldController.text;
                   if (keyword.isNotEmpty) {
                     searchPageController.saveSearchHistory(keyword);
+                    searchPageController.fetchData(keyword);
                     searchPageController.changeMode('after');
                   }
                 },
@@ -202,6 +204,7 @@ class _SearchPageState extends State<SearchPage> {
   }
 
   Widget _searchHistory(List<String> historyList) {
+    final reversedList = historyList.reversed.toList();
     return ListView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,
@@ -213,11 +216,11 @@ class _SearchPageState extends State<SearchPage> {
             child: ListTile(
               onTap: () {
                 FocusManager.instance.primaryFocus?.unfocus();
-                searchPageController.fetchData(historyList[index]);
+                searchPageController.fetchData(reversedList[index]);
                 searchPageController.changeMode('after');
               },
               contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-              title: Text(historyList[index], style: _TextStyles.SearchHistory),
+              title: Text(reversedList[index], style: _TextStyles.SearchHistory),
               trailing: GestureDetector(
                 onTap: () async {
                   searchPageController.removeSearchHistory(index);
