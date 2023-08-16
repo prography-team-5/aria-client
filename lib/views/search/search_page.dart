@@ -28,6 +28,22 @@ class _TextStyles {
       fontWeight: FontWeight.w400,
       height: 1.5,
       letterSpacing: -0.25);
+
+  static final ArtTitle = TextStyle(
+    color: ColorMap.gray_600,
+    fontSize: 20,
+    fontWeight: FontWeight.w800,
+    height: 1.5,
+    letterSpacing: -0.25,
+  );
+
+  static final ArtFeature = TextStyle(
+    color: ColorMap.gray_400,
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+    height: 1.5,
+    letterSpacing: -0.25,
+  );
 }
 
 enum Status { before, after }
@@ -64,7 +80,7 @@ class _SearchPageController extends GetxController {
     await helper.removeSearchHistory(idx);
     update(); //위젯 빌드 다시
   }
-  
+
   void fetchData(String keyword) async {
     artsList = await searchViewModel.fetchArts(keyword);
   }
@@ -115,6 +131,7 @@ class _SearchPageState extends State<SearchPage> {
                   if (keyword.isNotEmpty) {
                     searchPageController.saveSearchHistory(keyword);
                     searchPageController.status = Status.after;
+                    //TODO: keyboard disappeared
                   }
                 },
                 child: Text(
@@ -133,7 +150,7 @@ class _SearchPageState extends State<SearchPage> {
         ),
       ),
       body: Container(
-        margin: EdgeInsets.fromLTRB(24, 4, 24, 12),
+        // margin: EdgeInsets.fromLTRB(24, 0, 24, 12),
         child: GetBuilder<_SearchPageController>(
           builder: (controller) {
             return searchPageController.status == Status.before
@@ -190,11 +207,13 @@ class _SearchPageState extends State<SearchPage> {
 
   Widget _searchHistory(List<String> historyList) {
     return ListView.builder(
-        padding: EdgeInsets.zero,
-        shrinkWrap: true,
-        itemCount: historyList.length,
-        itemBuilder: (BuildContext context, int index) {
-          return SingleChildScrollView(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      itemCount: historyList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
             child: ListTile(
               onTap: () {
                 //TODO: historyList[index]로 search get api 호출
@@ -212,11 +231,83 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
   Widget _searchResult(RxList<Art> artsList) {
-    return Text(artsList[0].title);
+    return ListView.builder(
+      padding: EdgeInsets.zero,
+      shrinkWrap: true,
+      itemCount: artsList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // SizedBox(height: 24),
+                  ClipPath(
+                    clipper: ShapeBorderClipper(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    child: Image.network(
+                      artsList[index].mainImageUrl!,
+                      fit: BoxFit.cover,
+                      height: 407,
+                      width: double.infinity,
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Row(
+                    children: [
+                      Text(artsList[index].title, style: _TextStyles.ArtTitle),
+                      Spacer(),
+                      GestureDetector(
+                        onTap: () {
+                          //TODO: 신고기능 추가
+                        },
+                        child: SvgPicture.asset(
+                          'assets/images/more_button.svg',
+                          fit: BoxFit.cover,
+                          height: 24,
+                          width: 24,
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        artsList[index].year.toString() +
+                            '  |  ' +
+                            artsList[index].style +
+                            '  |  ' +
+                            artsList[index].size.width.toString() +
+                            ' X ' +
+                            artsList[index].size.height.toString(),
+                        style: _TextStyles.ArtFeature,
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 26),
+                ],
+              ),
+            ),
+            Container(
+              color: ColorMap.gray_100,
+              width: double.infinity,
+              height: 8,
+            ),
+          ],
+        );
+      },
+    );
   }
 }
