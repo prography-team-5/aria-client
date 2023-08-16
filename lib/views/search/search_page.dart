@@ -28,14 +28,26 @@ class _TextStyles {
       letterSpacing: -0.25);
 }
 
+enum Status { before, after }
+
 class _SearchPageController extends GetxController {
   final helper = SPHelper();
   final textFieldController = TextEditingController();
+  Status status = Status.before;
 
   @override
   void dispose() {
     textFieldController.dispose();
     super.dispose();
+  }
+
+  void changeMode() async {
+    if (status == Status.before) {
+      status = Status.after;
+    } else {
+      status = Status.before;
+    }
+    update();
   }
 
   void saveSearchHistory(String keyword) async {
@@ -49,7 +61,12 @@ class _SearchPageController extends GetxController {
   }
 }
 
-class SearchPage extends StatelessWidget {
+class SearchPage extends StatefulWidget {
+  @override
+  State<SearchPage> createState() => _SearchPageState();
+}
+
+class _SearchPageState extends State<SearchPage> {
   final helper = SPHelper();
   final searchPageController = Get.put(_SearchPageController());
 
@@ -88,6 +105,7 @@ class SearchPage extends StatelessWidget {
                   final keyword = searchPageController.textFieldController.text;
                   if (keyword.isNotEmpty) {
                     searchPageController.saveSearchHistory(keyword);
+                    searchPageController.status = Status.after;
                   }
                 },
                 child: Text(
@@ -109,21 +127,25 @@ class SearchPage extends StatelessWidget {
         margin: EdgeInsets.fromLTRB(24, 4, 24, 12),
         child: GetBuilder<_SearchPageController>(
           builder: (controller) {
-            return FutureBuilder(
-              future: helper.getSearchHistory(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  List<String> historyList = snapshot.data!;
-                  if (historyList.isNotEmpty) {
-                    return _searchHistory(historyList);
-                  } else return Container();
-                } else if (snapshot.hasError) {
-                  return Text("${snapshot.error}");
-                }
-                // 기본적으로 로딩 Spinner
-                return CircularProgressIndicator();
-              },
-            );
+            return searchPageController.status == Status.before
+                ? FutureBuilder(
+                    future: helper.getSearchHistory(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<String> historyList = snapshot.data!;
+                        if (historyList.isNotEmpty) {
+                          return _searchHistory(historyList);
+                        } else
+                          return Container();
+                      } else if (snapshot.hasError) {
+                        return Text("${snapshot.error}");
+                      }
+                      // 기본적으로 로딩 Spinner
+                      return CircularProgressIndicator();
+                    },
+                  )
+                : //TODO: 검색 결과 화면 UI 개발
+                Text('눌렀어');
           },
         ),
       ),
@@ -133,6 +155,9 @@ class SearchPage extends StatelessWidget {
   Widget _searchField() {
     return TextField(
       controller: searchPageController.textFieldController,
+      onTap: () {
+        searchPageController.changeMode();
+      },
       decoration: InputDecoration(
         contentPadding: EdgeInsets.all(10),
         focusedBorder: OutlineInputBorder(
@@ -156,23 +181,28 @@ class SearchPage extends StatelessWidget {
 
   Widget _searchHistory(List<String> historyList) {
     return ListView.builder(
-      padding: EdgeInsets.zero,
-      shrinkWrap: true,
-      itemCount: historyList.length,
-      itemBuilder: (BuildContext context, int index) {
-        return ListTile(
-          contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-          title: Text(historyList[index], style: _TextStyles.SearchHistory),
-          trailing: GestureDetector(
-            onTap: () async {
-              searchPageController.removeSearchHistory(index);
-            },
-            child: SvgPicture.asset(
-              'assets/images/cancel_button.svg',
+        padding: EdgeInsets.zero,
+        shrinkWrap: true,
+        itemCount: historyList.length,
+        itemBuilder: (BuildContext context, int index) {
+          return SingleChildScrollView(
+            child: ListTile(
+              onTap: () {
+                //TODO: historyList[index]로 search get api 호출
+                searchPageController.changeMode();
+              },
+              contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
+              title: Text(historyList[index], style: _TextStyles.SearchHistory),
+              trailing: GestureDetector(
+                onTap: () async {
+                  searchPageController.removeSearchHistory(index);
+                },
+                child: SvgPicture.asset(
+                  'assets/images/cancel_button.svg',
+                ),
+              ),
             ),
-          ),
-        );
-      }
-    );
+          );
+        });
   }
 }
