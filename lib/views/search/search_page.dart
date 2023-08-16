@@ -1,4 +1,6 @@
 import 'package:aria_client/helpers/sp_helper.dart';
+import 'package:aria_client/models/art.dart';
+import 'package:aria_client/viewmodels/search/search_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -33,7 +35,10 @@ enum Status { before, after }
 class _SearchPageController extends GetxController {
   final helper = SPHelper();
   final textFieldController = TextEditingController();
+
   Status status = Status.before;
+  final searchViewModel = SearchViewModel();
+  RxList<Art> artsList = RxList<Art>([]);
 
   @override
   void dispose() {
@@ -58,6 +63,10 @@ class _SearchPageController extends GetxController {
   void removeSearchHistory(int idx) async {
     await helper.removeSearchHistory(idx);
     update(); //위젯 빌드 다시
+  }
+  
+  void fetchData(String keyword) async {
+    artsList = await searchViewModel.fetchArts(keyword);
   }
 }
 
@@ -145,7 +154,7 @@ class _SearchPageState extends State<SearchPage> {
                     },
                   )
                 : //TODO: 검색 결과 화면 UI 개발
-                Text('눌렀어');
+                _searchResult(searchPageController.artsList);
           },
         ),
       ),
@@ -189,6 +198,7 @@ class _SearchPageState extends State<SearchPage> {
             child: ListTile(
               onTap: () {
                 //TODO: historyList[index]로 search get api 호출
+                searchPageController.fetchData(historyList[index]);
                 searchPageController.changeMode();
               },
               contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
@@ -204,5 +214,9 @@ class _SearchPageState extends State<SearchPage> {
             ),
           );
         });
+  }
+
+  Widget _searchResult(RxList<Art> artsList) {
+    return Text(artsList[0].title);
   }
 }

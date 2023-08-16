@@ -11,6 +11,8 @@ import 'package:aria_client/models/size.dart';
 import 'package:get/get.dart';
 
 class ArtService extends GetxService {
+  NetworkAdapter networkAdapter = NetworkAdapter();
+
   Future<Art?> fetchArtDetails() async {
     if (Env.env == Environ.dev) {
       //TODO: 작가에게 응원의 메세지 보내기 위한 sns 계정 정보 필요?
@@ -139,7 +141,6 @@ class ArtService extends GetxService {
   Future<Map<String, dynamic>> fetchArtsApi(int count) async {
     List<Art> artsList;
     List<dynamic> artsListTmp;
-    NetworkAdapter networkAdapter = NetworkAdapter();
 
     if (Env.env != Environ.dev) {
       artsList = [
@@ -229,11 +230,55 @@ class ArtService extends GetxService {
         .get(path: '/arts/random', params: {'count': count});
     //TODO: error 처리
     if (data['statusCode'] == 200) {
-      artsListTmp = data['body'].map((item) {
-        return Art.fromJson(item);
-      }).toList()?.cast<Art>();
+      artsListTmp = data['body']
+          .map((item) {
+            return Art.fromJson(item);
+          })
+          .toList()
+          ?.cast<Art>();
       return {'artsList': artsListTmp};
     } else
       exit(200);
+  }
+
+  Future<Map<String, dynamic>> fetchSearchedArts(String keyword) async {
+    List<Art> artsList;
+    artsList = [
+      Art(
+          artId: 1,
+          memberId: 1,
+          mainImageUrl:
+              'https://i.pinimg.com/564x/82/0b/91/820b91b0ed6f1d37f4688da8eaf030fa.jpg',
+          style: '아크릴 캔버스',
+          title: 'Art Title',
+          year: 2021,
+          artTags: ['현대대대대대대ㅐ', '아크릴아아아ㅏ', '공예 캔버스'],
+          size: Size(width: 100.34, height: 50.28),
+          description: '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
+      Art(
+          artId: 2,
+          memberId: 1,
+          mainImageUrl:
+              'https://i.pinimg.com/564x/42/9f/14/429f142e244ac812ce81d32030e1191b.jpg',
+          style: '아크릴 캔버스',
+          title: 'Art Title 2',
+          year: 2023,
+          artTags: ['현대', '아크릴'],
+          size: Size(width: 100.28, height: 50.4),
+          description: '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
+    ];
+    return {'artsList': artsList};
+    //TODO: api 호출
   }
 }
