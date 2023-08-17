@@ -14,7 +14,7 @@ class ProfileService extends GetxService {
     Map<String, dynamic> response = await NetworkAdapter().get(
         path: '/follows/followees/me', params: {}, token: signInViewModel.jwt);
     if (response['statusCode'] == 200) {
-      followeeList = (response['body'] as List)
+      followeeList = (response['body']['data'] as List)
           .map((e) => ArtistInfo.fromJson(e))
           .toList();
     } else {

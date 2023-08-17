@@ -28,7 +28,7 @@ class NetworkAdapter {
 
     dynamic body = {};
     try {
-      body = json.decode(utf8.decode(response.bodyBytes))['data'];
+      body = json.decode(utf8.decode(response.bodyBytes));
     } catch (e) {
       body = {};
     }
@@ -56,7 +56,7 @@ class NetworkAdapter {
     );
     return {
       'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+      'body': json.decode(utf8.decode(response.bodyBytes))
     };
   }
 
@@ -77,7 +77,7 @@ class NetworkAdapter {
     );
     return {
       'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+      'body': json.decode(utf8.decode(response.bodyBytes))
     };
   }
 
@@ -98,7 +98,7 @@ class NetworkAdapter {
     );
     return {
       'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+      'body': json.decode(utf8.decode(response.bodyBytes))
     };
   }
 
@@ -120,7 +120,7 @@ class NetworkAdapter {
     );
     return {
       'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+      'body': json.decode(utf8.decode(response.bodyBytes))
     };
   }
 }

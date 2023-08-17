@@ -201,7 +201,7 @@ class AuthService extends GetxService {
         params: {'accessToken': accessToken, 'platformType': 'KAKAO'});
 
     try {
-      jwt = data['body']['accessToken'];
+      jwt = data['body']['data']['accessToken'];
       statusCode = 200;
     } catch (e) {
       jwt = 'testjwtsignin';
@@ -230,7 +230,7 @@ class AuthService extends GetxService {
     });
 
     try {
-      jwt = data['body']['accessToken'];
+      jwt = data['body']['data']['accessToken'];
       statusCode = 200;
     } catch (e) {
       jwt = 'testjwtsignin';
@@ -256,7 +256,7 @@ class AuthService extends GetxService {
 
     Map<String, dynamic> data =
         await networkAdapter.get(path: '/members/me', token: jwt, params: {});
-    member = Member.fromJson(data['body']);
+    member = Member.fromJson(data['body']['data']);
     return {'member': member};
   }
 
