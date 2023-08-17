@@ -40,7 +40,11 @@ class _TextStyles {
 
 class _HomePageController extends GetxController {
   final cardScrollController = ScrollController();
+  final pageController = PageController(initialPage: 0);
+  final currentCardNotifier = ValueNotifier<RxInt>(0.obs);
 
+  Key key = ValueKey(false);
+  RxBool displayFront = true.obs;
   RxDouble cardScrollOffset = 0.0.obs;
   RxDouble cardScrollBottomOffset = 0.0.obs;
 
@@ -52,13 +56,13 @@ class _HomePageController extends GetxController {
 
   @override
   void onInit() {
+    super.onInit();
     cardScrollController.addListener(() {
       cardScrollOffset.value = cardScrollController.offset;
       cardScrollBottomOffset.value =
           cardScrollController.position.maxScrollExtent;
-      update();
+      // update();
     });
-    super.onInit();
   }
 }
 
@@ -68,14 +72,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @required
-  Key key = ValueKey(false);
-  bool _displayFront = true;
-  RxList<Art> artsList = RxList<Art>([]);
-
   final _homeViewModel = HomeViewModel();
-  final _currentCardNotifier = ValueNotifier<RxInt>(0.obs);
-  final _pageController = PageController(initialPage: 0);
+  final homePageController = Get.put(_HomePageController());
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +89,7 @@ class _HomePageState extends State<HomePage> {
               image: DecorationImage(
                 fit: BoxFit.fill,
                 image: NetworkImage(
-                    artsList[_currentCardNotifier.value.toInt()].mainImageUrl!),
+                    artsList[homePageController.currentCardNotifier.value.toInt()].mainImageUrl!),
               ),
             ),
             child: BackdropFilter(
@@ -210,7 +208,7 @@ class _HomePageState extends State<HomePage> {
       animation: rotateAnim,
       child: widget,
       builder: (context, widget) {
-        final isUnder = (ValueKey(_displayFront) != widget?.key);
+        final isUnder = (ValueKey(homePageController.displayFront) != widget?.key);
         var tilt = ((animation.value - 0.5).abs() - 0.5) * 0.003;
         tilt *= isUnder ? -1.0 : 1.0;
         final value =
@@ -227,28 +225,32 @@ class _HomePageState extends State<HomePage> {
   Widget _cardsPageView(RxList<Art> artsList) {
     return PageView.builder(
       itemCount: artsList.length,
-      controller: _pageController,
+      controller: homePageController.pageController,
       itemBuilder: (BuildContext context, int index) {
         return _cardFlipAnimation(index, artsList);
       },
       onPageChanged: (int index) {
-        setState(() {
-          _currentCardNotifier.value = index.obs;
-          _displayFront = true;
-        });
+        homePageController.currentCardNotifier.value = index.obs;
+        homePageController.displayFront.value = true;
+        // setState(() {
+        //   homePageController.currentCardNotifier.value = index.obs;
+        //   homePageController.displayFront = true;
+        // });
       },
     );
   }
 
+  //TODO: 카드 플립 안되는 이슈 해결
   Widget _cardFlipAnimation(int index, RxList<Art> artsList) {
     return GestureDetector(
       onTap: () => {
-        setState(() => _displayFront = !_displayFront),
+        homePageController.displayFront.value = !homePageController.displayFront.value
+        // setState(() => homePageController.displayFront = !homePageController.displayFront),
       },
       child: AnimatedSwitcher(
         duration: Duration(milliseconds: 1000),
         transitionBuilder: __transitionBuilder,
-        child: _displayFront
+        child: homePageController.displayFront.value
             ? _cardFrontWidget(index, artsList)
             : RearWidget(index: index, artsList: artsList),
         switchInCurve: Curves.easeInBack,
@@ -260,7 +262,7 @@ class _HomePageState extends State<HomePage> {
   Widget _cardFrontWidget(int index, RxList<Art> artsList) {
     final art = artsList[index];
     return Card(
-      key: key,
+      key: homePageController.key,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -376,7 +378,7 @@ class RearWidget extends StatelessWidget {
     return GetBuilder<_HomePageController>(
       init: _HomePageController(),
       builder: (context) {
-        final homePageController = Get.find<_HomePageController>();
+        final homePageController = Get.put(_HomePageController());
         return Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
