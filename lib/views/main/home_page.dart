@@ -77,13 +77,6 @@ class _HomePageState extends State<HomePage> {
   final _currentCardNotifier = ValueNotifier<RxInt>(0.obs);
   final _pageController = PageController(initialPage: 0);
 
-  Future<void> _fetchData() async {
-    await _homeViewModel.fetchArtsApi().then((result) {
-      artsList = result;
-      print(artsList);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final signinViewModel = Get.put(SigninViewModel());
@@ -129,17 +122,17 @@ class _HomePageState extends State<HomePage> {
                         ),
                         signinViewModel.member?.role != null
                             ? Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                          child: GestureDetector(
-                            onTap: () => signinViewModel.member!.role ==
-                                "ROLE_MEMBER"
-                                ? Get.toNamed('/user_my')
-                                : Get.toNamed('/artist_my'),
-                            child: SvgPicture.asset(
-                              'assets/images/my_button.svg',
-                            ),
-                          ),
-                        )
+                                padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                                child: GestureDetector(
+                                  onTap: () => signinViewModel.member!.role ==
+                                          "ROLE_MEMBER"
+                                      ? Get.toNamed('/user_my')
+                                      : Get.toNamed('/artist_my'),
+                                  child: SvgPicture.asset(
+                                    'assets/images/my_button.svg',
+                                  ),
+                                ),
+                              )
                             : Container(),
                       ],
                       centerTitle: true,
@@ -385,154 +378,73 @@ class RearWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final art = artsList[index];
-    return Card(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: ClipPath(
-        clipper: ShapeBorderClipper(
+    return GetBuilder<_HomePageController>(
+      init: _HomePageController(),
+      builder: (context) {
+        final homePageController = Get.find<_HomePageController>();
+        return Card(
           shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16)),
-        ),
-        child: Container(
-          width: double.infinity,
-          alignment: Alignment.centerLeft,
-          child: Container(
-            margin: const EdgeInsets.all(24),
-            child: SingleChildScrollView(
-              // controller: homePageController.cardScrollController,
-              child: Center(
-                child: Text(
-                    style: _TextStyles.Description, art.description),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: ClipPath(
+            clipper: ShapeBorderClipper(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16)),
+            ),
+            child: Container(
+              width: double.infinity,
+              alignment: Alignment.centerLeft,
+              child: ShaderMask(
+                shaderCallback: (Rect bounds) {
+                  return homePageController.cardScrollOffset == 0.0
+                      ? LinearGradient(
+                              begin: Alignment.center,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.white,
+                                Colors.white.withOpacity(0.04)
+                              ],
+                              stops: [0.8, 0.9],
+                              tileMode: TileMode.clamp)
+                          .createShader(bounds)
+                      : homePageController.cardScrollOffset ==
+                              homePageController.cardScrollBottomOffset
+                          ? LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.center,
+                                  colors: [
+                                    Colors.white.withOpacity(0.04),
+                                    Colors.white,
+                                  ],
+                                  stops: [0.1, 0.2],
+                                  tileMode: TileMode.clamp)
+                              .createShader(bounds)
+                          : LinearGradient(
+                              begin: Alignment.center,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.white,
+                                Colors.white.withOpacity(0.04)
+                              ],
+                              stops: [0.8, 0.9],
+                              tileMode: TileMode.mirror,
+                            ).createShader(bounds);
+                },
+                child: Container(
+                  margin: const EdgeInsets.all(24),
+                  child: SingleChildScrollView(
+                    controller: homePageController.cardScrollController,
+                    child: Center(
+                      child:
+                          Text(style: _TextStyles.Description, art.description),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
-          // child: ShaderMask(
-          //   shaderCallback: (Rect bounds) {
-          //     return homePageController.cardScrollOffset == 0.0
-          //         ? LinearGradient(
-          //                 begin: Alignment.center,
-          //                 end: Alignment.bottomCenter,
-          //                 colors: [
-          //                   Colors.white,
-          //                   Colors.white.withOpacity(0.04)
-          //                 ],
-          //                 stops: [0.8, 0.9],
-          //                 tileMode: TileMode.clamp)
-          //             .createShader(bounds)
-          //         : homePageController.cardScrollOffset ==
-          //                 homePageController.cardScrollBottomOffset
-          //             ? LinearGradient(
-          //                     begin: Alignment.topCenter,
-          //                     end: Alignment.center,
-          //                     colors: [
-          //                       Colors.white.withOpacity(0.04),
-          //                       Colors.white,
-          //                     ],
-          //                     stops: [0.1, 0.2],
-          //                     tileMode: TileMode.clamp)
-          //                 .createShader(bounds)
-          //             : LinearGradient(
-          //                 begin: Alignment.center,
-          //                 end: Alignment.bottomCenter,
-          //                 colors: [
-          //                   Colors.white,
-          //                   Colors.white.withOpacity(0.04)
-          //                 ],
-          //                 stops: [0.8, 0.9],
-          //                 tileMode: TileMode.mirror,
-          //               ).createShader(bounds);
-          //   },
-          //   child: Container(
-          //     margin: const EdgeInsets.all(24),
-          //     child: SingleChildScrollView(
-          //       controller: homePageController.cardScrollController,
-          //       child: Center(
-          //         child: Text(
-          //             style: _TextStyles.Description, art.description),
-          //       ),
-          //     ),
-          //   ),
-          // ),
-        ),
-      ),
+        );
+      },
     );
-    // return GetBuilder<_HomePageController>(
-    //     // init: _HomePageController(),
-    //     builder: (context) {
-    //       final homePageController = Get.find<_HomePageController>();
-    //       return Card(
-    //         shape: RoundedRectangleBorder(
-    //           borderRadius: BorderRadius.circular(16),
-    //         ),
-    //         child: ClipPath(
-    //           clipper: ShapeBorderClipper(
-    //             shape: RoundedRectangleBorder(
-    //                 borderRadius: BorderRadius.circular(16)),
-    //           ),
-    //           child: Container(
-    //             width: double.infinity,
-    //             alignment: Alignment.centerLeft,
-    //             child: Container(
-    //               margin: const EdgeInsets.all(24),
-    //               child: SingleChildScrollView(
-    //                 controller: homePageController.cardScrollController,
-    //                 child: Center(
-    //                   child: Text(
-    //                       style: _TextStyles.Description, art.description),
-    //                 ),
-    //               ),
-    //             ),
-    //             // child: ShaderMask(
-    //             //   shaderCallback: (Rect bounds) {
-    //             //     return homePageController.cardScrollOffset == 0.0
-    //             //         ? LinearGradient(
-    //             //                 begin: Alignment.center,
-    //             //                 end: Alignment.bottomCenter,
-    //             //                 colors: [
-    //             //                   Colors.white,
-    //             //                   Colors.white.withOpacity(0.04)
-    //             //                 ],
-    //             //                 stops: [0.8, 0.9],
-    //             //                 tileMode: TileMode.clamp)
-    //             //             .createShader(bounds)
-    //             //         : homePageController.cardScrollOffset ==
-    //             //                 homePageController.cardScrollBottomOffset
-    //             //             ? LinearGradient(
-    //             //                     begin: Alignment.topCenter,
-    //             //                     end: Alignment.center,
-    //             //                     colors: [
-    //             //                       Colors.white.withOpacity(0.04),
-    //             //                       Colors.white,
-    //             //                     ],
-    //             //                     stops: [0.1, 0.2],
-    //             //                     tileMode: TileMode.clamp)
-    //             //                 .createShader(bounds)
-    //             //             : LinearGradient(
-    //             //                 begin: Alignment.center,
-    //             //                 end: Alignment.bottomCenter,
-    //             //                 colors: [
-    //             //                   Colors.white,
-    //             //                   Colors.white.withOpacity(0.04)
-    //             //                 ],
-    //             //                 stops: [0.8, 0.9],
-    //             //                 tileMode: TileMode.mirror,
-    //             //               ).createShader(bounds);
-    //             //   },
-    //             //   child: Container(
-    //             //     margin: const EdgeInsets.all(24),
-    //             //     child: SingleChildScrollView(
-    //             //       controller: homePageController.cardScrollController,
-    //             //       child: Center(
-    //             //         child: Text(
-    //             //             style: _TextStyles.Description, art.description),
-    //             //       ),
-    //             //     ),
-    //             //   ),
-    //             // ),
-    //           ),
-    //         ),
-    //       );
-    //     });
   }
 }
