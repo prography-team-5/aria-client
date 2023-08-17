@@ -42,7 +42,6 @@ class _HomePageController extends GetxController {
   final cardScrollController = ScrollController();
 
   RxDouble cardScrollOffset = 0.0.obs;
-  RxDouble cardScrollBottomOffset = 0.0.obs;
 
   @override
   void onClose() {
@@ -54,8 +53,7 @@ class _HomePageController extends GetxController {
   void onInit() {
     cardScrollController.addListener(() {
       cardScrollOffset.value = cardScrollController.offset;
-      cardScrollBottomOffset.value =
-          cardScrollController.position.maxScrollExtent;
+      print('offset = ${cardScrollOffset.value}');
       update();
     });
     super.onInit();
@@ -71,7 +69,6 @@ class _HomePageState extends State<HomePage> {
   @required
   Key key = ValueKey(false);
   bool _displayFront = true;
-  RxList<Art> artsList = RxList<Art>([]);
 
   final _homeViewModel = HomeViewModel();
   final _currentCardNotifier = ValueNotifier<RxInt>(0.obs);
@@ -81,17 +78,16 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final signinViewModel = Get.put(SigninViewModel());
     return FutureBuilder(
-      future: _homeViewModel.fetchArtsApi(),
+      future: _homeViewModel.fetchArts(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           RxList<Art> artsList = snapshot.data!;
-          // RxList<Art> artsList = snapshot.data! as RxList<Art>;
           return Container(
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.fill,
                 image: NetworkImage(
-                    artsList[_currentCardNotifier.value.toInt()].mainImageUrl!),
+                    artsList[_currentCardNotifier.value.toInt()].mainImageUrl),
               ),
             ),
             child: BackdropFilter(
@@ -120,20 +116,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        signinViewModel.member?.role != null
-                            ? Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                                child: GestureDetector(
-                                  onTap: () => signinViewModel.member!.role ==
-                                          "ROLE_MEMBER"
-                                      ? Get.toNamed('/user_my')
-                                      : Get.toNamed('/artist_my'),
-                                  child: SvgPicture.asset(
-                                    'assets/images/my_button.svg',
-                                  ),
-                                ),
-                              )
-                            : Container(),
+                        signinViewModel.member?.role != null ? Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                          child: GestureDetector(
+                            onTap: () => Get.toNamed('/my'),
+                            child: SvgPicture.asset(
+                              'assets/images/my_button.svg',
+                            ),
+                          ),
+                        ) : Container(),
                       ],
                       centerTitle: true,
                       backgroundColor: Colors.transparent,
@@ -155,7 +146,6 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               TextButton(
-                                //TODO: 시스템 공유 옵션 사용
                                 onPressed: () {},
                                 child: SvgPicture.asset(
                                   'assets/images/share_button.svg',
@@ -172,7 +162,6 @@ class _HomePageState extends State<HomePage> {
                                     121, // L24 R24 BT64 SB 9
                                 height: 64,
                                 child: TextButton(
-                                  //TODO: artist 페이지로 이동
                                   onPressed: () {},
                                   child: FittedBox(
                                     child: Text(
@@ -280,7 +269,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Image.network(
-                  art.mainImageUrl!,
+                  art.mainImageUrl,
                   fit: BoxFit.cover,
                   height: constraints.maxHeight - 136,
                   width: double.infinity,
@@ -307,7 +296,7 @@ class _HomePageState extends State<HomePage> {
                                 art.style +
                                 '  |  ' +
                                 art.size.width.toString() +
-                                ' X ' +
+                                ' * ' +
                                 art.size.height.toString(),
                             style: _TextStyles.Feature,
                           ),
@@ -326,7 +315,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _tagsWidget(List<dynamic> artTags) {
+  Widget _tagsWidget(List<String> artTags) {
     final _tagStyle = TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,
@@ -379,72 +368,47 @@ class RearWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final art = artsList[index];
     return GetBuilder<_HomePageController>(
-      init: _HomePageController(),
-      builder: (context) {
-        final homePageController = Get.find<_HomePageController>();
-        return Card(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: ClipPath(
-            clipper: ShapeBorderClipper(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16)),
+        init: _HomePageController(),
+        builder: (context) {
+          final homePageController = Get.find<_HomePageController>();
+          return Card(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
             ),
-            child: Container(
-              width: double.infinity,
-              alignment: Alignment.centerLeft,
-              child: ShaderMask(
-                shaderCallback: (Rect bounds) {
-                  return homePageController.cardScrollOffset == 0.0
-                      ? LinearGradient(
-                              begin: Alignment.center,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.white,
-                                Colors.white.withOpacity(0.04)
-                              ],
-                              stops: [0.8, 0.9],
-                              tileMode: TileMode.clamp)
-                          .createShader(bounds)
-                      : homePageController.cardScrollOffset ==
-                              homePageController.cardScrollBottomOffset
-                          ? LinearGradient(
-                                  begin: Alignment.topCenter,
-                                  end: Alignment.center,
-                                  colors: [
-                                    Colors.white.withOpacity(0.04),
-                                    Colors.white,
-                                  ],
-                                  stops: [0.1, 0.2],
-                                  tileMode: TileMode.clamp)
-                              .createShader(bounds)
-                          : LinearGradient(
-                              begin: Alignment.center,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.white,
-                                Colors.white.withOpacity(0.04)
-                              ],
-                              stops: [0.8, 0.9],
-                              tileMode: TileMode.mirror,
-                            ).createShader(bounds);
-                },
-                child: Container(
-                  margin: const EdgeInsets.all(24),
-                  child: SingleChildScrollView(
-                    controller: homePageController.cardScrollController,
-                    child: Center(
-                      child:
-                          Text(style: _TextStyles.Description, art.description),
+            child: ClipPath(
+              clipper: ShapeBorderClipper(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16)),
+              ),
+              child: Container(
+                width: double.infinity,
+                alignment: Alignment.centerLeft,
+                child: ShaderMask(
+                  shaderCallback: (Rect bounds) {
+                    return LinearGradient(
+                      begin: Alignment.center,
+                      end: Alignment.bottomCenter,
+                      colors: [Colors.white, Colors.white.withOpacity(0.04)],
+                      stops: [0.8, 0.9],
+                      tileMode: homePageController.cardScrollOffset == 0.0
+                          ? TileMode.clamp
+                          : TileMode.mirror,
+                    ).createShader(bounds);
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.all(24),
+                    child: SingleChildScrollView(
+                      controller: homePageController.cardScrollController,
+                      child: Center(
+                        child: Text(
+                            style: _TextStyles.Description, art.description),
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        );
-      },
-    );
+          );
+        });
   }
 }
