@@ -1,5 +1,6 @@
 import 'package:aria_client/bindings/initial_bindings.dart';
 import 'package:aria_client/helpers/env.dart';
+import 'package:aria_client/helpers/sp_helper.dart';
 import 'package:aria_client/views/my/artist_add_art_page.dart';
 import 'package:aria_client/views/my/my_page.dart';
 import 'package:aria_client/views/my/user_edit_profile_page.dart';
@@ -28,6 +29,8 @@ void main() {
   ));
   KakaoSdk.init(nativeAppKey: Env.kakaoNativeKey);
   InitialBinding().dependencies();
+  final helper = SPHelper();
+  helper.init();
   runApp(const MyApp());
 }
 

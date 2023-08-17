@@ -1,4 +1,6 @@
 import 'package:aria_client/constants/colormap.dart';
+import 'package:aria_client/models/art.dart';
+import 'package:aria_client/viewmodels/art/detail_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -47,6 +49,7 @@ class _TextStyles {
 }
 
 class DetailPage extends StatelessWidget {
+  final _DetailViewModel = DetailViewModel();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,28 +74,40 @@ class DetailPage extends StatelessWidget {
           elevation: 0.0, // appBar 그림자 제거
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Image.network(
-              'https://i.pinimg.com/564x/9c/d3/ba/9cd3ba37ee042e5d610c100670473f18.jpg',
-              fit: BoxFit.cover,
-              width: double.infinity,
-            ),
-            _artDetailsArea(),
-            Container(
-              color: ColorMap.gray_100,
-              width: double.infinity,
-              height: 8,
-            ),
-            _artShareArea(),
-          ],
-        ),
+      body: FutureBuilder(
+        future: _DetailViewModel.fetchArtDetails(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            Rxn<Art> art = snapshot.data!;
+            return SingleChildScrollView(
+              child: Column(
+                children: [
+                  Image.network(
+                    art.value!.imagesUrl![0],
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                  ),
+                  _artDetailsArea(art),
+                  Container(
+                    color: ColorMap.gray_100,
+                    width: double.infinity,
+                    height: 8,
+                  ),
+                  _artShareArea(),
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+          // 기본적으로 로딩 Spinner
+          return CircularProgressIndicator();
+        }
       ),
     );
   }
 
-  Widget _artDetailsArea() {
+  Widget _artDetailsArea(Rxn<Art> art) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
       child: Column(
@@ -113,15 +128,15 @@ class DetailPage extends StatelessWidget {
                 ),
               ),
               SizedBox(width: 8),
-              Text('작가 닉네임', style: _TextStyles.Title)
+              Text(art.value!.artistNickname!, style: _TextStyles.Title)
             ],
           ),
           SizedBox(height: 16),
-          Text('작가의 작품 제목 공간인데요 어디까지 쓸 수 있는지 테스트를 진행하고 있',
+          Text(art.value!.title,
               style: _TextStyles.ArtTitle),
           SizedBox(height: 16),
           Text(
-            '작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명 작품 설명',
+            art.value!.description,
             style: _TextStyles.ArtDescription,
           ),
           SizedBox(height: 40),
@@ -150,7 +165,7 @@ class DetailPage extends StatelessWidget {
                       ),
                       Spacer(),
                       Text(
-                        '2021',
+                        art.value!.year.toString(),
                         style: _TextStyles.ArtDetailDescription,
                       ),
                     ],
@@ -163,7 +178,7 @@ class DetailPage extends StatelessWidget {
                       ),
                       Spacer(),
                       Text(
-                        '30.5 x 30.5',
+                        art.value!.size.width.toString() + ' x ' + art.value!.size.height.toString(),
                         style: _TextStyles.ArtDetailDescription,
                       ),
                     ],
@@ -176,7 +191,7 @@ class DetailPage extends StatelessWidget {
                       ),
                       Spacer(),
                       Text(
-                        '아크릴 캔버스',
+                        art.value!.style,
                         style: _TextStyles.ArtDetailDescription,
                       ),
                     ],
