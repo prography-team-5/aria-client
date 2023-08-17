@@ -1,25 +1,46 @@
+import 'package:aria_client/models/artist_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants/colormap.dart';
+import '../../constants/text_styles.dart';
+import '../../services/profile_service.dart';
+import '../../viewmodels/auth/signin_viewmodel.dart';
+
+class UserMyPageViewModel extends GetxController {
+  final SigninViewModel signinViewModel = Get.find<SigninViewModel>();
+  RxList<ArtistInfo> followeeList = <ArtistInfo>[].obs;
+  Future<void> getFollowList() async {
+    followeeList.value = await Get.find<ProfileService>().fetchFolloweeList();
+    update();
+  }
+
+  @override
+  void onInit() async {
+    super.onInit();
+    await getFollowList();
+  }
+}
 
 class UserMyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(UserMyPageViewModel());
     return SafeArea(
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(56),
           child: AppBar(
             automaticallyImplyLeading: false,
-            title: Text(
-              '프로필',
-              style: TextStyle(
-                  color: ColorMap.gray_700,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500),
-            ),
+            // title: Text(
+            //   '프로필',
+            //   style: TextStyle(
+            //       color: ColorMap.gray_700,
+            //       fontSize: 16,
+            //       fontWeight: FontWeight.w500),
+            // ),
             leading: Padding(
               padding: EdgeInsets.fromLTRB(12, 16, 0, 16),
               child: InkWell(
@@ -35,9 +56,13 @@ class UserMyPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 16, 12, 16),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () async {
+                    final uri = Uri.parse('https://google.com');
+                    if (!await launchUrl(uri))
+                      throw Exception('Could not launch ${uri.toString()}');
+                  },
                   child: Text(
-                    '작품 등록',
+                    '작가 신청',
                     style: TextStyle(
                       color: ColorMap.white,
                       fontFamily: 'Prentendard',
@@ -60,7 +85,130 @@ class UserMyPage extends StatelessWidget {
             elevation: 0.0, // appBar 그림자 제거
           ),
         ),
-        body: Container(),
+        body: ListView(
+          children: [
+            Container(
+              height: 147 + 140,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Column(
+                    children: [
+                      Container(
+                        height: 147,
+                        color: Color(0xff2D2942),
+                      ),
+                      Container(
+                        // height: 200,
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 30 + 5),
+                          child: Column(
+                            children: [
+                              Text(
+                                controller.signinViewModel.member!.nickname,
+                                style: TextStyles.Heading2,
+                              ),
+                              Padding(padding: EdgeInsets.all(5)),
+                              TextButton(
+                                onPressed: () {
+                                  Get.toNamed('/user_edit_profile');
+                                },
+                                child: Text(
+                                  '프로필 수정',
+                                  style: TextStyle(color: ColorMap.gray_700),
+                                ),
+                                style: TextButton.styleFrom(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 130, vertical: 13),
+                                  shape: RoundedRectangleBorder(
+                                    side: BorderSide(
+                                        color: ColorMap.gray_200, width: 1),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 8,
+                        color: ColorMap.gray_100,
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    top: 147 - 50,
+                    child: Container(
+                      height: 100.0,
+                      width: 100.0,
+                      child: Image.asset('assets/images/profile_avatar.png'),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(15),
+              child: Text('팔로우한 작가'),
+            ),
+            Container(
+              height: 500,
+              padding: EdgeInsets.all(15),
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 1,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                ),
+                itemCount: controller.followeeList.length,
+                itemBuilder: (context, index) =>
+                    FollowAvatar(follow: controller.followeeList[index]),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class FollowAvatar extends StatelessWidget {
+  final ArtistInfo follow;
+  FollowAvatar({required this.follow});
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.amber,
+              image: DecorationImage(
+                image: AssetImage('assets/images/profile_avatar.png'),
+                // image: NetworkImage(follow.profile_art_image_url),
+                fit: BoxFit.cover,
+              ),
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.all(5),
+            child: Text(
+              "nickname",
+              // follow.nickname,
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
