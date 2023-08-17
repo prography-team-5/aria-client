@@ -120,20 +120,15 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        signinViewModel.member?.role != null
-                            ? Padding(
-                                padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                                child: GestureDetector(
-                                  onTap: () => signinViewModel.member!.role ==
-                                          "ROLE_MEMBER"
-                                      ? Get.toNamed('/user_my')
-                                      : Get.toNamed('/artist_my'),
-                                  child: SvgPicture.asset(
-                                    'assets/images/my_button.svg',
-                                  ),
-                                ),
-                              )
-                            : Container(),
+                        signinViewModel.member?.role != null ? Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                          child: GestureDetector(
+                            onTap: () => Get.toNamed('/my'),
+                            child: SvgPicture.asset(
+                              'assets/images/my_button.svg',
+                            ),
+                          ),
+                        ) : Container(),
                       ],
                       centerTitle: true,
                       backgroundColor: Colors.transparent,

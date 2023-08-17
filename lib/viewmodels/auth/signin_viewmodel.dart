@@ -65,5 +65,11 @@ class SigninViewModel extends GetxController {
     this.refreshToken = refreshToken;
     this.jwt = jwt;
     this.member = member;
+    update();
+  }
+
+  void userEditProfileDone({required String nickname}) {
+    this.member!.nickname = nickname;
+    update();
   }
 }

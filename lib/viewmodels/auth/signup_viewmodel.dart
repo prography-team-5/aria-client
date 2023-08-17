@@ -50,4 +50,18 @@ class SignupViewModel extends GetxController {
     // navigate to main page
     Get.offAllNamed('/home');
   }
+
+  Future<void> userEditProfile({required String nickname}) async {
+    final signinViewModel = Get.find<SigninViewModel>();
+    Map<String, dynamic> res = await authService.userEditProfile(
+        nickname: nickname, accessToken: signinViewModel.jwt);
+    if (res['statusCode'] == 200) {
+      final signinViewModel = Get.find<SigninViewModel>();
+      signinViewModel.userEditProfileDone(nickname: nickname);
+      update();
+    } else {
+      // UserEditProfile 실패
+      Get.offAllNamed('/home');
+    }
+  }
 }

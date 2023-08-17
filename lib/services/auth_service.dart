@@ -85,7 +85,7 @@ class AuthService extends GetxService {
       return {
         'accessToken': accessToken,
         'refreshToken': refreshToken,
-        'statusCode': 200
+        'statusCode': 401
       };
       // return {'statusCode': statusCode};
     }
@@ -200,10 +200,15 @@ class AuthService extends GetxService {
         path: '/auth/sign-in',
         params: {'accessToken': accessToken, 'platformType': 'KAKAO'});
 
-    return {
-      'jwt': data['body']['accessToken'] ?? 'null',
-      'statusCode': data['statusCode']
-    };
+    try {
+      jwt = data['body']['data']['accessToken'];
+      statusCode = 200;
+    } catch (e) {
+      jwt = 'testjwtsignin';
+      statusCode = 401;
+    }
+
+    return {'jwt': jwt, 'statusCode': statusCode};
   }
 
   Future<Map<String, dynamic>> signUpWithServer(
@@ -217,17 +222,22 @@ class AuthService extends GetxService {
       return {'jwt': jwt, 'statusCode': 200};
     }
 
-    Map<String, dynamic> data = await networkAdapter.post(
-        path: '/auth/sign-up',
-        params: {
-          'accessToken': accessToken,
-          'refreshToken': refreshToken,
-          'nickname': nickname
-        });
-    return {
-      'jwt': data['body']['accessToken'] ?? 'null',
-      'statusCode': data['statusCode']
-    };
+    Map<String, dynamic> data =
+        await networkAdapter.post(path: '/auth/sign-up', params: {
+      'platformType': 'KAKAO', // TODO: for each platform
+      'accessToken': accessToken,
+      'nickname': nickname
+    });
+
+    try {
+      jwt = data['body']['data']['accessToken'];
+      statusCode = 200;
+    } catch (e) {
+      jwt = 'testjwtsignin';
+      statusCode = 401;
+    }
+
+    return {'jwt': jwt, 'statusCode': statusCode};
   }
 
   Future<Map<String, dynamic>> fetchMember({required String jwt}) async {
@@ -246,7 +256,17 @@ class AuthService extends GetxService {
 
     Map<String, dynamic> data =
         await networkAdapter.get(path: '/members/me', token: jwt, params: {});
-    member = Member.fromJson(data['body']);
+    member = Member.fromJson(data['body']['data']);
     return {'member': member};
+  }
+
+  Future<Map<String, dynamic>> userEditProfile(
+      {required String nickname, required String accessToken}) async {
+    NetworkAdapter networkAdapter = NetworkAdapter();
+    Map<String, dynamic> data = await networkAdapter.patch(
+        path: '/members/nickname',
+        accessToken: accessToken,
+        params: {'nickname': nickname});
+    return data;
   }
 }

@@ -25,10 +25,14 @@ class NetworkAdapter {
       'X-AUTH-TOKEN': '$token',
       'Authorization': 'Bearer $token'
     });
-    return {
-      'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))['data']
-    };
+
+    dynamic body = {};
+    try {
+      body = json.decode(utf8.decode(response.bodyBytes));
+    } catch (e) {
+      body = {};
+    }
+    return {'statusCode': response.statusCode, 'body': body};
   }
 
   Future<dynamic> post(
@@ -52,47 +56,49 @@ class NetworkAdapter {
     );
     return {
       'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+      'body': json.decode(utf8.decode(response.bodyBytes))
     };
   }
 
   Future<dynamic> put(
       {required String path,
       required Map<String, dynamic> params,
-      String? token}) async {
+      String? accessToken}) async {
     final url = Uri.parse(baseURL + path);
     final response = await http.put(
       url,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'X-AUTH-TOKEN': '$token'
+        'Authorization': 'Bearer $accessToken',
+        'X-AUTH-TOKEN': '$accessToken',
       },
       body: json.encode(params),
     );
     return {
       'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+      'body': json.decode(utf8.decode(response.bodyBytes))
     };
   }
 
   Future<dynamic> patch(
       {required String path,
       required Map<String, dynamic> params,
-      String? token}) async {
+      String? accessToken}) async {
     final url = Uri.parse(baseURL + path);
     final response = await http.patch(
       url,
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'X-AUTH-TOKEN': '$token'
+        'Authorization': 'Bearer $accessToken',
+        'X-AUTH-TOKEN': '$accessToken',
       },
       body: json.encode(params),
     );
     return {
       'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+      'body': json.decode(utf8.decode(response.bodyBytes))
     };
   }
 
@@ -114,7 +120,7 @@ class NetworkAdapter {
     );
     return {
       'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))['data']
+      'body': json.decode(utf8.decode(response.bodyBytes))
     };
   }
 }

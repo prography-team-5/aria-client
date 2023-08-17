@@ -68,7 +68,9 @@ class ArtistMyPage extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.fromLTRB(0, 16, 12, 16),
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.toNamed('/artist_add_art');
+                  },
                   child: Text(
                     '작품 등록',
                     style: TextStyle(
@@ -158,58 +160,110 @@ class ArtistMyPage extends StatelessWidget {
                               ),
                               child: Center(child: Text('1000자')),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    '프로필 수정',
-                                    style: TextStyle(color: ColorMap.gray_700),
-                                  ),
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 24, vertical: 13),
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: ColorMap.gray_200, width: 1),
-                                      borderRadius: BorderRadius.circular(15),
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    height: 45,
+                                    width: 140,
+                                    child: Center(
+                                        child: Text(
+                                      '프로필 수정',
+                                      style:
+                                          TextStyle(color: ColorMap.gray_700),
+                                    )),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      border:
+                                          Border.all(color: ColorMap.gray_200),
                                     ),
                                   ),
-                                ),
-                                TextButton(
-                                  onPressed: () {},
-                                  child: Text(
-                                    '프로필 공유',
-                                    style: TextStyle(color: ColorMap.gray_700),
-                                  ),
-                                  style: TextButton.styleFrom(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 24, vertical: 13),
-                                    shape: RoundedRectangleBorder(
-                                      side: BorderSide(
-                                          color: ColorMap.gray_200, width: 1),
-                                      borderRadius: BorderRadius.circular(15),
+                                  Container(
+                                    height: 45,
+                                    width: 140,
+                                    child: Center(
+                                        child: Text(
+                                      '프로필 공유',
+                                      style:
+                                          TextStyle(color: ColorMap.gray_700),
+                                    )),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      border:
+                                          Border.all(color: ColorMap.gray_200),
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
-                            Row(
-                              children: [
-                                Container(
-                                  height: 56,
-                                  width: 56,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    border:
-                                        Border.all(color: ColorMap.gray_200),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 30),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: SvgPicture.asset(
+                                          'assets/images/instagram_button.svg'),
+                                    ),
+                                    height: 56,
+                                    width: 56,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border:
+                                          Border.all(color: ColorMap.gray_200),
+                                    ),
                                   ),
-                                ),
-                                Container(),
-                                Container(),
-                                Container(),
-                              ],
+                                  Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: SvgPicture.asset(
+                                          'assets/images/youtube_button.svg'),
+                                    ),
+                                    height: 56,
+                                    width: 56,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border:
+                                          Border.all(color: ColorMap.gray_200),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: SvgPicture.asset(
+                                          'assets/images/kakaotalk_button.svg'),
+                                    ),
+                                    height: 56,
+                                    width: 56,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border:
+                                          Border.all(color: ColorMap.gray_200),
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(15.0),
+                                      child: SvgPicture.asset(
+                                          'assets/images/email_button.svg'),
+                                    ),
+                                    height: 56,
+                                    width: 56,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      border:
+                                          Border.all(color: ColorMap.gray_200),
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(
                               height: 50,
