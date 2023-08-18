@@ -45,7 +45,6 @@ class _HomePageController extends GetxController {
 
   Key key = ValueKey(false);
   RxBool displayFront = true.obs;
-  // RxBool alwaysFront = true.obs;
   RxDouble cardScrollOffset = 0.0.obs;
   RxDouble cardScrollBottomOffset = 0.0.obs;
 
@@ -66,7 +65,7 @@ class _HomePageController extends GetxController {
     });
   }
 
-  void flipping() async {
+  void flipping() {
     displayFront.value = !displayFront.value;
     update();
   }
@@ -241,8 +240,6 @@ class _HomePageState extends State<HomePage> {
       },
       onPageChanged: (int index) {
         homePageController.currentCardNotifier.value = index.obs;
-        //TODO: 옆으로 넘길 때 뒷면으로 나오는 문제 해결
-        // homePageController.displayFront.value = true;
       },
     );
   }
@@ -386,6 +383,7 @@ class RearWidget extends StatelessWidget {
       init: _HomePageController(),
       builder: (context) {
         final homePageController = Get.put(_HomePageController());
+        homePageController.displayFront.value = true;
         return Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
