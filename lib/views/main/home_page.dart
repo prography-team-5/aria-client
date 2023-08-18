@@ -45,6 +45,7 @@ class _HomePageController extends GetxController {
 
   Key key = ValueKey(false);
   RxBool displayFront = true.obs;
+  // RxBool alwaysFront = true.obs;
   RxDouble cardScrollOffset = 0.0.obs;
   RxDouble cardScrollBottomOffset = 0.0.obs;
 
@@ -63,6 +64,11 @@ class _HomePageController extends GetxController {
           cardScrollController.position.maxScrollExtent;
       // update();
     });
+  }
+
+  void flipping() async {
+    displayFront.value = !displayFront.value;
+    update();
   }
 }
 
@@ -88,8 +94,9 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.fill,
-                image: NetworkImage(
-                    artsList[homePageController.currentCardNotifier.value.toInt()].mainImageUrl!),
+                image: NetworkImage(artsList[
+                        homePageController.currentCardNotifier.value.toInt()]
+                    .mainImageUrl!),
               ),
             ),
             child: BackdropFilter(
@@ -118,15 +125,17 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                        signinViewModel.member?.role != null ? Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                          child: GestureDetector(
-                            onTap: () => Get.toNamed('/my'),
-                            child: SvgPicture.asset(
-                              'assets/images/my_button.svg',
-                            ),
-                          ),
-                        ) : Container(),
+                        signinViewModel.member?.role != null
+                            ? Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                                child: GestureDetector(
+                                  onTap: () => Get.toNamed('/my'),
+                                  child: SvgPicture.asset(
+                                    'assets/images/my_button.svg',
+                                  ),
+                                ),
+                              )
+                            : Container(),
                       ],
                       centerTitle: true,
                       backgroundColor: Colors.transparent,
@@ -208,7 +217,8 @@ class _HomePageState extends State<HomePage> {
       animation: rotateAnim,
       child: widget,
       builder: (context, widget) {
-        final isUnder = (ValueKey(homePageController.displayFront) != widget?.key);
+        final isUnder =
+            (ValueKey(homePageController.displayFront) != widget?.key);
         var tilt = ((animation.value - 0.5).abs() - 0.5) * 0.003;
         tilt *= isUnder ? -1.0 : 1.0;
         final value =
@@ -231,32 +241,29 @@ class _HomePageState extends State<HomePage> {
       },
       onPageChanged: (int index) {
         homePageController.currentCardNotifier.value = index.obs;
-        homePageController.displayFront.value = true;
-        // setState(() {
-        //   homePageController.currentCardNotifier.value = index.obs;
-        //   homePageController.displayFront = true;
-        // });
+        //TODO: 옆으로 넘길 때 뒷면으로 나오는 문제 해결
+        // homePageController.displayFront.value = true;
       },
     );
   }
 
-  //TODO: 카드 플립 안되는 이슈 해결
   Widget _cardFlipAnimation(int index, RxList<Art> artsList) {
-    return GestureDetector(
-      onTap: () => {
-        homePageController.displayFront.value = !homePageController.displayFront.value
-        // setState(() => homePageController.displayFront = !homePageController.displayFront),
-      },
-      child: AnimatedSwitcher(
-        duration: Duration(milliseconds: 1000),
-        transitionBuilder: __transitionBuilder,
-        child: homePageController.displayFront.value
-            ? _cardFrontWidget(index, artsList)
-            : RearWidget(index: index, artsList: artsList),
-        switchInCurve: Curves.easeInBack,
-        switchOutCurve: Curves.easeInBack.flipped,
-      ),
-    );
+    return GetBuilder<_HomePageController>(builder: (context) {
+      return GestureDetector(
+        onTap: () => {
+          homePageController.flipping(),
+        },
+        child: AnimatedSwitcher(
+          duration: Duration(milliseconds: 1000),
+          transitionBuilder: __transitionBuilder,
+          child: homePageController.displayFront.value
+              ? _cardFrontWidget(index, artsList)
+              : RearWidget(index: index, artsList: artsList),
+          switchInCurve: Curves.easeInBack,
+          switchOutCurve: Curves.easeInBack.flipped,
+        ),
+      );
+    });
   }
 
   Widget _cardFrontWidget(int index, RxList<Art> artsList) {
