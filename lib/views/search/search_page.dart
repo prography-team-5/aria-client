@@ -53,12 +53,22 @@ class _SearchPageController extends GetxController {
   Status status = Status.before;
   final searchViewModel = SearchViewModel();
   RxList<Art> artsList = RxList<Art>([]);
+  // RxString keyword = ''.obs;
 
   @override
   void dispose() {
     textFieldController.dispose();
     super.dispose();
   }
+
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   textFieldController.addListener(() {
+  //     textFieldController.text = keyword.value;
+  //     update();
+  //   });
+  // }
 
   //TODO: 필요없는 update() 삭제하기
   void changeMode(String mode) async {
@@ -77,6 +87,11 @@ class _SearchPageController extends GetxController {
 
   void removeSearchHistory(int idx) async {
     await helper.removeSearchHistory(idx);
+    update();
+  }
+
+  void fillTextField(String keyword) {
+    textFieldController.text = keyword;
     update();
   }
 
@@ -215,6 +230,7 @@ class _SearchPageState extends State<SearchPage> {
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
             child: ListTile(
               onTap: () {
+                searchPageController.fillTextField(reversedList[index]);
                 FocusManager.instance.primaryFocus?.unfocus();
                 searchPageController.fetchData(reversedList[index]);
                 searchPageController.changeMode('after');
