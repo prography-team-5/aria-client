@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 
 class _TextStyles {
   static final Title = TextStyle(
@@ -49,15 +50,19 @@ class _TextStyles {
       letterSpacing: -0.25);
 }
 
-class _DetailPageController extends GetxController {
-  final pageController = PageController(initialPage: 0);
-  final currentPageNotifier = ValueNotifier<int>(0);
+final GlobalKey _artDetailsAreaKey = GlobalKey();
 
-  @override
-  void onClose() {
-    pageController.dispose();
-    super.onClose();
+_getPosition(GlobalKey key) {
+  if (key.currentContext != null) {
+    final RenderBox renderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    final position = renderBox.localToGlobal(Offset.zero);
+    return position;
   }
+}
+
+class _DetailPageController extends GetxController {
+  final currentPageNotifier = ValueNotifier<int>(0);
 }
 
 class DetailPage extends StatelessWidget {
@@ -102,11 +107,6 @@ class DetailPage extends StatelessWidget {
                 child: Column(
                   children: [
                     _artsPageView(art.value!.imagesUrl!),
-                    // Image.network(
-                    //   art.value!.imagesUrl![0],
-                    //   fit: BoxFit.cover,
-                    //   width: double.infinity,
-                    // ),
                     _artDetailsArea(art),
                     Container(
                       color: ColorMap.gray_100,
@@ -129,15 +129,32 @@ class DetailPage extends StatelessWidget {
   Widget _artsPageView(List<String> imagesUrl) {
     return ExpandablePageView.builder(
       itemCount: imagesUrl.length,
-      // controller: detailPageController.pageController,
       itemBuilder: (BuildContext context, int index) {
-        return Image.network(
-          imagesUrl[index],
-          width: double.infinity,
+        // var dotPosition = _getPosition(_artDetailsAreaKey);
+        // print(dotPosition.dx);
+        // print(dotPosition.dy);
+        return Stack(
+          children: [
+            Image.network(
+              imagesUrl[index],
+              width: double.infinity,
+            ),
+            //TODO: width 값이 정확하지 않음...
+            Transform.translate(
+              offset: Offset(MediaQuery.of(context).size.width / 2 * 0.845, 12),
+              child: DotsIndicator(
+                dotsCount: imagesUrl.length,
+                position: detailPageController.currentPageNotifier.value,
+                decorator: DotsDecorator(
+                  color: ColorMap.gray_700.withOpacity(0.3), // Inactive color
+                  activeColor: ColorMap.mainColor,
+                ),
+              ),
+            ),
+          ],
         );
       },
       onPageChanged: (int index) {
-        //TODO: 이미지 위에 점점점 추가
         detailPageController.currentPageNotifier.value = index;
       },
     );
@@ -147,6 +164,7 @@ class DetailPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
       child: Column(
+        key: _artDetailsAreaKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
