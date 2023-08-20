@@ -4,6 +4,7 @@ import 'package:aria_client/viewmodels/art/detail_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:expandable_page_view/expandable_page_view.dart';
 
 class _TextStyles {
   static final Title = TextStyle(
@@ -48,11 +49,25 @@ class _TextStyles {
       letterSpacing: -0.25);
 }
 
+class _DetailPageController extends GetxController {
+  final pageController = PageController(initialPage: 0);
+  final currentPageNotifier = ValueNotifier<int>(0);
+
+  @override
+  void onClose() {
+    pageController.dispose();
+    super.onClose();
+  }
+}
+
 class DetailPage extends StatelessWidget {
   final int artId;
+
   DetailPage({super.key, required this.artId});
 
   final detailViewModel = DetailViewModel();
+  final detailPageController = _DetailPageController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,36 +93,53 @@ class DetailPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-        future: detailViewModel.fetchArtDetails(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            Rxn<Art> art = snapshot.data!;
-            print(art);
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Image.network(
-                    art.value!.imagesUrl![0],
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                  _artDetailsArea(art),
-                  Container(
-                    color: ColorMap.gray_100,
-                    width: double.infinity,
-                    height: 8,
-                  ),
-                  _artShareArea(),
-                ],
-              ),
-            );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          // 기본적으로 로딩 Spinner
-          return CircularProgressIndicator();
-        }
-      ),
+          future: detailViewModel.fetchArtDetails(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              Rxn<Art> art = snapshot.data!;
+              print(art);
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _artsPageView(art.value!.imagesUrl!),
+                    // Image.network(
+                    //   art.value!.imagesUrl![0],
+                    //   fit: BoxFit.cover,
+                    //   width: double.infinity,
+                    // ),
+                    _artDetailsArea(art),
+                    Container(
+                      color: ColorMap.gray_100,
+                      width: double.infinity,
+                      height: 8,
+                    ),
+                    _artShareArea(),
+                  ],
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            // 기본적으로 로딩 Spinner
+            return CircularProgressIndicator();
+          }),
+    );
+  }
+
+  Widget _artsPageView(List<String> imagesUrl) {
+    return ExpandablePageView.builder(
+      itemCount: imagesUrl.length,
+      // controller: detailPageController.pageController,
+      itemBuilder: (BuildContext context, int index) {
+        return Image.network(
+          imagesUrl[index],
+          width: double.infinity,
+        );
+      },
+      onPageChanged: (int index) {
+        //TODO: 이미지 위에 점점점 추가
+        detailPageController.currentPageNotifier.value = index;
+      },
     );
   }
 
@@ -136,8 +168,7 @@ class DetailPage extends StatelessWidget {
             ],
           ),
           SizedBox(height: 16),
-          Text(art.value!.title,
-              style: _TextStyles.ArtTitle),
+          Text(art.value!.title, style: _TextStyles.ArtTitle),
           SizedBox(height: 16),
           Text(
             art.value!.description,
@@ -182,7 +213,9 @@ class DetailPage extends StatelessWidget {
                       ),
                       Spacer(),
                       Text(
-                        art.value!.size.width.toString() + ' x ' + art.value!.size.height.toString(),
+                        art.value!.size.width.toString() +
+                            ' x ' +
+                            art.value!.size.height.toString(),
                         style: _TextStyles.ArtDetailDescription,
                       ),
                     ],

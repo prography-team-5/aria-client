@@ -18,10 +18,14 @@ class ArtService extends GetxService {
       //TODO: 작가에게 응원의 메세지 보내기 위한 sns 계정 정보 필요?
       return Art(
           artistNickname: '작가 아리아',
+          artistProfileImageUrl:
+              'https://i.pinimg.com/564x/9c/d3/ba/9cd3ba37ee042e5d610c100670473f18.jpg',
           artId: 1,
           memberId: 1,
           imagesUrl: [
-            'https://i.pinimg.com/564x/9c/d3/ba/9cd3ba37ee042e5d610c100670473f18.jpg'
+            'https://i.pinimg.com/564x/63/17/70/6317705051deb0f18512f35dd5da9e0c.jpg',
+            'https://i.pinimg.com/564x/f8/32/9d/f8329dc4cc8fa50086be9abc710124ea.jpg',
+            'https://i.pinimg.com/564x/82/0b/91/820b91b0ed6f1d37f4688da8eaf030fa.jpg'
           ],
           title: '[from view model] 작가의 작품 제목 공간인데요 어디까지 쓸 수 있는지 테스트를 진행하고 있',
           year: 2021,
