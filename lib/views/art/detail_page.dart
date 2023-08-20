@@ -49,7 +49,10 @@ class _TextStyles {
 }
 
 class DetailPage extends StatelessWidget {
-  final _DetailViewModel = DetailViewModel();
+  final int artId;
+  DetailPage({super.key, required this.artId});
+
+  final detailViewModel = DetailViewModel();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,10 +78,11 @@ class DetailPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-        future: _DetailViewModel.fetchArtDetails(),
+        future: detailViewModel.fetchArtDetails(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             Rxn<Art> art = snapshot.data!;
+            print(art);
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -121,7 +125,7 @@ class DetailPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(100)),
                 ),
                 child: Image.network(
-                  'https://i.pinimg.com/564x/9c/d3/ba/9cd3ba37ee042e5d610c100670473f18.jpg',
+                  art.value!.artistProfileImageUrl!,
                   fit: BoxFit.cover,
                   width: 48,
                   height: 48,
