@@ -66,6 +66,7 @@ class AuthService extends GetxService {
     // 2-1. 200이면 회원가입된 회원이므로 회원 정보 가져와서 반환
     if (statusCode == 200) {
       jwt = data['jwt'];
+      print('[+] jwt : $jwt');
       // 3. 회원 정보 가져옴
       data = await fetchMember(jwt: jwt);
       member = data['member'];
