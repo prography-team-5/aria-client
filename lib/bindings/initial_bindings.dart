@@ -32,7 +32,7 @@ class InitialBinding implements Bindings {
     Get.lazyPut<MyViewModel>(() => MyViewModel());
     Get.lazyPut<EditProfileViewModel>(() => EditProfileViewModel());
     Get.put<SigninViewModel>(SigninViewModel(), permanent: true);
-    Get.lazyPut<SignupViewModel>(() => SignupViewModel());
+    Get.put<SignupViewModel>(SignupViewModel(), permanent: true);
     Get.lazyPut<SplashViewModel>(() => SplashViewModel());
     Get.lazyPut<SearchViewModel>(() => SearchViewModel());
     Get.lazyPut<ArtistHomeViewModel>(() => ArtistHomeViewModel());

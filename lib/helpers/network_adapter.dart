@@ -96,6 +96,9 @@ class NetworkAdapter {
       },
       body: json.encode(params),
     );
+    if (response.body == '') {
+      return {'statusCode': response.statusCode, 'body': {}};
+    }
     return {
       'statusCode': response.statusCode,
       'body': json.decode(utf8.decode(response.bodyBytes))

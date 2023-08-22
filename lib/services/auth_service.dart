@@ -66,6 +66,7 @@ class AuthService extends GetxService {
     // 2-1. 200이면 회원가입된 회원이므로 회원 정보 가져와서 반환
     if (statusCode == 200) {
       jwt = data['jwt'];
+      print('[+] jwt : $jwt');
       // 3. 회원 정보 가져옴
       data = await fetchMember(jwt: jwt);
       member = data['member'];
@@ -192,7 +193,7 @@ class AuthService extends GetxService {
     String jwt = 'testjwtsignin';
     NetworkAdapter networkAdapter = NetworkAdapter();
 
-    if (Env.env == Environ.prod) {
+    if (Env.env == Environ.test) {
       return {'jwt': jwt, 'statusCode': 401};
     }
 
@@ -218,7 +219,7 @@ class AuthService extends GetxService {
     String jwt = 'testjwtsignup';
     NetworkAdapter networkAdapter = NetworkAdapter();
 
-    if (Env.env == Environ.prod) {
+    if (Env.env == Environ.test) {
       return {'jwt': jwt, 'statusCode': 200};
     }
 
@@ -244,7 +245,7 @@ class AuthService extends GetxService {
     Member? member;
     NetworkAdapter networkAdapter = NetworkAdapter();
 
-    if (Env.env == Environ.prod) {
+    if (Env.env == Environ.test) {
       member = await Member(
         memberId: 1,
         role: 'artist',
@@ -256,7 +257,7 @@ class AuthService extends GetxService {
 
     Map<String, dynamic> data =
         await networkAdapter.get(path: '/members/me', token: jwt, params: {});
-    member = Member.fromJson(data['body']['data']);
+    member = Member.fromJson(data['body']);
     return {'member': member};
   }
 
