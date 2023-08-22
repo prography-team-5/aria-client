@@ -144,6 +144,10 @@ class UserMyPage extends StatelessWidget {
                       height: 100.0,
                       width: 100.0,
                       child: Image.asset('assets/images/profile_avatar.png'),
+                      // TODO: s3 버켓 해결 후 수정
+                      // child: Image.network(
+                      //   controller.signinViewModel.member!.profileImageUrl,
+                      // ),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                       ),

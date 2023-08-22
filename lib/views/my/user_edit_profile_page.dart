@@ -20,7 +20,8 @@ class UserEditProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<SignupViewModel>();
+    final signUpController = Get.find<SignupViewModel>();
+    // final signInController = Get.find<SigninViewModel>();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(56),
@@ -63,9 +64,9 @@ class UserEditProfilePage extends StatelessWidget {
               height: 8,
             ),
             TextField(
-              controller: controller.nicknameController,
+              controller: signUpController.nicknameController,
               onChanged: (text) {
-                controller.changeColor();
+                signUpController.changeColor();
               },
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
@@ -87,9 +88,9 @@ class UserEditProfilePage extends StatelessWidget {
               child: Obx(
                 () => TextButton(
                   onPressed: () async {
-                    await controller.userEditProfile(
-                        nickname: controller.nicknameController.text);
-                    controller.refresh();
+                    await signUpController.userEditProfile(
+                        nickname: signUpController.nicknameController.text);
+                    signUpController.refresh();
                     Get.find<SigninViewModel>().refresh();
                     Get.offAllNamed(
                         '/home'); // TODO: 닉네임 수정 후 마이페이지로 가야되는데 일단은 홈으로
@@ -104,7 +105,7 @@ class UserEditProfilePage extends StatelessWidget {
                     ),
                   ),
                   style: TextButton.styleFrom(
-                    backgroundColor: controller.backgroundColor.value,
+                    backgroundColor: signUpController.backgroundColor.value,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100),
                     ),
