@@ -13,7 +13,7 @@ class Art {
   final List<dynamic> artTags;
   final Size size;
   final String description;
-  // final List<Sns>? artistSocialLinks;
+  final List<Sns>? artistSocialLinks;
 
   Art({
     required this.artId,
@@ -28,7 +28,7 @@ class Art {
     required this.artTags,
     required this.size,
     required this.description,
-    // this.artistSocialLinks,
+    this.artistSocialLinks,
   });
 
   factory Art.fromJson(Map<String, dynamic> json) => Art(
@@ -44,8 +44,10 @@ class Art {
         artTags: json['artTags'],
         size: Size.fromJson(json['size']),
         description: json['description'],
-        // artistSocialLinks: List.generate(json['artistSocialLinks'].length,
-        //     (index) => Sns.fromJson(json['artistSocialLinks'][index])),
+        artistSocialLinks: json['artistSocialLinks']
+            ?.toList()
+            .map((item) => Sns.fromJson(item))
+            .toList(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,7 +63,7 @@ class Art {
         'artTags': artTags,
         'size': size,
         'description': description,
-        // 'artistSocialLinks': artistSocialLinks,
+        'artistSocialLinks': artistSocialLinks,
       };
 }
 

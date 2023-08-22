@@ -1,6 +1,7 @@
 import 'package:aria_client/helpers/sp_helper.dart';
 import 'package:aria_client/models/art.dart';
 import 'package:aria_client/viewmodels/search/search_viewmodel.dart';
+import 'package:aria_client/views/art/detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -236,7 +237,8 @@ class _SearchPageState extends State<SearchPage> {
                 searchPageController.changeMode('after');
               },
               contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-              title: Text(reversedList[index], style: _TextStyles.SearchHistory),
+              title:
+                  Text(reversedList[index], style: _TextStyles.SearchHistory),
               trailing: GestureDetector(
                 onTap: () async {
                   searchPageController.removeSearchHistory(index);
@@ -266,22 +268,33 @@ class _SearchPageState extends State<SearchPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // SizedBox(height: 24),
-                  ClipPath(
-                    clipper: ShapeBorderClipper(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: Image.network(
-                      artsList[index].mainImageUrl!,
-                      fit: BoxFit.cover,
-                      height: 407,
-                      width: double.infinity,
+                  GestureDetector(
+                    onTap: () {
+                      //TODO: arguments를 artId 변수로 수정
+                      Get.to(() => DetailPage(artId: 3));
+                    },
+                    child: ClipPath(
+                      clipper: ShapeBorderClipper(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: Image.network(
+                        artsList[index].mainImageUrl!,
+                        fit: BoxFit.cover,
+                        height: 407,
+                        width: double.infinity,
+                      ),
                     ),
                   ),
                   SizedBox(height: 16),
                   Row(
                     children: [
-                      Text(artsList[index].title, style: _TextStyles.ArtTitle),
+                      GestureDetector(
+                          onTap: () {
+                            Get.to(() => DetailPage(artId: 3));
+                          },
+                          child: Text(artsList[index].title,
+                              style: _TextStyles.ArtTitle)),
                       Spacer(),
                       GestureDetector(
                         onTap: () {

@@ -98,7 +98,7 @@ class DetailPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-          future: detailViewModel.fetchArtDetails(),
+          future: detailViewModel.fetchArtDetails(artId),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               Rxn<Art> art = snapshot.data!;
