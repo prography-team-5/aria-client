@@ -57,8 +57,10 @@ class UserMyPage extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(0, 16, 12, 16),
                 child: TextButton(
                   onPressed: () async {
-                    final uri = Uri.parse('https://google.com');
-                    if (!await launchUrl(uri))
+                    final uri =
+                        Uri.parse('https://forms.gle/DkAtGJ6jdaFCi4ad7');
+                    if (!await launchUrl(uri,
+                        mode: LaunchMode.externalApplication))
                       throw Exception('Could not launch ${uri.toString()}');
                   },
                   child: Text(
