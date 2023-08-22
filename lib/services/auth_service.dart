@@ -257,7 +257,7 @@ class AuthService extends GetxService {
 
     Map<String, dynamic> data =
         await networkAdapter.get(path: '/members/me', token: jwt, params: {});
-    member = Member.fromJson(data['body']['data']);
+    member = Member.fromJson(data['body']);
     return {'member': member};
   }
 
