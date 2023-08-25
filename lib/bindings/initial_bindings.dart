@@ -1,3 +1,4 @@
+import 'package:aria_client/views/artist/artist_home_page.dart';
 import 'package:get/get.dart';
 
 import '../services/art_service.dart';
@@ -10,7 +11,6 @@ import '../viewmodels/search/search_viewmodel.dart';
 
 import '../viewmodels/art/detail_viewmodel.dart';
 import '../viewmodels/artist/add_art_viewmodel.dart';
-import '../viewmodels/artist/artist_home_viewmodel.dart';
 import '../viewmodels/auth/signin_viewmodel.dart';
 import '../viewmodels/auth/signup_viewmodel.dart';
 import '../viewmodels/auth/splash_viewmodel.dart';

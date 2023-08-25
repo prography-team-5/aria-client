@@ -1,3 +1,3 @@
-import 'package:get/get.dart';
+// import 'package:get/get.dart';
 
-class ArtistHomeViewModel extends GetxController {}
+// class ArtistHomeViewModel extends GetxController {}

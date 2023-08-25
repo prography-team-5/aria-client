@@ -67,4 +67,8 @@ class ArtistService extends GetxService {
   Future<List<Art>> fetchMyArts() async {
     return [];
   }
+
+  Future<List<Art>> fetchArtistArts() async {
+    return [];
+  }
 }
