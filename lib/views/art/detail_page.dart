@@ -190,7 +190,7 @@ class DetailPage extends StatelessWidget {
           Text(art.value!.title, style: _TextStyles.ArtTitle),
           SizedBox(height: 16),
           Text(
-            art.value!.description,
+            art.value!.description!,
             style: _TextStyles.ArtDescription,
           ),
           SizedBox(height: 40),
@@ -263,145 +263,127 @@ class DetailPage extends StatelessWidget {
   }
 
   Widget _artShareArea(List<Sns> artistSocialLinks) {
+    print(artistSocialLinks);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: 40),
-        Text(
-          '작품이 마음에 드셨나요?\n작가에게 응원의 메시지를 보내보세요.',
-          style: _TextStyles.ArtShareMessage,
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 24),
-        Container(
-          width: 262,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OutlinedButton(
-                onPressed: () {
-                  // Get.toNamed('/test_page');
-                },
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1, color: ColorMap.gray_200),
-                    fixedSize: Size(56, 56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
+        artistSocialLinks.length != 0
+            ? Column(
+                children: [
+                  SizedBox(height: 40),
+                  Text(
+                    '작품이 마음에 드셨나요?\n작가에게 응원의 메시지를 보내보세요.',
+                    style: _TextStyles.ArtShareMessage,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 24),
+                  Container(
+                    // width: 262,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        artistSocialLinks.length,
+                        (index) {
+                          if (artistSocialLinks[index].socialType ==
+                              'INSTAGRAM') {
+                            return OutlinedButton(
+                              onPressed: () {
+                                // Get.toNamed('/test_page');
+                              },
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 1, color: ColorMap.gray_200),
+                                  fixedSize: Size(56, 56),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.all(16)),
+                              child: SvgPicture.asset(
+                                'assets/images/instagram_button.svg',
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
+                          if (artistSocialLinks.length > 1) {
+                            SizedBox(width: 12.67);
+                          }
+                          if (artistSocialLinks[index].socialType ==
+                              'YOUTUBE') {
+                            return OutlinedButton(
+                              onPressed: () {
+                                // Get.toNamed('/test_page');
+                              },
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 1, color: ColorMap.gray_200),
+                                  fixedSize: Size(56, 56),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.all(16)),
+                              child: SvgPicture.asset(
+                                'assets/images/youtube_button.svg',
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
+                          if (artistSocialLinks.length > 2) {
+                            SizedBox(width: 12.67);
+                          }
+                          if (artistSocialLinks[index].socialType == 'KAKAO') {
+                            return OutlinedButton(
+                              onPressed: () {
+                                // Get.toNamed('/test_page');
+                              },
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 1, color: ColorMap.gray_200),
+                                  fixedSize: Size(56, 56),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.all(16)),
+                              child: SvgPicture.asset(
+                                'assets/images/kakaotalk_button.svg',
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
+                          if (artistSocialLinks.length > 3) {
+                            SizedBox(width: 12.67);
+                          }
+                          if (artistSocialLinks[index].socialType == 'EMAIL') {
+                            return OutlinedButton(
+                              onPressed: () {
+                                // Get.toNamed('/test_page');
+                              },
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 1, color: ColorMap.gray_200),
+                                  fixedSize: Size(56, 56),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.all(16)),
+                              child: SvgPicture.asset(
+                                'assets/images/email_button.svg',
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
+                          return Container();
+                        },
+                      ),
                     ),
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.all(16)),
-                child: SvgPicture.asset(
-                  'assets/images/instagram_button.svg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  // Get.toNamed('/test_page');
-                },
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1, color: ColorMap.gray_200),
-                    fixedSize: Size(56, 56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.all(16)),
-                child: SvgPicture.asset(
-                  'assets/images/youtube_button.svg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  // Get.toNamed('/test_page');
-                },
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1, color: ColorMap.gray_200),
-                    fixedSize: Size(56, 56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.all(16)),
-                child: SvgPicture.asset(
-                  'assets/images/kakaotalk_button.svg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          width: 262,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: List.generate(
-              artistSocialLinks.length,
-              (index) {
-                if (artistSocialLinks[index].socialType == 'INSTAGRAM') {
-                  return OutlinedButton(
-                    onPressed: () {
-                      // Get.toNamed('/test_page');
-                    },
-                    style: OutlinedButton.styleFrom(
-                        side: BorderSide(width: 1, color: ColorMap.gray_200),
-                        fixedSize: Size(56, 56),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        minimumSize: Size.zero,
-                        padding: EdgeInsets.all(16)),
-                    child: SvgPicture.asset(
-                      'assets/images/instagram_button.svg',
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                }
-                if (artistSocialLinks[index].socialType == 'YOUTUBE') {
-                  return OutlinedButton(
-                    onPressed: () {
-                      // Get.toNamed('/test_page');
-                    },
-                    style: OutlinedButton.styleFrom(
-                        side: BorderSide(width: 1, color: ColorMap.gray_200),
-                        fixedSize: Size(56, 56),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        minimumSize: Size.zero,
-                        padding: EdgeInsets.all(16)),
-                    child: SvgPicture.asset(
-                      'assets/images/youtube_button.svg',
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                }
-                if (artistSocialLinks[index].socialType == 'KAKAO') {
-                  return OutlinedButton(
-                    onPressed: () {
-                      // Get.toNamed('/test_page');
-                    },
-                    style: OutlinedButton.styleFrom(
-                        side: BorderSide(width: 1, color: ColorMap.gray_200),
-                        fixedSize: Size(56, 56),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(100),
-                        ),
-                        minimumSize: Size.zero,
-                        padding: EdgeInsets.all(16)),
-                    child: SvgPicture.asset(
-                      'assets/images/kakaotalk_button.svg',
-                      fit: BoxFit.cover,
-                    ),
-                  );
-                }
-                return Container();
-              },
-            ),
-          ),
-        ),
-        SizedBox(height: 40),
+                  ),
+                  SizedBox(height: 40),
+                ],
+              )
+            : Container()
       ],
     );
   }
