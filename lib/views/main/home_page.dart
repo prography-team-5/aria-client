@@ -185,7 +185,13 @@ class _HomePageState extends State<HomePage> {
                               height: 64,
                               child: TextButton(
                                 //TODO: artist 페이지로 이동
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.toNamed('/artist_home',
+                                      arguments: artsList[homePageController
+                                              .currentCardNotifier.value
+                                              .toInt()]
+                                          .memberId);
+                                },
                                 child: FittedBox(
                                   child: Text(
                                     '전시회 방문하기',
@@ -252,12 +258,17 @@ class _HomePageState extends State<HomePage> {
       },
       onPageChanged: (int index) {
         homePageController.currentCardNotifier.value = index.obs;
+        homePageController.displayFront.value = true;
         //TODO: 여기에 함수 추가
         if (index == artsList.length - 1) {
           // homePageController.fetchMoreData();
         }
       },
     );
+  }
+
+  Widget _emptyAnimation(Widget widget, Animation<double> animation) {
+    return widget;
   }
 
   Widget _cardFlipAnimation(int index, RxList<Art> artsList) {
@@ -269,7 +280,11 @@ class _HomePageState extends State<HomePage> {
           },
           child: AnimatedSwitcher(
             duration: Duration(milliseconds: 1000),
+            // TODO: 뒷면 안뒤집히게
             transitionBuilder: __transitionBuilder,
+            // transitionBuilder: homePageController.displayFront.value
+            //     ? __transitionBuilder
+            //     : _emptyAnimation,
             switchInCurve: Curves.easeInBack,
             switchOutCurve: Curves.easeInBack.flipped,
             child: homePageController.displayFront.value
@@ -456,8 +471,8 @@ class RearWidget extends StatelessWidget {
                   child: SingleChildScrollView(
                     controller: homePageController.cardScrollController,
                     child: Center(
-                      child:
-                          Text(style: _TextStyles.Description, art.description!),
+                      child: Text(
+                          style: _TextStyles.Description, art.description!),
                     ),
                   ),
                 ),

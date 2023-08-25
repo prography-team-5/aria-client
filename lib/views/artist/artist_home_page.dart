@@ -13,6 +13,7 @@ import '../../viewmodels/auth/signin_viewmodel.dart';
 
 class ArtistHomeViewModel extends GetxController {
   final SigninViewModel signinViewModel = Get.find<SigninViewModel>();
+  Rx<ArtistInfo>? artistInfo;
   RxList<Art> artList = <Art>[].obs;
   RxBool isLoading = false.obs;
   Future<void> getArtList() async {
@@ -32,6 +33,7 @@ class ArtistHomeViewModel extends GetxController {
 class ArtistHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('[+] Parameter: ${Get.arguments}');
     final controller = Get.put(ArtistHomeViewModel());
     return SafeArea(
       child: Scaffold(
