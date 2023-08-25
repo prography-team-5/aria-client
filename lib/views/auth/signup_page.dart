@@ -87,7 +87,7 @@ class SignupPage extends StatelessWidget {
                 () => TextButton(
                   onPressed: () async {
                     await controller.signUp(
-                        nickname: controller.nicknameController.text);
+                        nickname: controller.nicknameController.text.trim());
                   }, // TODO: 회원가입 제출 이후 동작
                   child: Text(
                     '회원가입',
