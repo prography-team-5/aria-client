@@ -1,6 +1,7 @@
 import 'package:aria_client/models/art.dart';
 import 'package:aria_client/models/artist_info.dart';
 import 'package:aria_client/services/artist_service.dart';
+import 'package:aria_client/views/my/artist_my_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -34,68 +35,29 @@ class ArtistHomePage extends StatelessWidget {
     final controller = Get.put(ArtistHomeViewModel());
     return SafeArea(
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(56),
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            // title: Text(
-            //   '프로필',
-            //   style: TextStyle(
-            //       color: ColorMap.gray_700,
-            //       fontSize: 16,
-            //       fontWeight: FontWeight.w500),
-            // ),
-            leading: Padding(
-              padding: EdgeInsets.fromLTRB(12, 16, 0, 16),
-              child: InkWell(
-                onTap: () {
-                  Get.back();
-                },
-                child: SvgPicture.asset(
-                  'assets/images/leading_button.svg',
-                ),
+        extendBodyBehindAppBar: true,
+        appBar: AppBar(
+          automaticallyImplyLeading: false,
+          leading: Padding(
+            padding: EdgeInsets.fromLTRB(12, 16, 0, 16),
+            child: InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: SvgPicture.asset(
+                'assets/images/leading_button.svg',
+                color: Colors.white,
               ),
             ),
-            actions: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(0, 16, 12, 16),
-                child: TextButton(
-                  onPressed: () async {
-                    final uri =
-                        Uri.parse('https://forms.gle/DkAtGJ6jdaFCi4ad7');
-                    if (!await launchUrl(uri,
-                        mode: LaunchMode.externalApplication))
-                      throw Exception('Could not launch ${uri.toString()}');
-                  },
-                  child: Text(
-                    '작가 신청',
-                    style: TextStyle(
-                      color: ColorMap.white,
-                      fontFamily: 'Prentendard',
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                    backgroundColor: ColorMap.mainColor,
-                    shape: RoundedRectangleBorder(
-                      side: BorderSide.none,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-            centerTitle: true,
-            backgroundColor: Colors.transparent,
-            elevation: 0.0, // appBar 그림자 제거
           ),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          elevation: 0.0, // appBar 그림자 제거
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              height: 147 + 140,
               child: Stack(
                 alignment: Alignment.center,
                 children: [
@@ -103,7 +65,7 @@ class ArtistHomePage extends StatelessWidget {
                     children: [
                       Container(
                         height: 147,
-                        color: Color(0xff2D2942),
+                        color: Color(0xff2D2942), // TODO: 이미지 가져오기
                       ),
                       Container(
                         // height: 200,
@@ -116,22 +78,104 @@ class ArtistHomePage extends StatelessWidget {
                                 style: TextStyles.Heading2,
                               ),
                               Padding(padding: EdgeInsets.all(5)),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 4, 0, 0),
+                                child: Text('현대 아크릴 공예'),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(0, 6, 0, 8),
+                                child: Text('32 Followers'),
+                              ),
+                              Container(
+                                width: 340,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  color: ColorMap.gray_200,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                child: Center(child: Text('1000자')),
+                              ),
                               TextButton(
-                                onPressed: () {
-                                  Get.toNamed('/user_edit_profile');
-                                },
+                                onPressed: () {},
                                 child: Text(
-                                  '프로필 수정',
+                                  '팔로우', // TODO: 팔로우 기능 구현
                                   style: TextStyle(color: ColorMap.gray_700),
                                 ),
                                 style: TextButton.styleFrom(
                                   padding: EdgeInsets.symmetric(
-                                      horizontal: 130, vertical: 13),
+                                      horizontal: 150, vertical: 13),
                                   shape: RoundedRectangleBorder(
                                     side: BorderSide(
                                         color: ColorMap.gray_200, width: 1),
                                     borderRadius: BorderRadius.circular(15),
                                   ),
+                                ),
+                              ),
+                              Padding(
+                                padding:
+                                    // const EdgeInsets.symmetric(horizontal: 30),
+                                    const EdgeInsets.all(10),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: SvgPicture.asset(
+                                            'assets/images/instagram_button.svg'),
+                                      ),
+                                      height: 56,
+                                      width: 56,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: ColorMap.gray_200),
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: SvgPicture.asset(
+                                            'assets/images/youtube_button.svg'),
+                                      ),
+                                      height: 56,
+                                      width: 56,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: ColorMap.gray_200),
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: SvgPicture.asset(
+                                            'assets/images/kakaotalk_button.svg'),
+                                      ),
+                                      height: 56,
+                                      width: 56,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: ColorMap.gray_200),
+                                      ),
+                                    ),
+                                    Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: SvgPicture.asset(
+                                            'assets/images/email_button.svg'),
+                                      ),
+                                      height: 56,
+                                      width: 56,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                            color: ColorMap.gray_200),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
@@ -151,7 +195,8 @@ class ArtistHomePage extends StatelessWidget {
                       width: 80,
                       child: CircleAvatar(
                         backgroundImage: NetworkImage(
-                          controller.signinViewModel.member!.profileImageUrl,
+                          controller.signinViewModel.member!
+                              .profileImageUrl, // TODO: 이미지 가져오기(작가꺼)
                         ),
                       ),
                     ),
@@ -159,43 +204,27 @@ class ArtistHomePage extends StatelessWidget {
                 ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.all(15),
-              child: Text('팔로우한 작가'),
-            ),
             Flexible(
               child: Container(
                 padding: EdgeInsets.all(15),
-                // child: GetBuilder<UserMyPageViewModel>(
-                //   builder: (controller) {
-                //     return controller.isLoading.value
-                //         ? const Center(
-                //             child: CircularProgressIndicator(),
-                //           )
-                //         : controller.followeeList.isEmpty
-                //             ? const Center(
-                //                 child: Text('아직 팔로우한 작가가 없습니다.'),
-                //               )
-                //             : GridView.builder(
-                //                 gridDelegate:
-                //                     SliverGridDelegateWithFixedCrossAxisCount(
-                //                   crossAxisCount: 3,
-                //                   childAspectRatio: 1,
-                //                   crossAxisSpacing: 10,
-                //                   mainAxisSpacing: 20,
-                //                   mainAxisExtent: 130,
-                //                 ),
-                //                 itemCount: controller.followeeList.length,
-                //                 itemBuilder: (context, index) {
-                //                   return Obx(
-                //                     () => FollowAvatar(
-                //                       follow: controller.followeeList[index],
-                //                     ),
-                //                   );
-                //                 },
-                //               );
-                //   },
-                // ),
+                child: GetBuilder<ArtistHomeViewModel>(
+                  builder: (controller) {
+                    return controller.isLoading.value
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : controller.artList.isEmpty
+                            ? const Center(
+                                child: Text('작품이 없습니다!'),
+                              )
+                            : ListView.builder(
+                                itemBuilder: (context, index) {
+                                  return Obx(() => Container());
+                                },
+                                itemCount: controller.artList.length,
+                              );
+                  },
+                ),
               ),
             ),
           ],
@@ -205,40 +234,11 @@ class ArtistHomePage extends StatelessWidget {
   }
 }
 
-class FollowAvatar extends StatelessWidget {
-  final ArtistInfo follow;
-  FollowAvatar({required this.follow});
+class ArtListTile extends StatelessWidget {
+  final Art art;
+  const ArtListTile({required this.art});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // width: 150,
-      // height: 150,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            height: 100.0,
-            width: 100.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: NetworkImage(follow.profile_art_image_url),
-              ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.all(5),
-            child: Text(
-              "nickname",
-              // follow.nickname,
-              style: TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return Container();
   }
 }
