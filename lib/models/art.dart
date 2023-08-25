@@ -1,8 +1,8 @@
 import 'package:aria_client/models/size.dart';
 
 class Art {
-  final int artId;
-  final int memberId;
+  final int? artId;
+  final int? memberId;
   final String? artistNickname;
   final String? artistProfileImageUrl;
   final String? mainImageUrl;
@@ -10,14 +10,14 @@ class Art {
   final String style;
   final String title;
   final int year;
-  final List<dynamic> artTags;
+  final List<dynamic>? artTags;
   final Size size;
   final String description;
   final List<Sns>? artistSocialLinks;
 
   Art({
-    required this.artId,
-    required this.memberId,
+    this.artId,
+    this.memberId,
     this.artistNickname,
     this.artistProfileImageUrl,
     this.mainImageUrl,
@@ -25,7 +25,7 @@ class Art {
     required this.style,
     required this.title,
     required this.year,
-    required this.artTags,
+    this.artTags,
     required this.size,
     required this.description,
     this.artistSocialLinks,
@@ -37,16 +37,15 @@ class Art {
         artistNickname: json['artistNickname'],
         artistProfileImageUrl: json['artistProfileImageUrl'],
         mainImageUrl: json['mainImageUrl'],
-        imagesUrl: json['imagesUrl'],
+        imagesUrl: (json['imagesUrl'] as List?)?.map((item) => item as String).toList(),
         style: json['style'],
         title: json['title'],
         year: json['year'],
         artTags: json['artTags'],
         size: Size.fromJson(json['size']),
         description: json['description'],
-        artistSocialLinks: json['artistSocialLinks']
-            ?.toList()
-            .map((item) => Sns.fromJson(item))
+        artistSocialLinks: (json['artistSocialLinks'] as List?)
+            ?.map((item) => item as Sns)
             .toList(),
       );
 
