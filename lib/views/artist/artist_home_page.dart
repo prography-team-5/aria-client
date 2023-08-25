@@ -4,8 +4,10 @@ import 'package:aria_client/services/artist_service.dart';
 import 'package:aria_client/views/art/detail_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../constants/colormap.dart';
 import '../../constants/text_styles.dart';
@@ -259,80 +261,255 @@ class ArtistHomePage extends StatelessWidget {
                                                         MainAxisAlignment
                                                             .spaceEvenly,
                                                     children: [
-                                                      Container(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(15.0),
-                                                          child: SvgPicture.asset(
-                                                              'assets/images/instagram_button.svg'),
-                                                        ),
-                                                        height: 56,
-                                                        width: 56,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          border: Border.all(
-                                                              color: ColorMap
-                                                                  .gray_200),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          if (controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .social_links
+                                                                  .length ==
+                                                              0) {
+                                                            return;
+                                                          }
+                                                          if (controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .social_links
+                                                                  .firstWhere((element) =>
+                                                                      element
+                                                                          .social_type ==
+                                                                      'INSTAGRAM') ==
+                                                              null) {
+                                                            return;
+                                                          }
+                                                          final uri = Uri.parse(controller
+                                                              .artistInfo
+                                                              .value
+                                                              .social_links
+                                                              .firstWhere((element) =>
+                                                                  element
+                                                                      .social_type ==
+                                                                  'INSTAGRAM')
+                                                              .url);
+                                                          if (!await launchUrl(
+                                                              uri,
+                                                              mode: LaunchMode
+                                                                  .externalApplication))
+                                                            throw Exception(
+                                                                'Could not launch ${uri.toString()}');
+                                                        },
+                                                        child: Container(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(15.0),
+                                                            child: SvgPicture.asset(
+                                                                'assets/images/instagram_button.svg'),
+                                                          ),
+                                                          height: 56,
+                                                          width: 56,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            border: Border.all(
+                                                                color: ColorMap
+                                                                    .gray_200),
+                                                          ),
                                                         ),
                                                       ),
-                                                      Container(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(15.0),
-                                                          child: SvgPicture.asset(
-                                                              'assets/images/youtube_button.svg'),
-                                                        ),
-                                                        height: 56,
-                                                        width: 56,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          border: Border.all(
-                                                              color: ColorMap
-                                                                  .gray_200),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          if (controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .social_links
+                                                                  .length ==
+                                                              0) {
+                                                            return;
+                                                          }
+                                                          if (controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .social_links
+                                                                  .firstWhere((element) =>
+                                                                      element
+                                                                          .social_type ==
+                                                                      'YOUTUBE') ==
+                                                              null) {
+                                                            return;
+                                                          }
+                                                          final uri = Uri.parse(controller
+                                                              .artistInfo
+                                                              .value
+                                                              .social_links
+                                                              .firstWhere(
+                                                                  (element) =>
+                                                                      element
+                                                                          .social_type ==
+                                                                      'YOUTUBE')
+                                                              .url);
+                                                          if (!await launchUrl(
+                                                              uri,
+                                                              mode: LaunchMode
+                                                                  .externalApplication))
+                                                            throw Exception(
+                                                                'Could not launch ${uri.toString()}');
+                                                        },
+                                                        child: Container(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(15.0),
+                                                            child: SvgPicture.asset(
+                                                                'assets/images/youtube_button.svg'),
+                                                          ),
+                                                          height: 56,
+                                                          width: 56,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            border: Border.all(
+                                                                color: ColorMap
+                                                                    .gray_200),
+                                                          ),
                                                         ),
                                                       ),
-                                                      Container(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(15.0),
-                                                          child: SvgPicture.asset(
-                                                              'assets/images/kakaotalk_button.svg'),
-                                                        ),
-                                                        height: 56,
-                                                        width: 56,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          border: Border.all(
-                                                              color: ColorMap
-                                                                  .gray_200),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          if (controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .social_links
+                                                                  .length ==
+                                                              0) {
+                                                            return;
+                                                          }
+                                                          if (controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .social_links
+                                                                  .firstWhere((element) =>
+                                                                      element
+                                                                          .social_type ==
+                                                                      'KAKAO') ==
+                                                              null) {
+                                                            return;
+                                                          }
+                                                          final uri = Uri.parse(
+                                                              controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .social_links
+                                                                  .firstWhere(
+                                                                      (element) =>
+                                                                          element
+                                                                              .social_type ==
+                                                                          'KAKAO')
+                                                                  .url);
+                                                          if (!await launchUrl(
+                                                              uri,
+                                                              mode: LaunchMode
+                                                                  .externalApplication))
+                                                            throw Exception(
+                                                                'Could not launch ${uri.toString()}');
+                                                        },
+                                                        child: Container(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(15.0),
+                                                            child: SvgPicture.asset(
+                                                                'assets/images/kakaotalk_button.svg'),
+                                                          ),
+                                                          height: 56,
+                                                          width: 56,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            border: Border.all(
+                                                                color: ColorMap
+                                                                    .gray_200),
+                                                          ),
                                                         ),
                                                       ),
-                                                      Container(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(15.0),
-                                                          child: SvgPicture.asset(
-                                                              'assets/images/email_button.svg'),
-                                                        ),
-                                                        height: 56,
-                                                        width: 56,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          border: Border.all(
-                                                              color: ColorMap
-                                                                  .gray_200),
+                                                      InkWell(
+                                                        onTap: () async {
+                                                          if (controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .social_links
+                                                                  .length ==
+                                                              0) {
+                                                            return;
+                                                          }
+                                                          if (controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .social_links
+                                                                  .firstWhere((element) =>
+                                                                      element
+                                                                          .social_type ==
+                                                                      'EMAIL') ==
+                                                              null) {
+                                                            return;
+                                                          }
+                                                          final uri = Uri.parse("mailto:" +
+                                                              controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .social_links
+                                                                  .firstWhere(
+                                                                      (element) =>
+                                                                          element
+                                                                              .social_type ==
+                                                                          'EMAIL')
+                                                                  .url);
+                                                          if (!await launchUrl(
+                                                              uri,
+                                                              mode: LaunchMode
+                                                                  .externalApplication))
+                                                            throw Exception(
+                                                                'Could not launch ${uri.toString()}');
+                                                          // Clipboard.setData(ClipboardData(
+                                                          //     text: controller
+                                                          //         .artistInfo
+                                                          //         .value
+                                                          //         .social_links
+                                                          //         .firstWhere(
+                                                          //             (element) =>
+                                                          //                 element
+                                                          //                     .social_type ==
+                                                          //                 'EMAIL')
+                                                          //         .url));
+                                                          // ScaffoldMessenger.of(
+                                                          //         context)
+                                                          //     .showSnackBar(
+                                                          //         SnackBar(
+                                                          //   content: Text(
+                                                          //       '이메일 주소가 복사되었습니다.'),
+                                                          // ));
+                                                        },
+                                                        child: Container(
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(15.0),
+                                                            child: SvgPicture.asset(
+                                                                'assets/images/email_button.svg'),
+                                                          ),
+                                                          height: 56,
+                                                          width: 56,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                            border: Border.all(
+                                                                color: ColorMap
+                                                                    .gray_200),
+                                                          ),
                                                         ),
                                                       ),
                                                     ],
