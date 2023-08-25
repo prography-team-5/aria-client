@@ -18,8 +18,6 @@ class ArtService extends GetxService {
     //       artistNickname: '작가 아리아',
     //       artistProfileImageUrl:
     //           'https://i.pinimg.com/564x/9c/d3/ba/9cd3ba37ee042e5d610c100670473f18.jpg',
-    //       artId: 1,
-    //       memberId: 1,
     //       imagesUrl: [
     //         'https://i.pinimg.com/564x/63/17/70/6317705051deb0f18512f35dd5da9e0c.jpg',
     //         'https://i.pinimg.com/564x/f8/32/9d/f8329dc4cc8fa50086be9abc710124ea.jpg',
@@ -37,7 +35,6 @@ class ArtService extends GetxService {
 
     Map<String, dynamic> data = await networkAdapter
         .get(path: '/arts/$artId', params: {}, token: signInViewModel.jwt);
-    print(data);
     if (data['statusCode'] == 200) {
       artInfo = Art.fromJson(data['body']);
       return {'artInfo': artInfo};
@@ -249,44 +246,59 @@ class ArtService extends GetxService {
       exit(200);
   }
 
-  Future<Map<String, dynamic>> fetchSearchedArts(String keyword) async {
+  Future<Map<String, dynamic>> fetchSearchedArts(String query, int page, int count) async {
     List<Art> artsList;
-    artsList = [
-      Art(
-          artId: 1,
-          memberId: 1,
-          mainImageUrl:
-              'https://i.pinimg.com/564x/82/0b/91/820b91b0ed6f1d37f4688da8eaf030fa.jpg',
-          style: '아크릴 캔버스',
-          title: 'Art Title',
-          year: 2021,
-          artTags: ['현대대대대대대ㅐ', '아크릴아아아ㅏ', '공예 캔버스'],
-          size: Size(width: 100.34, height: 50.28),
-          description: '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
-      Art(
-          artId: 2,
-          memberId: 1,
-          mainImageUrl:
-              'https://i.pinimg.com/564x/42/9f/14/429f142e244ac812ce81d32030e1191b.jpg',
-          style: '아크릴 캔버스',
-          title: 'Art Title 2',
-          year: 2023,
-          artTags: ['현대', '아크릴'],
-          size: Size(width: 100.28, height: 50.4),
-          description: '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
-              '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
-    ];
-    return {'artsList': artsList};
-    //TODO: api 호출
+    if (Env.env != Environ.dev) {
+      artsList = [
+        Art(
+            artId: 1,
+            memberId: 1,
+            mainImageUrl:
+            'https://i.pinimg.com/564x/82/0b/91/820b91b0ed6f1d37f4688da8eaf030fa.jpg',
+            style: '아크릴 캔버스',
+            title: 'Art Title',
+            year: 2021,
+            artTags: ['현대대대대대대ㅐ', '아크릴아아아ㅏ', '공예 캔버스'],
+            size: Size(width: 100.34, height: 50.28),
+            description: '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
+        Art(
+            artId: 2,
+            memberId: 1,
+            mainImageUrl:
+            'https://i.pinimg.com/564x/42/9f/14/429f142e244ac812ce81d32030e1191b.jpg',
+            style: '아크릴 캔버스',
+            title: 'Art Title 2',
+            year: 2023,
+            artTags: ['현대', '아크릴'],
+            size: Size(width: 100.28, height: 50.4),
+            description: '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.\n\n'
+                '혼란한 공간의 구원자라는 존재를 기존의 상식과는 다르게 비틀어 반영웅적인 이미지를 만들고.'),
+      ];
+      return {'artsList': artsList};
+    }
+
+    Map<String, dynamic> data = await networkAdapter
+        .get(path: '/arts/search', params: {'query': query, 'page': page, 'count': count}, token: signInViewModel.jwt);
+    //TODO: error 처리
+    if (data['statusCode'] == 200) {
+      artsList = data['body']
+          .map((item) {
+        return Art.fromJson(item);
+      })
+          .toList()
+          ?.cast<Art>();
+      return {'artsList': artsList};
+    } else
+      exit(200);
   }
 }

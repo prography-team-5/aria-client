@@ -8,10 +8,11 @@ class SearchViewModel extends GetxController {
   final RxList<Art> _arts = RxList<Art>([]);
   List<Art>? get arts => _arts.value;
 
-  Future<RxList<Art>> fetchArts(String keyword) async {
-    Map<String, dynamic> data = await artService.fetchSearchedArts(keyword);
+  Future<RxList<Art>> fetchArts(String query, int page, int count) async {
+    //TODO: 파라미터 변수로 변경
+    Map<String, dynamic> data = await artService.fetchSearchedArts('photo', 0, 5);
     _arts.value = data['artsList'];
-    print('search page get api 실행!!!!!!');
+    print('!!!!!!search page get api 실행!!!!!!');
     return _arts;
   }
 }
