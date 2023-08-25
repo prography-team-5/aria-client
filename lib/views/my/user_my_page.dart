@@ -1,4 +1,5 @@
 import 'package:aria_client/models/artist_info.dart';
+import 'package:aria_client/models/follow.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -11,7 +12,7 @@ import '../../viewmodels/auth/signin_viewmodel.dart';
 
 class UserMyPageViewModel extends GetxController {
   final SigninViewModel signinViewModel = Get.find<SigninViewModel>();
-  RxList<ArtistInfo> followeeList = <ArtistInfo>[].obs;
+  RxList<Followee> followeeList = <Followee>[].obs;
   RxBool isLoading = false.obs;
   Future<void> getFollowList() async {
     isLoading.value = true;
@@ -205,7 +206,7 @@ class UserMyPage extends StatelessWidget {
 }
 
 class FollowAvatar extends StatelessWidget {
-  final ArtistInfo follow;
+  final Followee follow;
   FollowAvatar({required this.follow});
   @override
   Widget build(BuildContext context) {
@@ -221,15 +222,14 @@ class FollowAvatar extends StatelessWidget {
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               image: DecorationImage(
-                image: NetworkImage(follow.profile_art_image_url),
+                image: NetworkImage(follow.followeeProfileImageUrl),
               ),
             ),
           ),
           Container(
             padding: EdgeInsets.all(5),
             child: Text(
-              "nickname",
-              // follow.nickname,
+              follow.followeeNickname,
               style: TextStyle(
                 fontSize: 12,
                 fontWeight: FontWeight.w500,
