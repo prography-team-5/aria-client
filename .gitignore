@@ -1,6 +1,12 @@
 # Env
 lib/helpers/env.dart
 
+# Firebase
+android/app/google-services.json
+lib/firebase_options.dart
+ios/Runner/GoogleService-Info.plist
+ios/firebase_app_id_file.json
+
 # pubspec.lock is automatically generated when dependencies are added in pubspec.yaml
 pubspec.lock
 
@@ -37,6 +43,9 @@ migrate_working_dir/
 .pub-cache/
 .pub/
 /build/
+
+# Web related
+web/
 
 # Symbolication related
 app.*.symbols

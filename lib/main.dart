@@ -6,11 +6,13 @@ import 'package:aria_client/views/my/my_page.dart';
 import 'package:aria_client/views/my/user_edit_profile_page.dart';
 import 'package:aria_client/views/my/user_my_page.dart';
 import 'package:aria_client/views/test/test_page.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 
+import 'firebase_options.dart';
 import 'views/art/detail_page.dart';
 import 'views/artist/add_art_page.dart';
 import 'views/artist/artist_home_page.dart';
@@ -22,13 +24,18 @@ import 'views/my/artist_edit_profile_page.dart';
 import 'views/my/artist_my_page.dart';
 import 'views/search/search_page.dart';
 
-void main() {
+void main() async {
   SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark.copyWith(
     statusBarIconBrightness: Brightness.light,
     statusBarColor: Colors.transparent,
   ));
-  KakaoSdk.init(nativeAppKey: Env.kakaoNativeKey);
+  KakaoSdk.init(
+      nativeAppKey: Env.kakaoNativeKey, javaScriptAppKey: Env.javascriptKey);
+  WidgetsFlutterBinding.ensureInitialized();
   InitialBinding().dependencies();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   final helper = SPHelper();
   helper.init();
   runApp(const MyApp());

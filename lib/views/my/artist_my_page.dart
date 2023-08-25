@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../../constants/colormap.dart';
 import '../../constants/text_styles.dart';
 
+// TODO: ArtistMyPage 작품 등록, 프로필 설정, 프로필 공유, 팔로워, 내 작품, 팔로워 페이지 구현
 class ArtistMyController extends GetxController {}
 
 class ArtistMyScrollController extends GetxController {
