@@ -216,13 +216,18 @@ class FollowAvatar extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            height: 100.0,
-            width: 100.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              image: DecorationImage(
-                image: NetworkImage(follow.followeeProfileImageUrl),
+          InkWell(
+            onTap: () {
+              Get.toNamed('/artist_home', arguments: follow.followeeId);
+            },
+            child: Container(
+              height: 100.0,
+              width: 100.0,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                image: DecorationImage(
+                  image: NetworkImage(follow.followeeProfileImageUrl),
+                ),
               ),
             ),
           ),
