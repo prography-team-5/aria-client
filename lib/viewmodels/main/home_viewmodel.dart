@@ -15,9 +15,9 @@ class HomeViewModel extends GetxController {
   }
 
   Future<RxList<Art>> fetchArtsApi() async {
-    Map<String, dynamic> data = await artService.fetchArtsApi(5);
+    Map<String, dynamic> data = await artService.fetchArtsApi(20);
     _arts.value = data['artsList'];
-    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!api 실행!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+    print('!!!!!!!!!!!!!!!!!!!!!!!!!!!fetchArtsApi api 실행!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
     return _arts;
   }
 }
