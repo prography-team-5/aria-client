@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+// import 'package:lottie/lottie.dart';
 
 class _TextStyles {
   static final Title = TextStyle(
@@ -113,7 +114,7 @@ class _HomePageState extends State<HomePage> {
               image: DecorationImage(
                 fit: BoxFit.fill,
                 image: NetworkImage(artsList[
-                homePageController.currentCardNotifier.value.toInt()]
+                        homePageController.currentCardNotifier.value.toInt()]
                     .mainImageUrl!),
               ),
             ),
@@ -145,14 +146,14 @@ class _HomePageState extends State<HomePage> {
                         ),
                         signinViewModel.member?.role != null
                             ? Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-                          child: GestureDetector(
-                            onTap: () => Get.toNamed('/my'),
-                            child: SvgPicture.asset(
-                              'assets/images/my_button.svg',
-                            ),
-                          ),
-                        )
+                                padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+                                child: GestureDetector(
+                                  onTap: () => Get.toNamed('/my'),
+                                  child: SvgPicture.asset(
+                                    'assets/images/my_button.svg',
+                                  ),
+                                ),
+                              )
                             : Container(),
                       ],
                       centerTitle: true,
@@ -166,10 +167,7 @@ class _HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         SizedBox(
-                          height: MediaQuery
-                              .of(context)
-                              .size
-                              .height -
+                          height: MediaQuery.of(context).size.height -
                               208, // H56 T24 SB24 BT64 B40
                           child: _cardsPageView(artsList),
                         ),
@@ -191,10 +189,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                             SizedBox(width: 9),
                             SizedBox(
-                              width: MediaQuery
-                                  .of(context)
-                                  .size
-                                  .width -
+                              width: MediaQuery.of(context).size.width -
                                   121, // L24 R24 BT64 SB 9
                               height: 64,
                               child: TextButton(
@@ -231,6 +226,17 @@ class _HomePageState extends State<HomePage> {
           return Text("${snapshot.error}");
         }
         // 기본적으로 로딩 Spinner
+        // return Container(
+        //   color: Colors.white,
+        //   child: Lottie.asset(
+        //     'assets/images/loading.json',
+        //     width: 68,
+        //     height: 48,
+        //     frameRate: FrameRate.max,
+        //     repeat: true,
+        //     animate: true,
+        //   ),
+        // );
         return CircularProgressIndicator();
       },
     );
@@ -243,14 +249,13 @@ class _HomePageState extends State<HomePage> {
       child: widget,
       builder: (context, widget) {
         final isUnder =
-        (ValueKey(homePageController.displayFront) != widget?.key);
+            (ValueKey(homePageController.displayFront) != widget?.key);
         var tilt = ((animation.value - 0.5).abs() - 0.5) * 0.003;
         tilt *= isUnder ? -1.0 : 1.0;
         final value =
-        isUnder ? min(rotateAnim.value, pi / 2) : rotateAnim.value;
+            isUnder ? min(rotateAnim.value, pi / 2) : rotateAnim.value;
         return Transform(
-          transform: Matrix4.rotationY(value)
-            ..setEntry(3, 0, tilt),
+          transform: Matrix4.rotationY(value)..setEntry(3, 0, tilt),
           child: widget,
           alignment: Alignment.center,
         );
@@ -280,25 +285,25 @@ class _HomePageState extends State<HomePage> {
     return GetBuilder<_HomePageController>(
       builder: (context) {
         return GestureDetector(
-            onTap: () =>
-            {
-              homePageController.flipping(),
-            },
-            child: homePageController.doNotFlip.value ? AnimatedSwitcher(
-              duration: Duration(milliseconds: 0),
-              child: homePageController.displayFront.value
-                  ? _cardFrontWidget(index, artsList)
-                  : RearWidget(index: index, artsList: artsList),
-            ) : AnimatedSwitcher(
-              duration: Duration(milliseconds: 1000),
-              transitionBuilder: __transitionBuilder,
-              switchInCurve: Curves.easeInBack,
-              switchOutCurve: Curves.easeInBack.flipped,
-              child: homePageController.displayFront.value
-                  ? _cardFrontWidget(index, artsList)
-                  : RearWidget(index: index, artsList: artsList),
-            )
-        );
+            onTap: () => {
+                  homePageController.flipping(),
+                },
+            child: homePageController.doNotFlip.value
+                ? AnimatedSwitcher(
+                    duration: Duration(milliseconds: 0),
+                    child: homePageController.displayFront.value
+                        ? _cardFrontWidget(index, artsList)
+                        : RearWidget(index: index, artsList: artsList),
+                  )
+                : AnimatedSwitcher(
+                    duration: Duration(milliseconds: 1000),
+                    transitionBuilder: __transitionBuilder,
+                    switchInCurve: Curves.easeInBack,
+                    switchOutCurve: Curves.easeInBack.flipped,
+                    child: homePageController.displayFront.value
+                        ? _cardFrontWidget(index, artsList)
+                        : RearWidget(index: index, artsList: artsList),
+                  ));
       },
     );
   }
@@ -313,56 +318,55 @@ class _HomePageState extends State<HomePage> {
       child: ClipPath(
         clipper: ShapeBorderClipper(
           shape:
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         ),
         child: LayoutBuilder(
-          builder: (context, constraints) =>
-              Container(
-                alignment: Alignment.centerLeft,
-                child: Column(
-                  children: [
-                    Image.network(
-                      art.mainImageUrl!,
-                      fit: BoxFit.cover,
-                      height: constraints.maxHeight - 136,
-                      width: double.infinity,
-                    ),
-                    Container(
-                      height: 96,
-                      margin: EdgeInsets.fromLTRB(24, 16, 24, 24),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+          builder: (context, constraints) => Container(
+            alignment: Alignment.centerLeft,
+            child: Column(
+              children: [
+                Image.network(
+                  art.mainImageUrl!,
+                  fit: BoxFit.cover,
+                  height: constraints.maxHeight - 136,
+                  width: double.infinity,
+                ),
+                Container(
+                  height: 96,
+                  margin: EdgeInsets.fromLTRB(24, 16, 24, 24),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 30,
+                        child: Text(
+                          art.title,
+                          style: _TextStyles.Title,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Row(
                         children: [
-                          SizedBox(
-                            height: 30,
-                            child: Text(
-                              art.title,
-                              style: _TextStyles.Title,
-                            ),
+                          Text(
+                            art.year.toString() +
+                                '  |  ' +
+                                art.style +
+                                '  |  ' +
+                                art.size.width.toString() +
+                                ' X ' +
+                                art.size.height.toString(),
+                            style: _TextStyles.Feature,
                           ),
-                          SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Text(
-                                art.year.toString() +
-                                    '  |  ' +
-                                    art.style +
-                                    '  |  ' +
-                                    art.size.width.toString() +
-                                    ' X ' +
-                                    art.size.height.toString(),
-                                style: _TextStyles.Feature,
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          _tagsWidget(art.artTags!),
                         ],
                       ),
-                    ),
-                  ],
+                      SizedBox(height: 16),
+                      _tagsWidget(art.artTags!),
+                    ],
+                  ),
                 ),
-              ),
+              ],
+            ),
+          ),
         ),
       ),
     );
@@ -379,15 +383,13 @@ class _HomePageState extends State<HomePage> {
       child: Row(
         children: artTags
             .map(
-              (item) =>
-              Container(
+              (item) => Container(
                 margin: EdgeInsets.fromLTRB(0, 0, 8, 0),
                 child: SizedBox(
                   width:
-                  TextLayoutHelper
-                      .getTextSize(text: item, style: _tagStyle)
-                      .width +
-                      18,
+                      TextLayoutHelper.getTextSize(text: item, style: _tagStyle)
+                              .width +
+                          18,
                   height: 24,
                   child: TextButton(
                     onPressed: null,
@@ -406,7 +408,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-        )
+            )
             .toList(),
       ),
     );
@@ -443,45 +445,45 @@ class RearWidget extends StatelessWidget {
                 shaderCallback: (Rect bounds) {
                   return homePageController.cardScrollOffset == 0.0
                       ? LinearGradient(
-                      begin: Alignment.center,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.white,
-                        Colors.white.withOpacity(0.04)
-                      ],
-                      stops: [0.8, 0.9],
-                      tileMode: TileMode.clamp)
-                      .createShader(bounds)
+                              begin: Alignment.center,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.white,
+                                Colors.white.withOpacity(0.04)
+                              ],
+                              stops: [0.8, 0.9],
+                              tileMode: TileMode.clamp)
+                          .createShader(bounds)
                       : homePageController.cardScrollOffset ==
-                      homePageController.cardScrollBottomOffset
-                      ? LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.center,
-                      colors: [
-                        Colors.white.withOpacity(0.04),
-                        Colors.white,
-                      ],
-                      stops: [0.1, 0.2],
-                      tileMode: TileMode.clamp)
-                      .createShader(bounds)
-                      : LinearGradient(
-                    begin: Alignment.center,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.white,
-                      Colors.white.withOpacity(0.04)
-                    ],
-                    stops: [0.8, 0.9],
-                    tileMode: TileMode.mirror,
-                  ).createShader(bounds);
+                              homePageController.cardScrollBottomOffset
+                          ? LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.center,
+                                  colors: [
+                                    Colors.white.withOpacity(0.04),
+                                    Colors.white,
+                                  ],
+                                  stops: [0.1, 0.2],
+                                  tileMode: TileMode.clamp)
+                              .createShader(bounds)
+                          : LinearGradient(
+                              begin: Alignment.center,
+                              end: Alignment.bottomCenter,
+                              colors: [
+                                Colors.white,
+                                Colors.white.withOpacity(0.04)
+                              ],
+                              stops: [0.8, 0.9],
+                              tileMode: TileMode.mirror,
+                            ).createShader(bounds);
                 },
                 child: Container(
                   margin: const EdgeInsets.all(24),
                   child: SingleChildScrollView(
                     controller: homePageController.cardScrollController,
                     child: Center(
-                      child:
-                      Text(style: _TextStyles.Description, art.description!),
+                      child: Text(
+                          style: _TextStyles.Description, art.description!),
                     ),
                   ),
                 ),
