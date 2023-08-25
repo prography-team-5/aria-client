@@ -12,13 +12,14 @@ class NetworkAdapter {
       required Map<String, dynamic> params,
       String? token}) async {
     String urlStr = this.baseURL + path;
-    if (params != {}) {
+    if (params.isNotEmpty) {
       urlStr += "?";
       for (var key in params.keys) {
         urlStr += '$key=${params[key]}&';
       }
     }
     final url = Uri.parse(urlStr);
+    print('[+] GET 요청 : ' + url.toString());
     final response = await http.get(url, headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -54,6 +55,9 @@ class NetworkAdapter {
       },
       body: json.encode(params),
     );
+    if (response.body == '') {
+      return {'statusCode': response.statusCode, 'body': {}};
+    }
     return {
       'statusCode': response.statusCode,
       'body': json.decode(utf8.decode(response.bodyBytes))
@@ -96,6 +100,9 @@ class NetworkAdapter {
       },
       body: json.encode(params),
     );
+    if (response.body == '') {
+      return {'statusCode': response.statusCode, 'body': {}};
+    }
     return {
       'statusCode': response.statusCode,
       'body': json.decode(utf8.decode(response.bodyBytes))

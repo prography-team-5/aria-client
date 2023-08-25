@@ -1,6 +1,7 @@
 import 'package:aria_client/helpers/sp_helper.dart';
 import 'package:aria_client/models/art.dart';
 import 'package:aria_client/viewmodels/search/search_viewmodel.dart';
+import 'package:aria_client/views/art/detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -70,8 +71,8 @@ class _SearchPageController extends GetxController {
     update();
   }
 
-  void saveSearchHistory(String keyword) async {
-    await helper.saveSearchHistory(keyword);
+  void saveSearchHistory(String query) async {
+    await helper.saveSearchHistory(query);
     update();
   }
 
@@ -80,8 +81,13 @@ class _SearchPageController extends GetxController {
     update();
   }
 
-  void fetchData(String keyword) async {
-    artsList = await searchViewModel.fetchArts(keyword);
+  void fillTextField(String query) {
+    textFieldController.text = query;
+    update();
+  }
+
+  void fetchData(String query, int page, int count) async {
+    artsList = await searchViewModel.fetchArts(query, page, count);
   }
 }
 
@@ -127,11 +133,12 @@ class _SearchPageState extends State<SearchPage> {
               child: TextButton(
                 onPressed: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
-                  final keyword = searchPageController.textFieldController.text;
-                  if (keyword.isNotEmpty) {
-                    searchPageController.saveSearchHistory(keyword);
-                    searchPageController.fetchData(keyword);
+                  final query = searchPageController.textFieldController.text;
+                  if (query.isNotEmpty) {
+                    searchPageController.saveSearchHistory(query);
+                    //TODO: 무한스크롤로 만들고 변수로 변경
                     searchPageController.changeMode('after');
+                    searchPageController.fetchData(query, 0, 5);
                   }
                 },
                 child: Text(
@@ -215,15 +222,18 @@ class _SearchPageState extends State<SearchPage> {
             padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
             child: ListTile(
               onTap: () {
+                searchPageController.fillTextField(reversedList[index]);
                 FocusManager.instance.primaryFocus?.unfocus();
-                searchPageController.fetchData(reversedList[index]);
+                //TODO: 무한스크롤로 만들고 변수로 변경
                 searchPageController.changeMode('after');
+                searchPageController.fetchData(reversedList[index], 0, 5);
               },
               contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
-              title: Text(reversedList[index], style: _TextStyles.SearchHistory),
+              title:
+                  Text(reversedList[index], style: _TextStyles.SearchHistory),
               trailing: GestureDetector(
                 onTap: () async {
-                  searchPageController.removeSearchHistory(index);
+                  searchPageController.removeSearchHistory(historyList.length - index - 1);
                 },
                 child: SvgPicture.asset(
                   'assets/images/cancel_button.svg',
@@ -249,23 +259,33 @@ class _SearchPageState extends State<SearchPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // SizedBox(height: 24),
-                  ClipPath(
-                    clipper: ShapeBorderClipper(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                    child: Image.network(
-                      artsList[index].mainImageUrl!,
-                      fit: BoxFit.cover,
-                      height: 407,
-                      width: double.infinity,
+                  GestureDetector(
+                    onTap: () {
+                      //TODO: arguments를 artId 변수로 수정
+                      Get.to(() => DetailPage(artId: 3));
+                    },
+                    child: ClipPath(
+                      clipper: ShapeBorderClipper(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
+                      ),
+                      child: Image.network(
+                        artsList[index].mainImageUrl!,
+                        fit: BoxFit.cover,
+                        height: 407,
+                        width: double.infinity,
+                      ),
                     ),
                   ),
                   SizedBox(height: 16),
                   Row(
                     children: [
-                      Text(artsList[index].title, style: _TextStyles.ArtTitle),
+                      GestureDetector(
+                          onTap: () {
+                            Get.to(() => DetailPage(artId: 3));
+                          },
+                          child: Text(artsList[index].title,
+                              style: _TextStyles.ArtTitle)),
                       Spacer(),
                       GestureDetector(
                         onTap: () {

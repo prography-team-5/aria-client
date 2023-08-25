@@ -57,8 +57,10 @@ class UserMyPage extends StatelessWidget {
                 padding: EdgeInsets.fromLTRB(0, 16, 12, 16),
                 child: TextButton(
                   onPressed: () async {
-                    final uri = Uri.parse('https://google.com');
-                    if (!await launchUrl(uri))
+                    final uri =
+                        Uri.parse('https://forms.gle/DkAtGJ6jdaFCi4ad7');
+                    if (!await launchUrl(uri,
+                        mode: LaunchMode.externalApplication))
                       throw Exception('Could not launch ${uri.toString()}');
                   },
                   child: Text(
@@ -85,7 +87,8 @@ class UserMyPage extends StatelessWidget {
             elevation: 0.0, // appBar 그림자 제거
           ),
         ),
-        body: ListView(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
               height: 147 + 140,
@@ -143,6 +146,10 @@ class UserMyPage extends StatelessWidget {
                       height: 100.0,
                       width: 100.0,
                       child: Image.asset('assets/images/profile_avatar.png'),
+                      // TODO: s3 버켓 해결 후 수정
+                      // child: Image.network(
+                      //   controller.signinViewModel.member!.profileImageUrl,
+                      // ),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                       ),
@@ -155,19 +162,35 @@ class UserMyPage extends StatelessWidget {
               padding: EdgeInsets.all(15),
               child: Text('팔로우한 작가'),
             ),
-            Container(
-              height: 500,
-              padding: EdgeInsets.all(15),
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 1,
-                  crossAxisSpacing: 10,
-                  mainAxisSpacing: 10,
+            Flexible(
+              child: Container(
+                padding: EdgeInsets.all(15),
+                child: GetBuilder<UserMyPageViewModel>(
+                  builder: (controller) {
+                    return controller.followeeList.length == 0
+                        ? const Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 1,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 20,
+                              mainAxisExtent: 130,
+                            ),
+                            itemCount: controller.followeeList.length,
+                            itemBuilder: (context, index) {
+                              return Obx(
+                                () => FollowAvatar(
+                                  follow: controller.followeeList[index],
+                                ),
+                              );
+                            },
+                          );
+                  },
                 ),
-                itemCount: controller.followeeList.length,
-                itemBuilder: (context, index) =>
-                    FollowAvatar(follow: controller.followeeList[index]),
               ),
             ),
           ],
@@ -183,17 +206,18 @@ class FollowAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      // width: 150,
+      // height: 150,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
+            height: 100.0,
+            width: 100.0,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: Colors.amber,
               image: DecorationImage(
-                image: AssetImage('assets/images/profile_avatar.png'),
-                // image: NetworkImage(follow.profile_art_image_url),
-                fit: BoxFit.cover,
+                image: NetworkImage(follow.profile_art_image_url),
               ),
             ),
           ),

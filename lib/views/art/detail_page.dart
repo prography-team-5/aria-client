@@ -4,6 +4,8 @@ import 'package:aria_client/viewmodels/art/detail_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:expandable_page_view/expandable_page_view.dart';
+import 'package:dots_indicator/dots_indicator.dart';
 
 class _TextStyles {
   static final Title = TextStyle(
@@ -48,8 +50,29 @@ class _TextStyles {
       letterSpacing: -0.25);
 }
 
+final GlobalKey _artDetailsAreaKey = GlobalKey();
+
+_getPosition(GlobalKey key) {
+  if (key.currentContext != null) {
+    final RenderBox renderBox =
+        key.currentContext!.findRenderObject() as RenderBox;
+    final position = renderBox.localToGlobal(Offset.zero);
+    return position;
+  }
+}
+
+class _DetailPageController extends GetxController {
+  final currentPageNotifier = ValueNotifier<int>(0);
+}
+
 class DetailPage extends StatelessWidget {
-  final _DetailViewModel = DetailViewModel();
+  final int artId;
+
+  DetailPage({super.key, required this.artId});
+
+  final detailViewModel = DetailViewModel();
+  final detailPageController = _DetailPageController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -75,35 +98,65 @@ class DetailPage extends StatelessWidget {
         ),
       ),
       body: FutureBuilder(
-        future: _DetailViewModel.fetchArtDetails(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            Rxn<Art> art = snapshot.data!;
-            return SingleChildScrollView(
-              child: Column(
-                children: [
-                  Image.network(
-                    art.value!.imagesUrl![0],
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                  ),
-                  _artDetailsArea(art),
-                  Container(
-                    color: ColorMap.gray_100,
-                    width: double.infinity,
-                    height: 8,
-                  ),
-                  _artShareArea(),
-                ],
+          future: detailViewModel.fetchArtDetails(artId),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              Rxn<Art> art = snapshot.data!;
+              print(art);
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _artsPageView(art.value!.imagesUrl!),
+                    _artDetailsArea(art),
+                    Container(
+                      color: ColorMap.gray_100,
+                      width: double.infinity,
+                      height: 8,
+                    ),
+                    _artShareArea(art.value!.artistSocialLinks!),
+                  ],
+                ),
+              );
+            } else if (snapshot.hasError) {
+              return Text("${snapshot.error}");
+            }
+            // 기본적으로 로딩 Spinner
+            return CircularProgressIndicator();
+          }),
+    );
+  }
+
+  Widget _artsPageView(List<String> imagesUrl) {
+    return ExpandablePageView.builder(
+      itemCount: imagesUrl.length,
+      itemBuilder: (BuildContext context, int index) {
+        // var dotPosition = _getPosition(_artDetailsAreaKey);
+        // print(dotPosition.dx);
+        // print(dotPosition.dy);
+        return Stack(
+          children: [
+            Image.network(
+              imagesUrl[index],
+              width: double.infinity,
+            ),
+            //TODO: width 값이 정확하지 않음...
+            Transform.translate(
+              offset: Offset(MediaQuery.of(context).size.width / 2 * 0.845, 12),
+              child: DotsIndicator(
+                dotsCount: imagesUrl.length,
+                position: detailPageController.currentPageNotifier.value,
+                decorator: DotsDecorator(
+                  color: ColorMap.gray_700.withOpacity(0.3), // Inactive color
+                  activeColor: ColorMap.mainColor,
+                ),
               ),
-            );
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-          // 기본적으로 로딩 Spinner
-          return CircularProgressIndicator();
-        }
-      ),
+            ),
+          ],
+        );
+      },
+      onPageChanged: (int index) {
+        detailPageController.currentPageNotifier.value = index;
+      },
     );
   }
 
@@ -111,17 +164,19 @@ class DetailPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 16, 24, 0),
       child: Column(
+        key: _artDetailsAreaKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
+              //TODO: 작가프로필이미지 이슈 해결되면 주석 해제, 지우지 말 것!!!
               ClipPath(
                 clipper: ShapeBorderClipper(
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(100)),
                 ),
                 child: Image.network(
-                  'https://i.pinimg.com/564x/9c/d3/ba/9cd3ba37ee042e5d610c100670473f18.jpg',
+                  art.value!.artistProfileImageUrl!,
                   fit: BoxFit.cover,
                   width: 48,
                   height: 48,
@@ -132,11 +187,10 @@ class DetailPage extends StatelessWidget {
             ],
           ),
           SizedBox(height: 16),
-          Text(art.value!.title,
-              style: _TextStyles.ArtTitle),
+          Text(art.value!.title, style: _TextStyles.ArtTitle),
           SizedBox(height: 16),
           Text(
-            art.value!.description,
+            art.value!.description!,
             style: _TextStyles.ArtDescription,
           ),
           SizedBox(height: 40),
@@ -178,7 +232,9 @@ class DetailPage extends StatelessWidget {
                       ),
                       Spacer(),
                       Text(
-                        art.value!.size.width.toString() + ' x ' + art.value!.size.height.toString(),
+                        art.value!.size.width.toString() +
+                            ' x ' +
+                            art.value!.size.height.toString(),
                         style: _TextStyles.ArtDetailDescription,
                       ),
                     ],
@@ -206,94 +262,128 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _artShareArea() {
+  Widget _artShareArea(List<Sns> artistSocialLinks) {
+    print(artistSocialLinks);
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: 40),
-        Text(
-          '작품이 마음에 드셨나요?\n작가에게 응원의 메시지를 보내보세요.',
-          style: _TextStyles.ArtShareMessage,
-          textAlign: TextAlign.center,
-        ),
-        SizedBox(height: 24),
-        Container(
-          width: 262,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              OutlinedButton(
-                onPressed: () {
-                  // Get.toNamed('/test_page');
-                },
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1, color: ColorMap.gray_200),
-                    fixedSize: Size(56, 56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
+        artistSocialLinks.length != 0
+            ? Column(
+                children: [
+                  SizedBox(height: 40),
+                  Text(
+                    '작품이 마음에 드셨나요?\n작가에게 응원의 메시지를 보내보세요.',
+                    style: _TextStyles.ArtShareMessage,
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(height: 24),
+                  Container(
+                    // width: 262,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        artistSocialLinks.length,
+                        (index) {
+                          if (artistSocialLinks[index].socialType ==
+                              'INSTAGRAM') {
+                            return OutlinedButton(
+                              onPressed: () {
+                                // Get.toNamed('/test_page');
+                              },
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 1, color: ColorMap.gray_200),
+                                  fixedSize: Size(56, 56),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.all(16)),
+                              child: SvgPicture.asset(
+                                'assets/images/instagram_button.svg',
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
+                          if (artistSocialLinks.length > 1) {
+                            SizedBox(width: 12.67);
+                          }
+                          if (artistSocialLinks[index].socialType ==
+                              'YOUTUBE') {
+                            return OutlinedButton(
+                              onPressed: () {
+                                // Get.toNamed('/test_page');
+                              },
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 1, color: ColorMap.gray_200),
+                                  fixedSize: Size(56, 56),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.all(16)),
+                              child: SvgPicture.asset(
+                                'assets/images/youtube_button.svg',
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
+                          if (artistSocialLinks.length > 2) {
+                            SizedBox(width: 12.67);
+                          }
+                          if (artistSocialLinks[index].socialType == 'KAKAO') {
+                            return OutlinedButton(
+                              onPressed: () {
+                                // Get.toNamed('/test_page');
+                              },
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 1, color: ColorMap.gray_200),
+                                  fixedSize: Size(56, 56),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.all(16)),
+                              child: SvgPicture.asset(
+                                'assets/images/kakaotalk_button.svg',
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
+                          if (artistSocialLinks.length > 3) {
+                            SizedBox(width: 12.67);
+                          }
+                          if (artistSocialLinks[index].socialType == 'EMAIL') {
+                            return OutlinedButton(
+                              onPressed: () {
+                                // Get.toNamed('/test_page');
+                              },
+                              style: OutlinedButton.styleFrom(
+                                  side: BorderSide(
+                                      width: 1, color: ColorMap.gray_200),
+                                  fixedSize: Size(56, 56),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
+                                  ),
+                                  minimumSize: Size.zero,
+                                  padding: EdgeInsets.all(16)),
+                              child: SvgPicture.asset(
+                                'assets/images/email_button.svg',
+                                fit: BoxFit.cover,
+                              ),
+                            );
+                          }
+                          return Container();
+                        },
+                      ),
                     ),
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.all(16)),
-                child: SvgPicture.asset(
-                  'assets/images/instagram_button.svg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  // Get.toNamed('/test_page');
-                },
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1, color: ColorMap.gray_200),
-                    fixedSize: Size(56, 56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.all(16)),
-                child: SvgPicture.asset(
-                  'assets/images/youtube_button.svg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  // Get.toNamed('/test_page');
-                },
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1, color: ColorMap.gray_200),
-                    fixedSize: Size(56, 56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.all(16)),
-                child: SvgPicture.asset(
-                  'assets/images/kakaotalk_button.svg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-              OutlinedButton(
-                onPressed: () {
-                  // Get.toNamed('/test_page');
-                },
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1, color: ColorMap.gray_200),
-                    fixedSize: Size(56, 56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.all(16)),
-                child: SvgPicture.asset(
-                  'assets/images/kakaotalk_button.svg',
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ],
-          ),
-        ),
-        SizedBox(height: 40),
+                  ),
+                  SizedBox(height: 40),
+                ],
+              )
+            : Container()
       ],
     );
   }

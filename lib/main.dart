@@ -60,7 +60,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/user_edit_profile", page: () => UserEditProfilePage()),
         GetPage(name: "/search", page: () => SearchPage()),
         GetPage(name: "/artist_home", page: () => ArtistHomePage()),
-        GetPage(name: "/detail", page: () => DetailPage()),
+        GetPage(name: "/detail", page: () => DetailPage(artId: 3)),
       ],
     );
   }
