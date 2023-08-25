@@ -54,22 +54,12 @@ class _SearchPageController extends GetxController {
   Status status = Status.before;
   final searchViewModel = SearchViewModel();
   RxList<Art> artsList = RxList<Art>([]);
-  // RxString keyword = ''.obs;
 
   @override
   void dispose() {
     textFieldController.dispose();
     super.dispose();
   }
-
-  // @override
-  // void onInit() {
-  //   super.onInit();
-  //   textFieldController.addListener(() {
-  //     textFieldController.text = keyword.value;
-  //     update();
-  //   });
-  // }
 
   //TODO: 필요없는 update() 삭제하기
   void changeMode(String mode) async {
@@ -81,8 +71,8 @@ class _SearchPageController extends GetxController {
     update();
   }
 
-  void saveSearchHistory(String keyword) async {
-    await helper.saveSearchHistory(keyword);
+  void saveSearchHistory(String query) async {
+    await helper.saveSearchHistory(query);
     update();
   }
 
@@ -91,13 +81,13 @@ class _SearchPageController extends GetxController {
     update();
   }
 
-  void fillTextField(String keyword) {
-    textFieldController.text = keyword;
+  void fillTextField(String query) {
+    textFieldController.text = query;
     update();
   }
 
-  void fetchData(String keyword) async {
-    artsList = await searchViewModel.fetchArts(keyword);
+  void fetchData(String query, int page, int count) async {
+    artsList = await searchViewModel.fetchArts(query, page, count);
   }
 }
 
@@ -143,10 +133,11 @@ class _SearchPageState extends State<SearchPage> {
               child: TextButton(
                 onPressed: () async {
                   FocusManager.instance.primaryFocus?.unfocus();
-                  final keyword = searchPageController.textFieldController.text;
-                  if (keyword.isNotEmpty) {
-                    searchPageController.saveSearchHistory(keyword);
-                    searchPageController.fetchData(keyword);
+                  final query = searchPageController.textFieldController.text;
+                  if (query.isNotEmpty) {
+                    searchPageController.saveSearchHistory(query);
+                    //TODO: 무한스크롤로 만들고 변수로 변경
+                    searchPageController.fetchData(query, 0, 5);
                     searchPageController.changeMode('after');
                   }
                 },
@@ -233,7 +224,8 @@ class _SearchPageState extends State<SearchPage> {
               onTap: () {
                 searchPageController.fillTextField(reversedList[index]);
                 FocusManager.instance.primaryFocus?.unfocus();
-                searchPageController.fetchData(reversedList[index]);
+                //TODO: 무한스크롤로 만들고 변수로 변경
+                searchPageController.fetchData(reversedList[index], 0, 5);
                 searchPageController.changeMode('after');
               },
               contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
@@ -267,7 +259,6 @@ class _SearchPageState extends State<SearchPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // SizedBox(height: 24),
                   GestureDetector(
                     onTap: () {
                       //TODO: arguments를 artId 변수로 수정
