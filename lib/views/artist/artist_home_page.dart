@@ -147,15 +147,12 @@ class ArtistHomePage extends StatelessWidget {
                   Positioned(
                     top: 147 - 50,
                     child: Container(
-                      height: 100.0,
-                      width: 100.0,
-                      // TODO: s3 버켓 해결 후 수정
-                      // child: Image.asset('assets/images/profile_avatar.png'),
-                      child: Image.network(
-                        controller.signinViewModel.member!.profileImageUrl,
-                      ),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
+                      height: 80,
+                      width: 80,
+                      child: CircleAvatar(
+                        backgroundImage: NetworkImage(
+                          controller.signinViewModel.member!.profileImageUrl,
+                        ),
                       ),
                     ),
                   )
