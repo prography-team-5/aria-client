@@ -45,7 +45,7 @@ class Art {
         size: Size.fromJson(json['size']),
         description: json['description'],
         artistSocialLinks: (json['artistSocialLinks'] as List?)
-            ?.map((item) => item as Sns)
+            ?.map((item) => Sns.fromJson(item))
             .toList(),
       );
 

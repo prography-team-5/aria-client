@@ -88,6 +88,7 @@ class _SearchPageController extends GetxController {
 
   void fetchData(String query, int page, int count) async {
     artsList = await searchViewModel.fetchArts(query, page, count);
+    update();
   }
 }
 
@@ -261,8 +262,7 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      //TODO: arguments를 artId 변수로 수정
-                      Get.to(() => DetailPage(artId: 3));
+                      Get.to(() => DetailPage(artId: artsList[index].artId!));
                     },
                     child: ClipPath(
                       clipper: ShapeBorderClipper(
@@ -282,7 +282,7 @@ class _SearchPageState extends State<SearchPage> {
                     children: [
                       GestureDetector(
                           onTap: () {
-                            Get.to(() => DetailPage(artId: 3));
+                            Get.to(() => DetailPage(artId: artsList[index].artId!));
                           },
                           child: Text(artsList[index].title,
                               style: _TextStyles.ArtTitle)),

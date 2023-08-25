@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+// import 'package:lottie/lottie.dart';
 
 class _TextStyles {
   static final Title = TextStyle(
@@ -46,6 +47,7 @@ class _HomePageController extends GetxController {
 
   Key key = ValueKey(false);
   RxBool displayFront = true.obs;
+  RxBool doNotFlip = false.obs;
   RxDouble cardScrollOffset = 0.0.obs;
   RxDouble cardScrollBottomOffset = 0.0.obs;
 
@@ -72,6 +74,13 @@ class _HomePageController extends GetxController {
 
   void flipping() {
     displayFront.value = !displayFront.value;
+    doNotFlip.value = false;
+    update();
+  }
+
+  void makeFront() {
+    displayFront.value = true;
+    doNotFlip.value = true;
     update();
   }
 
@@ -217,6 +226,17 @@ class _HomePageState extends State<HomePage> {
           return Text("${snapshot.error}");
         }
         // 기본적으로 로딩 Spinner
+        // return Container(
+        //   color: Colors.white,
+        //   child: Lottie.asset(
+        //     'assets/images/loading.json',
+        //     width: 68,
+        //     height: 48,
+        //     frameRate: FrameRate.max,
+        //     repeat: true,
+        //     animate: true,
+        //   ),
+        // );
         return CircularProgressIndicator();
       },
     );
@@ -252,7 +272,8 @@ class _HomePageState extends State<HomePage> {
       },
       onPageChanged: (int index) {
         homePageController.currentCardNotifier.value = index.obs;
-        //TODO: 여기에 함수 추가
+        homePageController.makeFront();
+        //TODO: 여기에 artsList 더 가져오는 함수 추가
         if (index == artsList.length - 1) {
           // homePageController.fetchMoreData();
         }
@@ -264,26 +285,31 @@ class _HomePageState extends State<HomePage> {
     return GetBuilder<_HomePageController>(
       builder: (context) {
         return GestureDetector(
-          onTap: () => {
-            homePageController.flipping(),
-          },
-          child: AnimatedSwitcher(
-            duration: Duration(milliseconds: 1000),
-            transitionBuilder: __transitionBuilder,
-            switchInCurve: Curves.easeInBack,
-            switchOutCurve: Curves.easeInBack.flipped,
-            child: homePageController.displayFront.value
-                ? _cardFrontWidget(index, artsList)
-                : RearWidget(index: index, artsList: artsList),
-          ),
-        );
+            onTap: () => {
+                  homePageController.flipping(),
+                },
+            child: homePageController.doNotFlip.value
+                ? AnimatedSwitcher(
+                    duration: Duration(milliseconds: 0),
+                    child: homePageController.displayFront.value
+                        ? _cardFrontWidget(index, artsList)
+                        : RearWidget(index: index, artsList: artsList),
+                  )
+                : AnimatedSwitcher(
+                    duration: Duration(milliseconds: 1000),
+                    transitionBuilder: __transitionBuilder,
+                    switchInCurve: Curves.easeInBack,
+                    switchOutCurve: Curves.easeInBack.flipped,
+                    child: homePageController.displayFront.value
+                        ? _cardFrontWidget(index, artsList)
+                        : RearWidget(index: index, artsList: artsList),
+                  ));
       },
     );
   }
 
   Widget _cardFrontWidget(int index, RxList<Art> artsList) {
     final art = artsList[index];
-    print(art.artId);
     return Card(
       key: homePageController.key,
       shape: RoundedRectangleBorder(
@@ -456,8 +482,8 @@ class RearWidget extends StatelessWidget {
                   child: SingleChildScrollView(
                     controller: homePageController.cardScrollController,
                     child: Center(
-                      child:
-                          Text(style: _TextStyles.Description, art.description!),
+                      child: Text(
+                          style: _TextStyles.Description, art.description!),
                     ),
                   ),
                 ),
