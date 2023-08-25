@@ -113,7 +113,7 @@ class DetailPage extends StatelessWidget {
                       width: double.infinity,
                       height: 8,
                     ),
-                    _artShareArea(),
+                    _artShareArea(art.value!.artistSocialLinks!),
                   ],
                 ),
               );
@@ -169,6 +169,7 @@ class DetailPage extends StatelessWidget {
         children: [
           Row(
             children: [
+              //TODO: 작가프로필이미지 이슈 해결되면 주석 해제, 지우지 말 것!!!
               ClipPath(
                 clipper: ShapeBorderClipper(
                   shape: RoundedRectangleBorder(
@@ -261,7 +262,7 @@ class DetailPage extends StatelessWidget {
     );
   }
 
-  Widget _artShareArea() {
+  Widget _artShareArea(List<Sns> artistSocialLinks) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -328,24 +329,76 @@ class DetailPage extends StatelessWidget {
                   fit: BoxFit.cover,
                 ),
               ),
-              OutlinedButton(
-                onPressed: () {
-                  // Get.toNamed('/test_page');
-                },
-                style: OutlinedButton.styleFrom(
-                    side: BorderSide(width: 1, color: ColorMap.gray_200),
-                    fixedSize: Size(56, 56),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    minimumSize: Size.zero,
-                    padding: EdgeInsets.all(16)),
-                child: SvgPicture.asset(
-                  'assets/images/kakaotalk_button.svg',
-                  fit: BoxFit.cover,
-                ),
-              ),
             ],
+          ),
+        ),
+        Container(
+          width: 262,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: List.generate(
+              artistSocialLinks.length,
+              (index) {
+                if (artistSocialLinks[index].socialType == 'INSTAGRAM') {
+                  return OutlinedButton(
+                    onPressed: () {
+                      // Get.toNamed('/test_page');
+                    },
+                    style: OutlinedButton.styleFrom(
+                        side: BorderSide(width: 1, color: ColorMap.gray_200),
+                        fixedSize: Size(56, 56),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.all(16)),
+                    child: SvgPicture.asset(
+                      'assets/images/instagram_button.svg',
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }
+                if (artistSocialLinks[index].socialType == 'YOUTUBE') {
+                  return OutlinedButton(
+                    onPressed: () {
+                      // Get.toNamed('/test_page');
+                    },
+                    style: OutlinedButton.styleFrom(
+                        side: BorderSide(width: 1, color: ColorMap.gray_200),
+                        fixedSize: Size(56, 56),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.all(16)),
+                    child: SvgPicture.asset(
+                      'assets/images/youtube_button.svg',
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }
+                if (artistSocialLinks[index].socialType == 'KAKAO') {
+                  return OutlinedButton(
+                    onPressed: () {
+                      // Get.toNamed('/test_page');
+                    },
+                    style: OutlinedButton.styleFrom(
+                        side: BorderSide(width: 1, color: ColorMap.gray_200),
+                        fixedSize: Size(56, 56),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.all(16)),
+                    child: SvgPicture.asset(
+                      'assets/images/kakaotalk_button.svg',
+                      fit: BoxFit.cover,
+                    ),
+                  );
+                }
+                return Container();
+              },
+            ),
           ),
         ),
         SizedBox(height: 40),
