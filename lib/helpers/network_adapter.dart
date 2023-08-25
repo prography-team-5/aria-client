@@ -125,9 +125,6 @@ class NetworkAdapter {
       },
       body: json.encode(params),
     );
-    return {
-      'statusCode': response.statusCode,
-      'body': json.decode(utf8.decode(response.bodyBytes))
-    };
+    return {'statusCode': response.statusCode, 'body': ''};
   }
 }

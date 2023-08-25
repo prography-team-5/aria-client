@@ -21,3 +21,24 @@ class Follow {
         'followee_id': followee_id,
       };
 }
+
+class Followee {
+  final int followId;
+  final int followeeId;
+  final String followeeNickname;
+  final String followeeProfileImageUrl;
+
+  Followee({
+    required this.followId,
+    required this.followeeId,
+    required this.followeeNickname,
+    required this.followeeProfileImageUrl,
+  });
+
+  factory Followee.fromJson(Map<String, dynamic> json) => Followee(
+        followId: json['followId'],
+        followeeId: json['followeeId'],
+        followeeNickname: json['followeeNickname'],
+        followeeProfileImageUrl: json['followeeProfileImageUrl'],
+      );
+}

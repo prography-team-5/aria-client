@@ -194,7 +194,13 @@ class _HomePageState extends State<HomePage> {
                               height: 64,
                               child: TextButton(
                                 //TODO: artist 페이지로 이동
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.toNamed('/artist_home',
+                                      arguments: artsList[homePageController
+                                              .currentCardNotifier.value
+                                              .toInt()]
+                                          .memberId);
+                                },
                                 child: FittedBox(
                                   child: Text(
                                     '전시회 방문하기',
@@ -279,6 +285,10 @@ class _HomePageState extends State<HomePage> {
         }
       },
     );
+  }
+
+  Widget _emptyAnimation(Widget widget, Animation<double> animation) {
+    return widget;
   }
 
   Widget _cardFlipAnimation(int index, RxList<Art> artsList) {
