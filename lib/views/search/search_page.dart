@@ -88,6 +88,7 @@ class _SearchPageController extends GetxController {
 
   void fetchData(String query, int page, int count) async {
     artsList = await searchViewModel.fetchArts(query, page, count);
+    update();
   }
 }
 
