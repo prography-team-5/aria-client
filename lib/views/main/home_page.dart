@@ -39,6 +39,7 @@ class _TextStyles {
 }
 
 class _HomePageController extends GetxController {
+  final homeViewModel = HomeViewModel();
   final cardScrollController = ScrollController();
   final pageController = PageController(initialPage: 0);
   final currentCardNotifier = ValueNotifier<RxInt>(0.obs);
@@ -51,17 +52,21 @@ class _HomePageController extends GetxController {
   @override
   void onClose() {
     cardScrollController.dispose();
+    pageController.dispose();
     super.onClose();
   }
 
   @override
   void onInit() {
     super.onInit();
+    // displayFront = List.generate(artsList.length, (index) => true.obs);
+    // print(displayFront);
+
     cardScrollController.addListener(() {
       cardScrollOffset.value = cardScrollController.offset;
       cardScrollBottomOffset.value =
           cardScrollController.position.maxScrollExtent;
-      // update();
+      update();
     });
   }
 
@@ -69,6 +74,13 @@ class _HomePageController extends GetxController {
     displayFront.value = !displayFront.value;
     update();
   }
+
+// void fetchMoreData() async {
+//   RxList<Art> moreArtsList = await homeViewModel.fetchArtsApi();
+//   print('갖고오나?');
+//   // artsList.add(moreArtsList);
+//   print('더 많은 데이터를 가져와라!!!');
+// }
 }
 
 class HomePage extends StatefulWidget {
@@ -77,14 +89,13 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _homeViewModel = HomeViewModel();
   final homePageController = Get.put(_HomePageController());
 
   @override
   Widget build(BuildContext context) {
     final signinViewModel = Get.put(SigninViewModel());
     return FutureBuilder(
-      future: _homeViewModel.fetchArtsApi(),
+      future: homePageController.homeViewModel.fetchArtsApi(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           RxList<Art> artsList = snapshot.data!;
@@ -142,61 +153,62 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   body: Container(
-                      margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height -
-                                208, // H56 T24 SB24 BT64 B40
-                            child: _cardsPageView(artsList),
-                          ),
-                          SizedBox(height: 24),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              TextButton(
-                                //TODO: 시스템 공유 옵션 사용
+                    margin: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height -
+                              208, // H56 T24 SB24 BT64 B40
+                          child: _cardsPageView(artsList),
+                        ),
+                        SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            TextButton(
+                              //TODO: 시스템 공유 옵션 사용
+                              onPressed: () {},
+                              child: SvgPicture.asset(
+                                'assets/images/share_button.svg',
+                              ),
+                              style: TextButton.styleFrom(
+                                backgroundColor: ColorMap.subColor,
+                                shape: const CircleBorder(),
+                                fixedSize: Size(64, 64),
+                              ),
+                            ),
+                            SizedBox(width: 9),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width -
+                                  121, // L24 R24 BT64 SB 9
+                              height: 64,
+                              child: TextButton(
+                                //TODO: artist 페이지로 이동
                                 onPressed: () {},
-                                child: SvgPicture.asset(
-                                  'assets/images/share_button.svg',
+                                child: FittedBox(
+                                  child: Text(
+                                    '전시회 방문하기',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
                                 ),
                                 style: TextButton.styleFrom(
-                                  backgroundColor: ColorMap.subColor,
-                                  shape: const CircleBorder(),
-                                  fixedSize: Size(64, 64),
-                                ),
-                              ),
-                              SizedBox(width: 9),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width -
-                                    121, // L24 R24 BT64 SB 9
-                                height: 64,
-                                child: TextButton(
-                                  //TODO: artist 페이지로 이동
-                                  onPressed: () {},
-                                  child: FittedBox(
-                                    child: Text(
-                                      '전시회 방문하기',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ),
-                                  ),
-                                  style: TextButton.styleFrom(
-                                    backgroundColor: ColorMap.mainColor,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(100),
-                                    ),
+                                  backgroundColor: ColorMap.mainColor,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(100),
                                   ),
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      )),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
@@ -240,31 +252,38 @@ class _HomePageState extends State<HomePage> {
       },
       onPageChanged: (int index) {
         homePageController.currentCardNotifier.value = index.obs;
+        //TODO: 여기에 함수 추가
+        if (index == artsList.length - 1) {
+          // homePageController.fetchMoreData();
+        }
       },
     );
   }
 
   Widget _cardFlipAnimation(int index, RxList<Art> artsList) {
-    return GetBuilder<_HomePageController>(builder: (context) {
-      return GestureDetector(
-        onTap: () => {
-          homePageController.flipping(),
-        },
-        child: AnimatedSwitcher(
-          duration: Duration(milliseconds: 1000),
-          transitionBuilder: __transitionBuilder,
-          child: homePageController.displayFront.value
-              ? _cardFrontWidget(index, artsList)
-              : RearWidget(index: index, artsList: artsList),
-          switchInCurve: Curves.easeInBack,
-          switchOutCurve: Curves.easeInBack.flipped,
-        ),
-      );
-    });
+    return GetBuilder<_HomePageController>(
+      builder: (context) {
+        return GestureDetector(
+          onTap: () => {
+            homePageController.flipping(),
+          },
+          child: AnimatedSwitcher(
+            duration: Duration(milliseconds: 1000),
+            transitionBuilder: __transitionBuilder,
+            switchInCurve: Curves.easeInBack,
+            switchOutCurve: Curves.easeInBack.flipped,
+            child: homePageController.displayFront.value
+                ? _cardFrontWidget(index, artsList)
+                : RearWidget(index: index, artsList: artsList),
+          ),
+        );
+      },
+    );
   }
 
   Widget _cardFrontWidget(int index, RxList<Art> artsList) {
     final art = artsList[index];
+    print(art.artId);
     return Card(
       key: homePageController.key,
       shape: RoundedRectangleBorder(
@@ -315,7 +334,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       SizedBox(height: 16),
-                      _tagsWidget(art.artTags),
+                      _tagsWidget(art.artTags!),
                     ],
                   ),
                 ),
@@ -383,7 +402,7 @@ class RearWidget extends StatelessWidget {
       init: _HomePageController(),
       builder: (context) {
         final homePageController = Get.put(_HomePageController());
-        homePageController.displayFront.value = true;
+        // homePageController.displayFront.value = true;
         return Card(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
@@ -438,7 +457,7 @@ class RearWidget extends StatelessWidget {
                     controller: homePageController.cardScrollController,
                     child: Center(
                       child:
-                          Text(style: _TextStyles.Description, art.description),
+                          Text(style: _TextStyles.Description, art.description!),
                     ),
                   ),
                 ),
