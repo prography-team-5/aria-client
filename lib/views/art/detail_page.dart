@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:expandable_page_view/expandable_page_view.dart';
 import 'package:dots_indicator/dots_indicator.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class _TextStyles {
   static final Title = TextStyle(
@@ -288,7 +289,9 @@ class DetailPage extends StatelessWidget {
                               'INSTAGRAM') {
                             return OutlinedButton(
                               onPressed: () {
-                                // Get.toNamed('/test_page');
+                                launchUrl(
+                                  Uri.parse(artistSocialLinks[index].url),
+                                );
                               },
                               style: OutlinedButton.styleFrom(
                                   side: BorderSide(
@@ -312,7 +315,9 @@ class DetailPage extends StatelessWidget {
                               'YOUTUBE') {
                             return OutlinedButton(
                               onPressed: () {
-                                // Get.toNamed('/test_page');
+                                launchUrl(
+                                  Uri.parse(artistSocialLinks[index].url),
+                                );
                               },
                               style: OutlinedButton.styleFrom(
                                   side: BorderSide(
@@ -335,7 +340,9 @@ class DetailPage extends StatelessWidget {
                           if (artistSocialLinks[index].socialType == 'KAKAO') {
                             return OutlinedButton(
                               onPressed: () {
-                                // Get.toNamed('/test_page');
+                                launchUrl(
+                                  Uri.parse(artistSocialLinks[index].url),
+                                );
                               },
                               style: OutlinedButton.styleFrom(
                                   side: BorderSide(
@@ -358,7 +365,9 @@ class DetailPage extends StatelessWidget {
                           if (artistSocialLinks[index].socialType == 'EMAIL') {
                             return OutlinedButton(
                               onPressed: () {
-                                // Get.toNamed('/test_page');
+                                launchUrl(
+                                  Uri.parse('mailto:' + artistSocialLinks[index].url),
+                                );
                               },
                               style: OutlinedButton.styleFrom(
                                   side: BorderSide(
