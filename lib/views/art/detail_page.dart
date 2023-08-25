@@ -366,7 +366,7 @@ class DetailPage extends StatelessWidget {
                             return OutlinedButton(
                               onPressed: () {
                                 launchUrl(
-                                  Uri.parse(artistSocialLinks[index].url),
+                                  Uri.parse('mailto:' + artistSocialLinks[index].url),
                                 );
                               },
                               style: OutlinedButton.styleFrom(
