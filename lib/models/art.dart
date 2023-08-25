@@ -12,7 +12,7 @@ class Art {
   final int year;
   final List<dynamic>? artTags;
   final Size size;
-  final String description;
+  final String? description;
   final List<Sns>? artistSocialLinks;
 
   Art({
@@ -27,7 +27,7 @@ class Art {
     required this.year,
     this.artTags,
     required this.size,
-    required this.description,
+    this.description,
     this.artistSocialLinks,
   });
 

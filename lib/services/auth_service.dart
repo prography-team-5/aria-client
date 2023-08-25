@@ -202,7 +202,7 @@ class AuthService extends GetxService {
         params: {'accessToken': accessToken, 'platformType': 'KAKAO'});
 
     try {
-      jwt = data['body']['data']['accessToken'];
+      jwt = data['body']['accessToken'];
       statusCode = 200;
     } catch (e) {
       jwt = 'testjwtsignin';
@@ -231,7 +231,7 @@ class AuthService extends GetxService {
     });
 
     try {
-      jwt = data['body']['data']['accessToken'];
+      jwt = data['body']['accessToken'];
       statusCode = 200;
     } catch (e) {
       jwt = 'testjwtsignin';
