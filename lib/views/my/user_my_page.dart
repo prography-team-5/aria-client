@@ -144,10 +144,11 @@ class UserMyPage extends StatelessWidget {
                     ],
                   ),
                   Positioned(
-                    top: 147 - 50,
+                    top: 147 - 40,
                     child: Container(
-                      height: 100.0,
-                      width: 100.0,
+                      height: 80.0,
+                      width: 80.0,
+                      padding: EdgeInsets.all(15),
                       // TODO: s3 버켓 해결 후 수정
                       // child: Image.asset('assets/images/profile_avatar.png'),
                       child: Image.network(
@@ -155,6 +156,7 @@ class UserMyPage extends StatelessWidget {
                       ),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
+                        color: Colors.white,
                       ),
                     ),
                   )
