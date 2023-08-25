@@ -181,10 +181,18 @@ class ArtistHomePage extends StatelessWidget {
                                                             15),
                                                   ),
                                                   child: Center(
-                                                    child: Text(controller
-                                                        .artistInfo
-                                                        .value
-                                                        .intro),
+                                                    child: Text(
+                                                      controller
+                                                                  .artistInfo
+                                                                  .value
+                                                                  .intro ==
+                                                              ''
+                                                          ? '아티스트 소개가 없습니다.'
+                                                          : controller
+                                                              .artistInfo
+                                                              .value
+                                                              .intro,
+                                                    ),
                                                   ),
                                                 ),
                                                 Obx(
