@@ -89,4 +89,28 @@ class ArtistService extends GetxService {
   Future<List<Art>> fetchMyArts() async {
     return [];
   }
+
+  Future<void> follow(int memberId) async {
+    final SigninViewModel signinViewModel = Get.find<SigninViewModel>();
+    final response = await NetworkAdapter().post(
+      path: '/follows/?followeeId=$memberId',
+      params: {},
+      accessToken: signinViewModel.jwt,
+    );
+    // TODO: map 형태로 반환하여 예외처리하도록
+    if (response['statusCode'] == 201) {
+      return;
+    }
+    return;
+  }
+
+  Future<void> unfollow(int memberId) async {
+    final SigninViewModel signinViewModel = Get.find<SigninViewModel>();
+    final response = await NetworkAdapter().delete(
+      path: '/follows/?followeeId=$memberId',
+      params: {},
+      token: signinViewModel.jwt,
+    );
+    return;
+  }
 }

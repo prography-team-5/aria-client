@@ -30,6 +30,7 @@ class ArtistHomeViewModel extends GetxController {
   RxList<Art> artList = <Art>[].obs;
   RxBool isLoading = false.obs;
   RxBool isArtsLoading = false.obs;
+  RxBool isFollowee = false.obs;
 
   Future<void> getArts() async {
     isArtsLoading.value = true;
@@ -43,8 +44,23 @@ class ArtistHomeViewModel extends GetxController {
     isLoading.value = true;
     artistInfo.value = await Get.find<ArtistService>()
         .fetchArtist(Get.arguments) as ArtistInfo;
+    isFollowee.value = artistInfo.value.isFollowee;
     isLoading.value = false;
     update();
+  }
+
+  Future<void> follow() async {
+    await Get.find<ArtistService>().follow(Get.arguments);
+    isFollowee.value = true;
+    update();
+    refresh();
+  }
+
+  Future<void> unfollow() async {
+    await Get.find<ArtistService>().unfollow(Get.arguments);
+    isFollowee.value = false;
+    update();
+    refresh();
   }
 
   @override
@@ -73,7 +89,6 @@ class ArtistHomePage extends StatelessWidget {
               },
               child: SvgPicture.asset(
                 'assets/images/leading_button.svg',
-                color: Colors.white,
               ),
             ),
           ),
@@ -125,8 +140,8 @@ class ArtistHomePage extends StatelessWidget {
                                             child: Column(
                                               children: [
                                                 Text(
-                                                  controller.signinViewModel
-                                                      .member!.nickname,
+                                                  controller.artistInfo.value
+                                                      .artist_profile.nickname,
                                                   style: TextStyles.Heading2,
                                                 ),
                                                 Padding(
@@ -172,28 +187,58 @@ class ArtistHomePage extends StatelessWidget {
                                                         .intro),
                                                   ),
                                                 ),
-                                                TextButton(
-                                                  onPressed: () {},
-                                                  child: Text(
-                                                    '팔로우', // TODO: 팔로우 기능 구현
-                                                    style: TextStyle(
-                                                        color:
-                                                            ColorMap.gray_700),
-                                                  ),
-                                                  style: TextButton.styleFrom(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 150,
-                                                            vertical: 13),
-                                                    shape:
-                                                        RoundedRectangleBorder(
-                                                      side: BorderSide(
+                                                Obx(
+                                                  () => TextButton(
+                                                    onPressed: controller
+                                                            .isFollowee.value
+                                                        ? () {
+                                                            // unfollow
+                                                            controller
+                                                                .unfollow();
+                                                          }
+                                                        : () {
+                                                            // follow
+                                                            controller.follow();
+                                                          },
+                                                    child: Text(
+                                                      controller
+                                                              .isFollowee.value
+                                                          ? '팔로잉'
+                                                          : '팔로우', // TODO: 팔로우 기능 구현
+                                                      style: TextStyle(
+                                                        color: controller
+                                                                .isFollowee
+                                                                .value
+                                                            ? ColorMap.gray_700
+                                                            : ColorMap.white,
+                                                      ),
+                                                    ),
+                                                    style: TextButton.styleFrom(
+                                                      backgroundColor:
+                                                          controller.isFollowee
+                                                                  .value
+                                                              ? ColorMap.white
+                                                              : ColorMap
+                                                                  .subColor,
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 150,
+                                                              vertical: 13),
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        side: BorderSide(
                                                           color:
                                                               ColorMap.gray_200,
-                                                          width: 1),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              15),
+                                                          width: controller
+                                                                  .isFollowee
+                                                                  .value
+                                                              ? 1
+                                                              : 0,
+                                                        ),
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(15),
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
