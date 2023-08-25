@@ -137,8 +137,8 @@ class _SearchPageState extends State<SearchPage> {
                   if (query.isNotEmpty) {
                     searchPageController.saveSearchHistory(query);
                     //TODO: 무한스크롤로 만들고 변수로 변경
-                    searchPageController.fetchData(query, 0, 5);
                     searchPageController.changeMode('after');
+                    searchPageController.fetchData(query, 0, 5);
                   }
                 },
                 child: Text(
@@ -225,15 +225,15 @@ class _SearchPageState extends State<SearchPage> {
                 searchPageController.fillTextField(reversedList[index]);
                 FocusManager.instance.primaryFocus?.unfocus();
                 //TODO: 무한스크롤로 만들고 변수로 변경
-                searchPageController.fetchData(reversedList[index], 0, 5);
                 searchPageController.changeMode('after');
+                searchPageController.fetchData(reversedList[index], 0, 5);
               },
               contentPadding: EdgeInsets.fromLTRB(0, 4, 0, 4),
               title:
                   Text(reversedList[index], style: _TextStyles.SearchHistory),
               trailing: GestureDetector(
                 onTap: () async {
-                  searchPageController.removeSearchHistory(index);
+                  searchPageController.removeSearchHistory(historyList.length - index - 1);
                 },
                 child: SvgPicture.asset(
                   'assets/images/cancel_button.svg',
