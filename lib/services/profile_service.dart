@@ -25,89 +25,65 @@ class ProfileService extends GetxService {
     if (Env.env == Environ.test) {
       return [
         ArtistInfo(
-            id: 1,
+          profile_art_image_url: 'https://picsum.photos/200',
+          artist_profile: ArtistProfile(
             member_id: 1,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
+            profile_image_url: 'https://picsum.photos/200',
+            nickname: '테스트',
+          ),
+          intro: '안녕하세요',
+          artist_tags: [
+            ArtistTag(artist_tag_id: 1, name: '그림'),
+            ArtistTag(artist_tag_id: 2, name: '디자인'),
+            ArtistTag(artist_tag_id: 3, name: '사진'),
+          ],
+          social_links: [
+            SocialLink(
+                social_link_id: 1,
+                social_type: 'instagram',
+                url: 'https://www.instagram.com/'),
+            SocialLink(
+                social_link_id: 2,
+                social_type: 'facebook',
+                url: 'https://www.facebook.com/'),
+            SocialLink(
+                social_link_id: 3,
+                social_type: 'twitter',
+                url: 'https://www.twitter.com/'),
+          ],
+          isFollowee: true,
+          follower_count: 100,
+        ),
         ArtistInfo(
-            id: 2,
-            member_id: 2,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 3,
-            member_id: 3,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 4,
-            member_id: 4,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 5,
-            member_id: 5,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 6,
-            member_id: 6,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 7,
-            member_id: 7,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 8,
-            member_id: 8,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 9,
-            member_id: 9,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 9,
-            member_id: 9,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 9,
-            member_id: 9,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 9,
-            member_id: 9,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 9,
-            member_id: 9,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
-        ArtistInfo(
-            id: 9,
-            member_id: 9,
-            profile_art_image_url:
-                'https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FctPGwk%2FbtrUvU5ZKOb%2FL5IR7GxdBKqU5o221GDKRk%2Fimg.png',
-            intro: ''),
+          profile_art_image_url: 'https://picsum.photos/200',
+          artist_profile: ArtistProfile(
+            member_id: 1,
+            profile_image_url: 'https://picsum.photos/200',
+            nickname: '테스트',
+          ),
+          intro: '안녕하세요',
+          artist_tags: [
+            ArtistTag(artist_tag_id: 1, name: '그림'),
+            ArtistTag(artist_tag_id: 2, name: '디자인'),
+            ArtistTag(artist_tag_id: 3, name: '사진'),
+          ],
+          social_links: [
+            SocialLink(
+                social_link_id: 1,
+                social_type: 'instagram',
+                url: 'https://www.instagram.com/'),
+            SocialLink(
+                social_link_id: 2,
+                social_type: 'facebook',
+                url: 'https://www.facebook.com/'),
+            SocialLink(
+                social_link_id: 3,
+                social_type: 'twitter',
+                url: 'https://www.twitter.com/'),
+          ],
+          isFollowee: true,
+          follower_count: 100,
+        ),
       ];
     }
     return followeeList;
