@@ -262,8 +262,7 @@ class _SearchPageState extends State<SearchPage> {
                 children: [
                   GestureDetector(
                     onTap: () {
-                      //TODO: arguments를 artId 변수로 수정
-                      Get.to(() => DetailPage(artId: 3));
+                      Get.to(() => DetailPage(artId: artsList[index].artId!));
                     },
                     child: ClipPath(
                       clipper: ShapeBorderClipper(
@@ -283,7 +282,7 @@ class _SearchPageState extends State<SearchPage> {
                     children: [
                       GestureDetector(
                           onTap: () {
-                            Get.to(() => DetailPage(artId: 3));
+                            Get.to(() => DetailPage(artId: artsList[index].artId!));
                           },
                           child: Text(artsList[index].title,
                               style: _TextStyles.ArtTitle)),
