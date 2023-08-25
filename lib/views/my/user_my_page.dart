@@ -12,8 +12,11 @@ import '../../viewmodels/auth/signin_viewmodel.dart';
 class UserMyPageViewModel extends GetxController {
   final SigninViewModel signinViewModel = Get.find<SigninViewModel>();
   RxList<ArtistInfo> followeeList = <ArtistInfo>[].obs;
+  RxBool isLoading = false.obs;
   Future<void> getFollowList() async {
+    isLoading.value = true;
     followeeList.value = await Get.find<ProfileService>().fetchFolloweeList();
+    isLoading.value = false;
     update();
   }
 
@@ -145,11 +148,11 @@ class UserMyPage extends StatelessWidget {
                     child: Container(
                       height: 100.0,
                       width: 100.0,
-                      child: Image.asset('assets/images/profile_avatar.png'),
                       // TODO: s3 버켓 해결 후 수정
-                      // child: Image.network(
-                      //   controller.signinViewModel.member!.profileImageUrl,
-                      // ),
+                      // child: Image.asset('assets/images/profile_avatar.png'),
+                      child: Image.network(
+                        controller.signinViewModel.member!.profileImageUrl,
+                      ),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                       ),
@@ -167,28 +170,32 @@ class UserMyPage extends StatelessWidget {
                 padding: EdgeInsets.all(15),
                 child: GetBuilder<UserMyPageViewModel>(
                   builder: (controller) {
-                    return controller.followeeList.length == 0
+                    return controller.isLoading.value
                         ? const Center(
                             child: CircularProgressIndicator(),
                           )
-                        : GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 1,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 20,
-                              mainAxisExtent: 130,
-                            ),
-                            itemCount: controller.followeeList.length,
-                            itemBuilder: (context, index) {
-                              return Obx(
-                                () => FollowAvatar(
-                                  follow: controller.followeeList[index],
+                        : controller.followeeList.isEmpty
+                            ? const Center(
+                                child: Text('아직 팔로우한 작가가 없습니다.'),
+                              )
+                            : GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 3,
+                                  childAspectRatio: 1,
+                                  crossAxisSpacing: 10,
+                                  mainAxisSpacing: 20,
+                                  mainAxisExtent: 130,
                                 ),
+                                itemCount: controller.followeeList.length,
+                                itemBuilder: (context, index) {
+                                  return Obx(
+                                    () => FollowAvatar(
+                                      follow: controller.followeeList[index],
+                                    ),
+                                  );
+                                },
                               );
-                            },
-                          );
                   },
                 ),
               ),
